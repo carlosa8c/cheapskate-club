@@ -48,3 +48,16 @@ and https://supabase.com/docs/guides/auth/social-login/auth-github
 Signing in does not connect cheapoS or upload usage. Profiles are private except
 for opted-in names accompanying accepted leaderboard totals. Installation
 pairing, ingestion and public community posting are separate follow-up work.
+
+## Automatic profile defaults
+
+The account page creates a missing profile from OAuth username/name metadata.
+No extra Save step is required. Existing profiles are never overwritten. Handles
+are normalized to Club rules; collisions get an account-specific suffix. Missing
+provider names use a generic member name, never an email address. Sharing remains
+off. Edit profile & sharing opens optional settings. No new migration is needed.
+
+Verify with a new X/GitHub account and an already-signed-in account without a
+profile: visiting My club should show a ready profile. Edit the name, sign out
+and back in, and confirm the edit persists. Provider defaults do not claim
+verified ownership of a matching Club handle.
