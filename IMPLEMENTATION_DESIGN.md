@@ -55,11 +55,24 @@ Support GitHub and X through the account layer, subject to provider setup.
 X-only was an earlier design choice; keep identity-provider IDs separate from
 public handles so adding a provider does not change event ownership.
 
-Hosting is UNDECIDED: the operator already has hosting options. Confirm those
-before provisioning, choosing deployment adapters or buying services. Keep the
-web app deployable as a Node service/container. Supabase is the recommended
-managed service, subject to that hosting decision. Do not provision Vercel by
-default or create a second backend service for the initial release.
+Hosting and managed-service selection are PENDING as of September 15, 2026.
+The operator recalls previously paying for Vercel or Supabase; current accounts,
+subscriptions and available credits have not been confirmed. Cost is a priority.
+
+Candidates to evaluate before committing to the deployment architecture:
+- Vercel: possible existing subscription; status and cost pending.
+- Supabase: possible existing subscription for database/auth; status and cost pending.
+- Hostinger: possible lower-cost hosting option; plan and runtime support pending.
+- Automattic WordPress: possible free workplace hosting perk; exact product,
+  entitlement, permitted use and backend capabilities pending confirmation.
+
+These are candidates, not claims of equivalent capabilities or confirmed pricing.
+The Next.js/Postgres/Auth recommendation remains provisional. In particular,
+confirm whether the WordPress perk can support the required pairing and ingestion
+API or would call for a WordPress implementation or separately hosted backend.
+Revisit the stack if the selected hosting makes a simpler solution preferable.
+Do not provision services, buy subscriptions or assume an existing paid plan.
+Confirm hosting before choosing deployment adapters or provider-specific auth.
 
 Use small unit tests for ingestion/accounting and a few browser flows for
 joining, revoking, syncing and posting. No inference is required to test these.
