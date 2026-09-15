@@ -35,3 +35,12 @@ The featured champion/podium always represents **all-time free API usage**, whil
 See [DESIGN.md](DESIGN.md) for concept rationale, suggested language, CheapOS onboarding, data boundaries, ranking rules, and a staged implementation plan. See [VALIDATION.md](VALIDATION.md) for checks performed and prototype limitations.
 
 The relay mark comes from the existing cheapoS brand. Typography uses local system fonts; there are no external font or image calls. Layout appearance can vary slightly across operating systems.
+
+## Implementation direction
+
+Start with [IMPLEMENTATION_DESIGN.md](IMPLEMENTATION_DESIGN.md) for the agreed
+stack, community scope, lightweight anti-cheating design and build order. It
+supersedes conflicting trust/pairing claims in earlier protocol drafts.
+[CHEAPOS_INTEGRATION.md](CHEAPOS_INTEGRATION.md) lists the desktop-app work and
+acceptance checks. Hosting is intentionally open for the operator's existing
+options. These documents do not change the prototype into a live service.
