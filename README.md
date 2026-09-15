@@ -44,3 +44,9 @@ supersedes conflicting trust/pairing claims in earlier protocol drafts.
 [CHEAPOS_INTEGRATION.md](CHEAPOS_INTEGRATION.md) lists the desktop-app work and
 acceptance checks. Hosting is intentionally open for the operator's existing
 options. These documents do not change the prototype into a live service.
+
+## Application foundation
+
+The Next.js implementation lives in [web/](web/README.md). Run it separately
+from the original static prototypes. See its README for local setup and the
+pending Supabase/Vercel connection steps.
