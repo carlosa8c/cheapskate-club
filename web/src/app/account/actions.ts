@@ -35,3 +35,10 @@ export async function saveProfile(form: FormData) {
   revalidatePath("/");
   redirect("/account?status=saved");
 }
+
+export async function disconnectInstallation(form:FormData) {
+ if(!authConfigured()) redirect("/join");
+ const client=await supabase();
+ const {error}=await client.rpc("club_revoke_installation",{installation:String(form.get("installation_id")||"")});
+ redirect(`/account?status=${error?"disconnect-error":"disconnected"}`);
+}

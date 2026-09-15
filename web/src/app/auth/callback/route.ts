@@ -1,3 +1,4 @@
+import { cookies } from "next/headers";
 import { NextResponse, type NextRequest } from "next/server";
 import { authConfigured, supabase } from "@/lib/supabase";
 
@@ -8,7 +9,7 @@ export async function GET(request: NextRequest) {
   if (code && authConfigured()) {
     const client = await supabase();
     const { error } = await client.auth.exchangeCodeForSession(code);
-    if (!error) return NextResponse.redirect(new URL("/account", origin));
+    if (!error) return NextResponse.redirect(new URL((await cookies()).get("club_pairing") ? "/connect" : "/account", origin));
   }
   return NextResponse.redirect(new URL("/join?status=callback", origin));
 }

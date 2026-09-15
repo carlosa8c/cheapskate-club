@@ -12,7 +12,8 @@ npm run build
 Open http://localhost:5188. No credentials are required to preview the pages.
 The leaderboard shows an honest setup state, never fabricated participants.
 X-first sign-in, GitHub sign-in and private profile settings are implemented.
-See AUTH_SETUP.md to enable them. Pairing, signed ingestion and posting remain pending.
+See AUTH_SETUP.md to enable them. Pairing and signed ingestion are available on this branch; see CONNECTION_SETUP.md.
+Community posting remains pending.
 
 ## Connect Supabase (when ready)
 

@@ -23,6 +23,6 @@ export default async function Join({ searchParams }: { searchParams: Promise<{st
     {status && messages[status] && <p className="notice" role="status">{messages[status]}</p>}
     {configured ? <div className="signin-options"><form action={signIn}><input type="hidden" name="provider" value="x"/><SubmitButton pendingText="Opening X…">Continue with X →</SubmitButton></form><form action={signIn}><input type="hidden" name="provider" value="github"/><SubmitButton pendingText="Opening GitHub…">Continue with GitHub</SubmitButton></form></div> : <p className="notice">Sign-in is being configured. The leaderboard is still open to browse.</p>}
     <p>Signing in creates a Club account. It does not connect your repositories or upload anything from cheapoS. Leaderboard sharing stays off until you choose it.</p>
-    <h2>Bring your work, keep your privacy.</h2><p>Your email stays private. You choose the name other members see. Installation pairing and usage sync are coming next.</p>
+    <h2>Bring your work, keep your privacy.</h2><p>Your email stays private. You choose the name other members see. Connect cheapoS from its Usage & savings panel when you’re ready.</p>
   </section>;
 }
