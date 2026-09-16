@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {buildInput,buildId} from '../src/lib/build-input.ts';
+const form=(extra={})=>{const data=new FormData();for(const [key,value] of Object.entries({title:'My tiny tool',description:'A useful little experiment.',...extra}))data.set(key,value);return data;};
+assert.ok(buildInput(form()));
+for(const url of ['javascript:alert(1)','http://example.com','https://user:password@example.com','not a url'])assert.equal(buildInput(form({project_url:url})),null);
+assert.equal(buildInput(form({title:'ab'})),null);
+assert.equal(buildInput(form({description:'x'.repeat(3001)})),null);
+assert.equal(buildInput(form({discussion_url:'https://x.com.evil.test/me/status/123'})),null);
+assert.ok(buildInput(form({discussion_url:'https://x.com/builder/status/123'})));
+assert.equal(buildInput(form({show_usage:'on'})).show_usage,true);
+assert.equal(buildInput(form()).show_usage,false);
+assert.ok(buildId('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'));
+assert.equal(buildId('../account'),false);
+console.log('PASS community input validation and usage opt-in');
