@@ -1,0 +1,9 @@
+import type {Member} from "@/lib/member";
+const categories=[['public_free','Free remote','A little cloud generosity.'],['included','Included access','Making the most of your plan.'],['local','Local models','Homegrown compute.']] as const;
+export function MemberStats({member}:{member:Member}) {
+ return <div className="member-stats"><div className="token-banner"><div><p className="eyebrow">SMALL BILLS. BIG IDEAS.</p><strong>{member.tokens.toLocaleString("en-US")}</strong><h2>zero-cost tokens & counting.</h2><p>Free remote, included access, and local models. All part of the same good habit.</p></div><span className="member-sun" aria-hidden="true">✳</span></div>
+ <div className="cards usage-cards">{categories.map(([key,label,description])=><article key={key}><p className="eyebrow">{label}</p><h3>{(member.categories[key]||0).toLocaleString("en-US")}</h3><p>{description}</p></article>)}</div>
+ {member.share_models && <section className="model-mix"><p className="eyebrow">THE TOOLBOX</p><h2>Models in the mix.</h2>{member.models.length?<ul>{member.models.map(model=><li key={model.name}><div><strong>{model.name}</strong><span>{model.tokens.toLocaleString("en-US")} tokens</span></div><meter min={0} max={Math.max(member.tokens,1)} value={model.tokens} aria-label={`${model.name} share of zero-cost tokens`}/></li>)}</ul>:<p>Model details will appear after a connected installation shares them.</p>}</section>}
+ {!member.tokens && <p className="notice">Every builder starts somewhere. The first tokens are still to come.</p>}
+ </div>;
+}

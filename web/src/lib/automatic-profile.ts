@@ -19,14 +19,14 @@ export function providerProfile(user: Pick<User, "id" | "user_metadata">) {
 
 // Insert only: later sign-ins must never overwrite edits or sharing preferences.
 export async function ensureProfile(client: SupabaseClient, user: User) {
-  const read = () => client.from("club_profiles").select("handle,display_name,sharing_enabled").eq("id", user.id).maybeSingle();
+  const read = () => client.from("club_profiles").select("handle,display_name,sharing_enabled,share_models").eq("id", user.id).maybeSingle();
   const existing = await read();
   if (existing.error || existing.data) return existing;
   const defaults = providerProfile(user);
   for (let attempt = 0; attempt < 4; attempt++) {
     const suffix = `_${user.id.replace(/-/g, "").slice(0, 10)}${attempt > 1 ? `_${attempt}` : ""}`;
     const handle = attempt === 0 ? defaults.handle : defaults.handle.slice(0, 30 - suffix.length) + suffix;
-    const created = await client.from("club_profiles").insert({ id: user.id, ...defaults, handle }).select("handle,display_name,sharing_enabled").single();
+    const created = await client.from("club_profiles").insert({ id: user.id, ...defaults, handle }).select("handle,display_name,sharing_enabled,share_models").single();
     if (!created.error || created.error.code !== "23505") return created;
     // Another callback may have created our own profile while we were inserting.
     const concurrent = await read();

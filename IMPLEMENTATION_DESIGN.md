@@ -166,3 +166,23 @@ or cached aggregates derived from accepted events for rankings.
 
 No hosting resources, authentication integrations or production sync are created
 by this design update.
+
+## September 15 update: fun-first member profiles
+
+The main scoreboard now adds public-free, included-access, and local tokens into
+one zero-cost total. Earlier separate-board requirements are superseded. Paid
+and unknown categories remain outside this score. Existing accepted events count
+immediately; no re-upload or opt-in to model names is needed for a combined score.
+
+Public `/@handle` profiles show the combined score and category cards. The account
+page shows the same stats even when the profile is private. Model breakdowns are
+optional: installations must explicitly opt in before sending names, and members
+can hide the breakdown from their profile settings. Names are omitted by default;
+turning off installation model sharing clears its uploaded names for the current
+account. Token totals remain unchanged. No prompts, paths, code, or credentials
+are uploaded. Existing signed sequence and idempotent event handling remain.
+
+Run `web/supabase/migrations/202609150004_member_profiles.sql` before deploying
+this version. Migration 004 is backward compatible with existing installation
+clients. New cheapoS clients use the same category resolver as local usage stats.
+Accounting caveats live on About, not in repetitive notices on the scoreboard.
