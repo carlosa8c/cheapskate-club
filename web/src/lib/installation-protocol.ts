@@ -18,6 +18,7 @@ export function verifiedMessage(body: {payload?: unknown; signature?: unknown; p
    if(!e || typeof e.event_id!=="string" || !uuid.test(e.event_id) || seen.has(e.event_id) || e.slot!==index || !["public_free","local","included","paid","unknown"].includes(String(e.category)) || typeof e.accounting_at!=="string" || !/^\d{4}-\d{2}-\d{2}T00:00:00Z$/.test(e.accounting_at) || !Number.isFinite(Date.parse(e.accounting_at)) || Date.parse(e.accounting_at)>Date.now()) throw Error("Invalid event");
    for(const field of ["input_tokens","output_tokens"]) if(!Number.isSafeInteger(e[field]) || Number(e[field])<0 || Number(e[field])>1000000000) throw Error("Invalid token count");
    if(e.model_name!==undefined && (typeof e.model_name!=="string" || !/^[a-zA-Z0-9_.:/@+ -]{1,160}$/.test(e.model_name))) throw Error("Invalid model name");
+   if(e.role!==undefined && (typeof e.role!=="string" || !["worker","reviewer","planner","coordinator","unknown"].includes(e.role))) throw Error("Invalid role");
    seen.add(e.event_id);
   });
  }

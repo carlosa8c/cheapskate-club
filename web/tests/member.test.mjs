@@ -13,3 +13,9 @@ test('model details stay hidden without opt-in and appear when enabled',()=>{
 test('invalid totals cannot become a member score',()=>{
  for(const bad of [null,{}, {...sample,tokens:-1},{...sample,tokens:'30'},{...sample,categories:{local:Infinity}},{...sample,models:[{name:'bad',tokens:-1}]}]) assert.equal(memberData(bad),null);
 });
+test('roles are validated and preserved',()=>{
+ const withRoles={...sample,roles:[{name:'worker',tokens:20},{name:'reviewer',tokens:10}]};
+ assert.deepEqual(memberData(withRoles).roles,withRoles.roles);
+ assert.deepEqual(memberData(sample).roles,[]);
+ for(const bad of [{...sample,roles:'not-array'},{...sample,roles:[{name:123,tokens:10}]},{...sample,roles:[{name:'worker',tokens:-1}]}]) assert.equal(memberData(bad),null);
+});
