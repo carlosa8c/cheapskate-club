@@ -1,7 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  async rewrites() {
+    return [
+      {
+        source: "/api/scoreboard.svg",
+        destination: "/api/scoreboard",
+      },
+    ];
+  },
 };
 
 export default nextConfig;
