@@ -74,13 +74,13 @@ export default function Podium({ entries }: PodiumProps) {
 
         {/* P1: First Place (Gold / Mint Champion) */}
         <div className="podium-card podium-p1">
-          <div className="podium-crown" aria-hidden="true">👑</div>
           <div className="podium-badge badge-p1">
             <span className="medal-icon">🥇</span> P1 · POLE POSITION
           </div>
           {p1 ? (
             <Link className="podium-link" href={`/@${p1.handle}`}>
               <div className="podium-avatar-wrap champion-avatar-wrap">
+                <span className="avatar-crown" aria-hidden="true">👑</span>
                 <Avatar name={p1.display_name || "Champion"} />
                 <span className="podium-rank-tag tag-p1">1</span>
               </div>
