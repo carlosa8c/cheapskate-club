@@ -2143,3 +2143,77 @@ select{background:var(--input-bg);color:var(--input-color);border:1px solid var(
     padding: 1px 7px;
   }
 }
+
+
+/* ════════════════════════════════════════════════════════════════════
+   LIVE SCOREBOARD TELEMETRY & TICKER PULSE
+   ════════════════════════════════════════════════════════════════════ */
+.live-pulse-active {
+  animation: livePulseGlow 2s ease-in-out infinite;
+}
+@keyframes livePulseGlow {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(86, 207, 137, 0.7);
+  }
+  50% {
+    transform: scale(1.25);
+    box-shadow: 0 0 0 7px rgba(86, 207, 137, 0);
+  }
+}
+
+.counter-pulse {
+  animation: counterGlow 1.4s ease-out;
+}
+@keyframes counterGlow {
+  0% {
+    text-shadow: 0 0 35px rgba(86, 207, 137, 0.95), 0 0 75px rgba(86, 207, 137, 0.6);
+    transform: scale(1.02);
+  }
+  100% {
+    text-shadow: 0 0 30px rgba(86, 207, 137, 0.45);
+    transform: scale(1);
+  }
+}
+
+.counter-delta-floater {
+  display: inline-block;
+  font: 700 16px var(--mono);
+  color: var(--accent-mint);
+  background: rgba(86, 207, 137, 0.15);
+  border: 1px solid rgba(86, 207, 137, 0.5);
+  padding: 3px 12px;
+  border-radius: 999px;
+  margin-left: 14px;
+  vertical-align: middle;
+  animation: deltaFloat 3.2s ease-out forwards;
+}
+@keyframes deltaFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  15% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+}
+
+.live-delta-pill {
+  background: rgba(86, 207, 137, 0.2);
+  color: var(--accent-mint);
+  font: 700 10.5px var(--mono);
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(86, 207, 137, 0.45);
+  margin-left: 8px;
+  animation: livePulseGlow 1.5s ease-in-out infinite;
+}

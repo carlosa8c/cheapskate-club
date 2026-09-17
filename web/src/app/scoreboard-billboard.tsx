@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import type { Member } from "@/lib/member";
 
@@ -40,38 +40,101 @@ export default function ScoreboardBillboard({
   entryCount,
   championMember,
 }: ScoreboardBillboardProps) {
+  const initialTarget = totalTokens > 0 ? totalTokens : 81364597;
+  const [liveTotal, setLiveTotal] = useState(initialTarget);
+  const [liveMember, setLiveMember] = useState<Member | null | undefined>(championMember);
   const [displayCount, setDisplayCount] = useState(0);
   const [isClient, setIsClient] = useState(false);
+  const [isLivePulsing, setIsLivePulsing] = useState(false);
+  const [lastDelta, setLastDelta] = useState<number | null>(null);
+  const [showDelta, setShowDelta] = useState(false);
 
-  useEffect(() => {
-    setIsClient(true);
+  const displayCountRef = useRef(displayCount);
+  displayCountRef.current = displayCount;
+
+  const liveTotalRef = useRef(liveTotal);
+  liveTotalRef.current = liveTotal;
+
+  // Smooth easing ticker
+  const animateTicker = (fromVal: number, toVal: number, duration: number = 1200) => {
     let start: number | null = null;
     let animId: number;
-    const duration = 1500;
-    const target = totalTokens > 0 ? totalTokens : 81364597;
 
     function step(timestamp: number) {
       if (!start) start = timestamp;
       const elapsed = timestamp - start;
       const progress = Math.min(elapsed / duration, 1);
       const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-      setDisplayCount(Math.floor(ease * target));
+      const current = Math.floor(fromVal + (toVal - fromVal) * ease);
+      setDisplayCount(current);
 
       if (progress < 1) {
         animId = requestAnimationFrame(step);
       } else {
-        setDisplayCount(target);
+        setDisplayCount(toVal);
       }
     }
 
     animId = requestAnimationFrame(step);
     return () => cancelAnimationFrame(animId);
-  }, [totalTokens]);
+  };
 
-  const target = totalTokens > 0 ? totalTokens : 81364597;
+  // Initial mount entrance animation
+  useEffect(() => {
+    setIsClient(true);
+    const cancel = animateTicker(0, initialTarget, 1500);
+    return () => cancel();
+  }, [initialTarget]);
+
+  // Live polling every 10 seconds
+  useEffect(() => {
+    let active = true;
+
+    async function pollLiveStats() {
+      if (typeof document !== "undefined" && document.hidden) return;
+      try {
+        const res = await fetch("/api/stats", { cache: "no-store" });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!active) return;
+
+        if (data.totalTokens && data.totalTokens !== liveTotalRef.current) {
+          const delta = data.totalTokens - liveTotalRef.current;
+          if (delta > 0) {
+            setLastDelta(delta);
+            setShowDelta(true);
+            setIsLivePulsing(true);
+            setTimeout(() => {
+              if (active) {
+                setIsLivePulsing(false);
+                setShowDelta(false);
+              }
+            }, 3500);
+          }
+
+          animateTicker(displayCountRef.current, data.totalTokens, 1200);
+          setLiveTotal(data.totalTokens);
+
+          if (data.championMember) {
+            setLiveMember(data.championMember);
+          }
+        }
+      } catch {
+        // Quietly handle transient network blips
+      }
+    }
+
+    const timer = setInterval(pollLiveStats, 10000);
+    return () => {
+      active = false;
+      clearInterval(timer);
+    };
+  }, []);
+
+  const target = liveTotal;
   const countToShow = isClient ? displayCount : target;
 
-  const categories = championMember?.categories || {
+  const categories = liveMember?.categories || {
     public_free: Math.round(target * 0.977),
     included: Math.round(target * 0.02),
     local: Math.round(target * 0.003),
@@ -97,8 +160,8 @@ export default function ScoreboardBillboard({
 
   const retailEstimate = (target * 0.000003).toFixed(2);
 
-  const roles = championMember?.roles?.length
-    ? championMember.roles
+  const roles = liveMember?.roles?.length
+    ? liveMember.roles
     : [
         { name: "worker", tokens: Math.round(target * 0.758) },
         { name: "reviewer", tokens: Math.round(target * 0.076) },
@@ -108,8 +171,8 @@ export default function ScoreboardBillboard({
 
   const totalRoleTokens = roles.reduce((sum, r) => sum + r.tokens, 0) || target;
 
-  const models = championMember?.models?.length
-    ? championMember.models
+  const models = liveMember?.models?.length
+    ? liveMember.models
     : [
         { name: "gemini-3.1-flash-lite", tokens: 26295820 },
         { name: "groq/qwen3.6-27b", tokens: 13599357 },
@@ -129,17 +192,26 @@ export default function ScoreboardBillboard({
           <span className="billboard-title">
             COMMUNITY COMPUTE · LIVE ON <strong>cheapskate-club.vercel.app</strong>
           </span>
-          <div className="pulse-pill">
-            <span className="pulse-dot" aria-hidden="true"></span>
-            HONEST · ED25519 VERIFIED
+          <div className="pulse-pill" title="Live telemetry synced every 10s">
+            <span className="pulse-dot live-pulse-active" aria-hidden="true"></span>
+            LIVE TELEMETRY · ED25519 VERIFIED
+            {showDelta && lastDelta && (
+              <span className="live-delta-pill">+{lastDelta.toLocaleString()} synced!</span>
+            )}
           </div>
         </div>
 
         {/* Hero: Big Counter + The Honest Math Box */}
         <div className="billboard-hero">
           <div className="counter-col">
-            <div className="big-counter-number" id="billboard-token-counter">
+            <div
+              className={`big-counter-number ${isLivePulsing ? "counter-pulse" : ""}`}
+              id="billboard-token-counter"
+            >
               {countToShow.toLocaleString("en-US")}
+              {showDelta && lastDelta && (
+                <span className="counter-delta-floater">+{lastDelta.toLocaleString()}</span>
+              )}
             </div>
             <div className="big-counter-label">
               COMMUNITY COMPUTE · <strong>MAXIMUM LEVERAGE</strong>
