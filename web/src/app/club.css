@@ -1149,3 +1149,87 @@ select{background:var(--input-bg);color:var(--input-color);border:1px solid var(
   .svg-badge-link { margin-left: 0; }
   .bar-legend { gap: 14px; }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   HOME GATEWAYS (LEADERBOARD & COMMUNITY TILES)
+   ════════════════════════════════════════════════════════════════════ */
+.home-gateways {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin: 12px 0 44px;
+}
+.home-gateway-card {
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 34px 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 22px;
+  text-decoration: none;
+  color: var(--ink);
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.home-gateway-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent-mint);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+}
+[data-theme="dark"] .home-gateway-card:hover {
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+}
+.home-gateway-card h2 {
+  font: 32px/1.15 var(--serif);
+  margin: 12px 0;
+  color: var(--ink);
+}
+.home-gateway-card p {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.6;
+}
+.gateway-eyebrow {
+  font: 700 11px var(--mono);
+  letter-spacing: 2px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.gateway-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+  font-size: 13px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.gateway-pill {
+  font: 11px var(--mono);
+  color: var(--muted);
+}
+.gateway-arrow {
+  font-weight: 600;
+  color: var(--accent-mint);
+}
+.leaderboard-intro {
+  padding-bottom: 20px;
+}
+@media (max-width: 900px) {
+  .home-gateways {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+}
+@media (max-width: 620px) {
+  .home-gateway-card {
+    padding: 24px 20px;
+  }
+  .home-gateway-card h2 {
+    font-size: 26px;
+  }
+}
