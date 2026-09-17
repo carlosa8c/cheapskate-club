@@ -32,7 +32,7 @@ export default async function Home() {
             <em>More brag.</em>
           </h1>
           <p>
-            You bring the ideas. cheapoS brings the tokens.<br />
+            You bring the ideas. cheapoS stretches every token.<br />
             We bring a wildly unnecessary leaderboard.
           </p>
           <div className="hero-actions">
