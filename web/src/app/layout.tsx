@@ -28,6 +28,7 @@ export default async function Layout({children}: {children: React.ReactNode}) {
      <nav aria-label="Main navigation">
       <Link href="/">Home</Link>
       <Link href="/leaderboard">Leaderboard</Link>
+      <Link href="/engine">Engine</Link>
       <Link href="/community">Community</Link>
       <Link href="/about">How it works</Link>
       <ThemeToggle />
