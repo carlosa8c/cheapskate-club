@@ -59,7 +59,7 @@ export default function Rankings({
           <thead>
             <tr>
               <th className="rank-cell" scope="col">Rank</th>
-              <th scope="col">Fellow cheapoS</th>
+              <th scope="col">Fellow cheapo</th>
               <th className="total-cell" scope="col">Community tokens</th>
             </tr>
           </thead>

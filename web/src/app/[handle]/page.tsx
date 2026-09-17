@@ -37,7 +37,7 @@ export default async function MemberPage({params}:{params:Promise<{handle:string
  const rankIndex = board ? board.entries.findIndex(e => e.handle.toLowerCase() === member.handle.toLowerCase()) : -1;
  const titleInfo = rankIndex >= 0 ? getCheapoTitle(rankIndex + 1) : null;
  const shareable=await publicMember(member.handle).catch(()=>null);
- return <section className="member-page"><Link href="/">← The leaderboard</Link><div className="member-heading"><div className="member-monogram" aria-hidden="true">{member.display_name.slice(0,1).toUpperCase()}</div><div><p className="eyebrow">MEET A FELLOW CHEAPSKATE</p><h1>{member.display_name}</h1><p>@{member.handle}</p>{titleInfo && (
+ return <section className="member-page"><Link href="/leaderboard">← The leaderboard</Link><div className="member-heading"><div className="member-monogram" aria-hidden="true">{member.display_name.slice(0,1).toUpperCase()}</div><div><p className="eyebrow">MEET A FELLOW CHEAPSKATE</p><h1>{member.display_name}</h1><p>@{member.handle}</p>{titleInfo && (
       <span className={`cheapo-title-pill pill-rank-${rankIndex + 1}`} style={{ marginTop: 6, display: 'inline-flex' }}>
         <span className="title-icon">{titleInfo.icon}</span> {titleInfo.title}
       </span>

@@ -27,7 +27,7 @@ export default async function Account({ searchParams }: { searchParams: Promise<
   const member=memberData(stats);
   const { status } = await searchParams;
   return <section className="prose account-page"><p className="eyebrow">YOUR CORNER OF THE CLUB</p><h1>You’re in.<br/><em>Welcome to the club.</em></h1>
-    {profile && <><p className="lede">{profile.display_name} · @{profile.handle}</p><p>Your profile is ready. You can change your name and sharing preferences whenever you like.</p><Link className="button" href="/">Explore the leaderboard →</Link></>}
+    {profile && <><p className="lede">{profile.display_name} · @{profile.handle}</p><p>Your profile is ready. You can change your name and sharing preferences whenever you like.</p><Link className="button" href="/leaderboard">Explore the leaderboard →</Link></>}
     {member ? <><MemberStats member={member}/>{profile?.sharing_enabled && <p><Link href={`/@${profile.handle}`}>View your public profile ↗</Link></p>}</> : <p>Your Club stats are not available yet. Try again shortly.</p>}
     {status && messages[status] && <p className="notice" role="status">{messages[status]}</p>}
     {error ? <p role="alert" className="notice">We couldn’t load your profile. Please reload in a moment. Your saved settings haven’t changed.</p> :

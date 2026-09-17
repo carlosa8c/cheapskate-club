@@ -21,7 +21,7 @@ export default async function Join({ searchParams }: { searchParams: Promise<{st
     <h1>Find your<br/><em>fellow cheapos.</em></h1>
     <p className="lede">Join with X or GitHub. We’ll use your profile name to get you started—you can change it anytime.</p>
     {status && messages[status] && <p className="notice" role="status">{messages[status]}</p>}
-    {configured ? <div className="signin-options"><form action={signIn}><input type="hidden" name="provider" value="x"/><SubmitButton pendingText="Opening X…">Continue with X →</SubmitButton></form><form action={signIn}><input type="hidden" name="provider" value="github"/><SubmitButton pendingText="Opening GitHub…">Continue with GitHub</SubmitButton></form></div> : <p className="notice">Sign-in is being configured. The leaderboard is still open to browse.</p>}
+    {configured ? <div className="signin-options"><form action={signIn}><input type="hidden" name="provider" value="x"/><SubmitButton pendingText="Opening X…">Continue with X →</SubmitButton></form><form action={signIn}><input type="hidden" name="provider" value="github"/><SubmitButton pendingText="Opening GitHub…">Continue with GitHub →</SubmitButton></form></div> : <p className="notice">Sign-in is being configured. The leaderboard is still open to browse.</p>}
     <p>Signing in creates a Club account. It does not connect your repositories or upload anything from cheapoS. Leaderboard sharing stays off until you choose it.</p>
     <h2>Bring your work, keep your privacy.</h2><p>Your email stays private. You choose the name other members see. Connect cheapoS from its Usage & savings panel when you’re ready.</p>
   </section>;

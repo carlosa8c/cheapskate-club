@@ -218,7 +218,7 @@ export default function ScoreboardBillboard({
             </div>
             <div className="big-counter-headline">
               ~${retailEstimate} in commercial API bills eliminated —{" "}
-              <strong className="zero-pocket-highlight">$0 out-of-pocket</strong>
+              <strong className="zero-pocket-highlight">rock-bottom spend</strong>
             </div>
             <div className="big-counter-sub">
               Signed machine sync · {models.length} models in the mix · {roles.length} agent roles ·
