@@ -50,7 +50,7 @@ export default async function Home() {
           className="champion-card"
           href={champion ? `/@${champion.handle}` : member ? "/account" : "/join"}
         >
-          <span className="eyebrow">ALL-TIME ZERO-COST CHAMPION</span>
+          <span className="eyebrow">ALL-TIME COMMUNITY CHAMPION</span>
           <h2>Top Cheapo</h2>
           <div className="trophy-stage">
             <span className="orbit orbit-one" aria-hidden="true">✦</span>
@@ -74,6 +74,11 @@ export default async function Home() {
                   ? "The first spot is waiting."
                   : "Checking the scoreboard."}
               </span>
+              {champion && (
+                <span className="cheapo-title-pill pill-rank-1" style={{ marginTop: 4, display: "inline-flex" }}>
+                  👑 Supreme Frugal Overlord
+                </span>
+              )}
             </div>
             <span className="champion-link" aria-hidden="true">↗</span>
           </div>
@@ -87,7 +92,7 @@ export default async function Home() {
                 : "—"}
             </strong>
             <span>
-              zero-cost tokens<br />and counting
+              community tokens<br />and counting
             </span>
           </div>
         </Link>
@@ -110,7 +115,7 @@ export default async function Home() {
             </div>
             <h2>The Leaderboard</h2>
             <p>
-              See who&apos;s extracting the most compute for $0.00 out-of-pocket. Filter by
+              See who&apos;s extracting maximum compute with minimum bill. Filter by
               month or all-time, inspect model distributions, and claim your place on the board.
             </p>
           </div>
@@ -130,7 +135,7 @@ export default async function Home() {
             </div>
             <h2>What Cheapos Are Building</h2>
             <p>
-              Explore real projects built with $0 compute — autonomous agents, CLI utilities,
+              Explore real projects built with community compute — autonomous agents, CLI utilities,
               games, and research bots. Discover builds, leave cheers, or share yours.
             </p>
           </div>

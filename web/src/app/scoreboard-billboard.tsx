@@ -172,9 +172,9 @@ export default function ScoreboardBillboard({
 
             {/* Real honest spend */}
             <div className="honest-row">
-              <div className="honest-val-real">$0.00</div>
+              <div className="honest-val-real">~$0.00</div>
               <div className="honest-desc-real">
-                actual out-of-pocket spend
+                rock-bottom out-of-pocket
                 <span className="real-sub">{unbilledPct}% unbilled compute ✓</span>
               </div>
             </div>

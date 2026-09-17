@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Avatar } from "../club-art";
 import type { Entry } from "@/lib/leaderboard";
+import { getCheapoTitle } from "@/lib/cheapo-titles";
 
 export interface PodiumProps {
   entries: Entry[];
@@ -18,6 +19,10 @@ export default function Podium({ entries }: PodiumProps) {
   const p1 = entries[0];
   const p2 = entries[1];
   const p3 = entries[2];
+
+  const t1 = getCheapoTitle(1);
+  const t2 = getCheapoTitle(2);
+  const t3 = getCheapoTitle(3);
 
   return (
     <section className="racing-podium-section" aria-label="Top 3 Racing Podium">
@@ -44,6 +49,11 @@ export default function Podium({ entries }: PodiumProps) {
               <div className="podium-info">
                 <strong className="podium-name">{p2.display_name}</strong>
                 <span className="podium-handle">@{p2.handle}</span>
+                {t2 && (
+                  <span className="podium-honorific-badge badge-rank-2">
+                    {t2.icon} {t2.title}
+                  </span>
+                )}
               </div>
               <div className="podium-score-wrap">
                 <span className="podium-score-val">{formatTokens(p2.tokens)}</span>
@@ -60,6 +70,11 @@ export default function Podium({ entries }: PodiumProps) {
               <div className="podium-info">
                 <strong className="podium-name">Silver Step Open</strong>
                 <span className="podium-handle">No runner-up yet</span>
+                {t2 && (
+                  <span className="podium-honorific-badge badge-rank-2">
+                    {t2.icon} {t2.title}
+                  </span>
+                )}
               </div>
               <p className="podium-empty-note">
                 Connect your installation and claim the #2 spot.
@@ -87,6 +102,11 @@ export default function Podium({ entries }: PodiumProps) {
               <div className="podium-info">
                 <strong className="podium-name">{p1.display_name}</strong>
                 <span className="podium-handle">@{p1.handle}</span>
+                {t1 && (
+                  <span className="podium-honorific-badge badge-rank-1">
+                    {t1.icon} {t1.title}
+                  </span>
+                )}
               </div>
               <div className="podium-score-wrap">
                 <span className="podium-score-val champion-score-val">
@@ -108,6 +128,11 @@ export default function Podium({ entries }: PodiumProps) {
               <div className="podium-info">
                 <strong className="podium-name">Crown Waiting</strong>
                 <span className="podium-handle">Take pole position</span>
+                {t1 && (
+                  <span className="podium-honorific-badge badge-rank-1">
+                    {t1.icon} {t1.title}
+                  </span>
+                )}
               </div>
               <span className="podium-claim-btn">Take 1st Place ↗</span>
             </Link>
@@ -131,6 +156,11 @@ export default function Podium({ entries }: PodiumProps) {
               <div className="podium-info">
                 <strong className="podium-name">{p3.display_name}</strong>
                 <span className="podium-handle">@{p3.handle}</span>
+                {t3 && (
+                  <span className="podium-honorific-badge badge-rank-3">
+                    {t3.icon} {t3.title}
+                  </span>
+                )}
               </div>
               <div className="podium-score-wrap">
                 <span className="podium-score-val">{formatTokens(p3.tokens)}</span>
@@ -147,6 +177,11 @@ export default function Podium({ entries }: PodiumProps) {
               <div className="podium-info">
                 <strong className="podium-name">Bronze Step Open</strong>
                 <span className="podium-handle">No 3rd place yet</span>
+                {t3 && (
+                  <span className="podium-honorific-badge badge-rank-3">
+                    {t3.icon} {t3.title}
+                  </span>
+                )}
               </div>
               <p className="podium-empty-note">
                 Any verified free compute steps onto the podium.

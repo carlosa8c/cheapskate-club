@@ -37,8 +37,8 @@ export default async function LeaderboardPage({
           <em>Honor Roll.</em>
         </h1>
         <p className="lede">
-          Compete for high-mileage glory. Verified machine sync, signed token events,
-          and absolutely $0 out-of-pocket spend.
+          Compete for high-mileage glory and coveted thrift titles. Verified machine sync,
+          signed token telemetry, maximum compute leverage, and rock-bottom bills.
         </p>
       </section>
 
@@ -71,6 +71,27 @@ export default async function LeaderboardPage({
                 <span className="join-fine">Opt in once. Leave whenever.</span>
               </>
             )}
+          </section>
+
+          <section className="join-card cheapo-titles-guide-card">
+            <div className="eyebrow">HONORARY THRIFT TITLES</div>
+            <h3>Cheapo Honorifics</h3>
+            <p>
+              Climb the ranks to unlock official bragging rights and custom badges:
+            </p>
+            <ul className="cheapo-titles-list">
+              <li><span className="rank-badge">#1</span> 👑 Supreme Frugal Overlord</li>
+              <li><span className="rank-badge">#2</span> 🥈 The Discount Baron</li>
+              <li><span className="rank-badge">#3</span> 🥉 The Thrifty Wizard</li>
+              <li><span className="rank-badge">#4</span> 🏷️ Coupon Clipper Prime</li>
+              <li><span className="rank-badge">#5</span> 🍞 Frontier Freeloader</li>
+              <li><span className="rank-badge">#6</span> 🔌 Power Strip Parasite</li>
+              <li><span className="rank-badge">#7</span> ☕ Free Refill Connoisseur</li>
+              <li><span className="rank-badge">#8</span> 📦 Cardboard Box Architect</li>
+              <li><span className="rank-badge">#9</span> 🪙 Dime Dropper Deluxe</li>
+              <li><span className="rank-badge">#10</span> 🪪 Gate Crasher First Class</li>
+            </ul>
+            <span className="join-fine">Spots #11–20 feature additional thrift badges.</span>
           </section>
 
           <section className="small-note">

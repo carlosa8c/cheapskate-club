@@ -140,8 +140,8 @@ export async function GET() {
 
     <!-- Honest Real Spend -->
     <g transform="translate(18, 114)">
-      <text x="0" y="0" class="mono" font-size="30" font-weight="800" fill="#56cf89">$0.00</text>
-      <text x="298" y="-8" text-anchor="end" class="mono" font-size="10.5" fill="#7a8d82">actual out-of-pocket spend</text>
+      <text x="0" y="0" class="mono" font-size="30" font-weight="800" fill="#56cf89">~$0.00</text>
+      <text x="298" y="-8" text-anchor="end" class="mono" font-size="10.5" fill="#7a8d82">rock-bottom out-of-pocket</text>
       <text x="298" y="8" text-anchor="end" class="mono" font-size="10.5" font-weight="700" fill="#56cf89">99.7% unbilled compute ✓</text>
     </g>
 
