@@ -26,7 +26,7 @@ export default function Podium({ entries }: PodiumProps) {
           <span className="racing-flag" aria-hidden="true">🏁</span>
           POLE POSITION &amp; PODIUM
         </div>
-        <h2 className="podium-title">Top 3 Cheapos</h2>
+        <h2 className="podium-title">Top 3 cheapoS</h2>
       </div>
 
       <div className="racing-podium">

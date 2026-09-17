@@ -33,7 +33,7 @@ export default async function LeaderboardPage({
           OFFICIAL STANDINGS · ZERO-COST COMPUTE
         </div>
         <h1>
-          The Cheapo<br />
+          The cheapoS<br />
           <em>Honor Roll.</em>
         </h1>
         <p className="lede">
