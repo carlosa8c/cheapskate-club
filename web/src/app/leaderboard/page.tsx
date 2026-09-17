@@ -2,6 +2,7 @@ import Link from "next/link";
 import { currentMember } from "@/lib/current-member";
 import { leaderboard } from "@/lib/leaderboard";
 import Rankings from "../rankings";
+import Podium from "./podium";
 
 export const dynamic = "force-dynamic";
 
@@ -40,6 +41,9 @@ export default async function LeaderboardPage({
           and absolutely $0 out-of-pocket spend.
         </p>
       </section>
+
+      {/* Top 3 Racing Podium Cards */}
+      <Podium entries={board.entries} period={period} />
 
       <div className="board-layout">
         <Rankings key={period} board={board} period={period} />
