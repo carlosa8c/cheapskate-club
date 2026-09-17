@@ -6,9 +6,9 @@ import ModelExplorer from "./model-explorer";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "The Engine Room · Compute Observatory · cheapoS",
+  title: "Under the Hood · Compute Observatory · cheapoS",
   description:
-    "Community index of zero-cost AI intelligence: global free model power rankings and autonomous agent role breakdown.",
+    "Community compute index: global free model power rankings, 4-tier infrastructure provenance, and autonomous agent role breakdown.",
 };
 
 function formatTokens(n: number): string {
@@ -24,11 +24,13 @@ export default async function EnginePage() {
   const catTotal =
     stats.categories.public_free +
       stats.categories.included +
-      stats.categories.local || stats.totalTokens || 1;
+      stats.categories.local +
+      stats.categories.paid || stats.totalTokens || 1;
 
   const pubPct = ((stats.categories.public_free / catTotal) * 100).toFixed(1);
   const incPct = ((stats.categories.included / catTotal) * 100).toFixed(1);
   const locPct = ((stats.categories.local / catTotal) * 100).toFixed(1);
+  const paidPct = ((stats.categories.paid / catTotal) * 100).toFixed(1);
 
   return (
     <div className="engine-page">
@@ -39,11 +41,11 @@ export default async function EnginePage() {
           THE ENGINE ROOM · CLUB COMPUTE OBSERVATORY
         </div>
         <h1>
-          What Gets Built When<br />
-          <em>Compute Costs $0.00.</em>
+          Under the hood.<br />
+          <em>Maximum leverage. Minimum bill.</em>
         </h1>
         <p className="lede">
-          The community index of zero-dollar intelligence. Aggregated telemetry across
+          The community index of high-efficiency compute. Aggregated telemetry across
           active installations, {stats.uniqueModelCount} benchmarked models, and 4
           autonomous cognitive agent roles.
         </p>
@@ -52,17 +54,17 @@ export default async function EnginePage() {
       {/* Global Telemetry KPI Strip */}
       <section className="engine-kpis" aria-label="Global compute telemetry">
         <div className="engine-kpi-card">
-          <span className="kpi-label">TOTAL ZERO-COST TOKENS</span>
+          <span className="kpi-label">TOTAL COMMUNITY COMPUTE</span>
           <strong className="kpi-val kpi-mint">
             {stats.totalTokens.toLocaleString("en-US")}
           </strong>
-          <span className="kpi-sub">100% verified on-device receipts</span>
+          <span className="kpi-sub">Verified machine sync receipts</span>
         </div>
 
         <div className="engine-kpi-card">
           <span className="kpi-label">MODELS BENCHMARKED</span>
           <strong className="kpi-val">{stats.uniqueModelCount}</strong>
-          <span className="kpi-sub">across 4 major free gateways</span>
+          <span className="kpi-sub">across 4 major compute gateways</span>
         </div>
 
         <div className="engine-kpi-card">
@@ -78,7 +80,7 @@ export default async function EnginePage() {
           <strong className="kpi-val" style={{ color: "#a78bfa" }}>
             ~${stats.estimatedCommercialRetailTotal.toFixed(2)}
           </strong>
-          <span className="kpi-sub">$0.00 actual out-of-pocket spend</span>
+          <span className="kpi-sub">Maximum leverage across providers</span>
         </div>
       </section>
 
@@ -134,29 +136,33 @@ export default async function EnginePage() {
         <div className="engine-section-header">
           <div className="engine-eyebrow">
             <span className="little-spark" aria-hidden="true">📊</span>
-            THE FREE TIER 500
+            THE MODEL POWER RANKINGS
           </div>
-          <h2 id="models-heading">Free Model Power Rankings</h2>
+          <h2 id="models-heading">Community Model Index</h2>
           <p className="engine-section-desc">
-            Which free frontier models do software builders actually choose when compute is
-            free? Live telemetry aggregated across installations.
+            Which frontier models do software builders actually deploy when maximizing compute
+            efficiency? Live telemetry aggregated across installations.
           </p>
         </div>
 
         <ModelExplorer models={stats.models} />
       </section>
 
-      {/* Section 3: Zero-Dollar Infrastructure Matrix */}
+      {/* Section 3: 4-Tier Infrastructure Matrix */}
       <section className="engine-section" aria-labelledby="infra-heading">
         <div className="engine-section-header">
           <div className="engine-eyebrow">
             <span className="little-spark" aria-hidden="true">🌐</span>
             INFRASTRUCTURE PROVENANCE
           </div>
-          <h2 id="infra-heading">Where the Zero-Cost Compute Originates</h2>
+          <h2 id="infra-heading">Where Community Compute Originates</h2>
+          <p className="engine-section-desc">
+            4 compute tiers working together: public free gateways, included developer
+            quotas, local hardware, and pay-as-you-go frontier keys.
+          </p>
         </div>
 
-        <div className="infra-grid">
+        <div className="infra-grid infra-grid-4">
           <div className="infra-card">
             <div className="infra-top">
               <span className="infra-dot dot-public-free" aria-hidden="true"></span>
@@ -179,8 +185,7 @@ export default async function EnginePage() {
             </div>
             <h3>Included Account Quotas</h3>
             <p>
-              Pre-bundled allowances from existing developer environments and free-tier
-              subscriptions.
+              Pre-bundled developer environment quotas and zero-dollar editor allowances.
             </p>
             <strong className="infra-tokens">
               {stats.categories.included.toLocaleString("en-US")} tokens
@@ -195,10 +200,25 @@ export default async function EnginePage() {
             <h3>Local Hardware</h3>
             <p>
               On-device inference powered by Apple Silicon unified memory (MLX), local
-              Ollama instances, and CPU fallback.
+              Ollama, and CPU execution.
             </p>
             <strong className="infra-tokens">
               {stats.categories.local.toLocaleString("en-US")} tokens
+            </strong>
+          </div>
+
+          <div className="infra-card">
+            <div className="infra-top">
+              <span className="infra-dot dot-paid" aria-hidden="true"></span>
+              <span className="infra-pct">{paidPct}%</span>
+            </div>
+            <h3>Paid Pay-As-You-Go</h3>
+            <p>
+              Targeted out-of-pocket tokens reserved for high-stakes frontier reasoning
+              or heavy benchmarks.
+            </p>
+            <strong className="infra-tokens" style={{ color: "#a78bfa" }}>
+              {stats.categories.paid.toLocaleString("en-US")} tokens
             </strong>
           </div>
         </div>
@@ -209,7 +229,7 @@ export default async function EnginePage() {
         <span className="banner-star" aria-hidden="true">✳</span>
         <div>
           <h2>Want your compute on the observatory?</h2>
-          <p>Download cheapoS, start building for $0, and sync with the club.</p>
+          <p>Download cheapoS, start building efficiently, and sync with the club.</p>
         </div>
         <Link className="button" href={member ? "/account" : "/join"}>
           {member ? "Your installation settings ↗" : "Join the club ↗"}

@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Leaderboard · The Cheapskate Club",
-  description: "Official all-time and monthly zero-cost AI token rankings for cheapoS builders.",
+  description: "Official all-time and monthly community AI token rankings for cheapoS builders.",
 };
 
 export default async function LeaderboardPage({
@@ -30,14 +30,14 @@ export default async function LeaderboardPage({
       <section className="intro leaderboard-intro">
         <div className="eyebrow">
           <span className="little-spark" aria-hidden="true">✳</span>
-          OFFICIAL STANDINGS · ZERO-COST COMPUTE
+          OFFICIAL STANDINGS · COMMUNITY COMPUTE
         </div>
         <h1>
           The cheapoS<br />
           <em>Honor Roll.</em>
         </h1>
         <p className="lede">
-          Compete for zero-cost glory. Verified machine sync, signed token events,
+          Compete for high-mileage glory. Verified machine sync, signed token events,
           and absolutely $0 out-of-pocket spend.
         </p>
       </section>

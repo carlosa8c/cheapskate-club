@@ -47,7 +47,7 @@ export default function Podium({ entries }: PodiumProps) {
               </div>
               <div className="podium-score-wrap">
                 <span className="podium-score-val">{formatTokens(p2.tokens)}</span>
-                <span className="podium-score-lbl">zero-cost tokens</span>
+                <span className="podium-score-lbl">verified tokens</span>
               </div>
               <span className="podium-view-btn">View profile ↗</span>
             </Link>
@@ -96,7 +96,7 @@ export default function Podium({ entries }: PodiumProps) {
                   {p1.tokens.toLocaleString("en-US")} total tokens
                 </span>
               </div>
-              <span className="podium-status-pill">100% Free compute ✓</span>
+              <span className="podium-status-pill">Top Mileage ✓</span>
               <span className="podium-view-btn">View profile ↗</span>
             </Link>
           ) : (
@@ -134,7 +134,7 @@ export default function Podium({ entries }: PodiumProps) {
               </div>
               <div className="podium-score-wrap">
                 <span className="podium-score-val">{formatTokens(p3.tokens)}</span>
-                <span className="podium-score-lbl">zero-cost tokens</span>
+                <span className="podium-score-lbl">verified tokens</span>
               </div>
               <span className="podium-view-btn">View profile ↗</span>
             </Link>

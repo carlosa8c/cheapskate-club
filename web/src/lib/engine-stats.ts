@@ -38,6 +38,7 @@ export interface EngineStats {
     public_free: number;
     included: number;
     local: number;
+    paid: number;
   };
   roles: RoleStat[];
   models: ModelStat[];
@@ -98,10 +99,9 @@ function cleanModelName(name: string): string {
   return name.replace(/^openrouter\//, "").replace(/:free$/, "");
 }
 
-// Industry standard commercial pricing per 1M tokens to estimate savings avoided
 function estimateModelSavings(name: string, tokens: number): number {
   const lower = name.toLowerCase();
-  let ratePerMillion = 3.0; // default frontier blend
+  let ratePerMillion = 3.0;
   if (lower.includes("flash-lite") || lower.includes("mini")) {
     ratePerMillion = 0.30;
   } else if (lower.includes("flash") || lower.includes("27b")) {
@@ -114,17 +114,16 @@ function estimateModelSavings(name: string, tokens: number): number {
 
 export async function getEngineStats(): Promise<EngineStats> {
   const board = await leaderboard("zero_cost", "all");
-  let totalTokens = 81345631;
+  let totalTokens = 81364597;
   const totalMembers = board.state === "ready" ? board.entries.length : 1;
 
   if (board.state === "ready" && board.entries.length > 0) {
     totalTokens = board.entries.reduce((sum, e) => sum + e.tokens, 0);
   }
 
-  // Aggregate member profiles
   const rawRoles: Record<string, number> = {};
   const rawModels: Record<string, number> = {};
-  const rawCategories = { public_free: 0, included: 0, local: 0 };
+  const rawCategories = { public_free: 0, included: 0, local: 0, paid: 0 };
 
   if (board.state === "ready" && board.entries.length > 0) {
     const profiles = await Promise.all(
@@ -137,6 +136,7 @@ export async function getEngineStats(): Promise<EngineStats> {
         rawCategories.public_free += p.categories.public_free || 0;
         rawCategories.included += p.categories.included || 0;
         rawCategories.local += p.categories.local || 0;
+        rawCategories.paid += (p.categories as Record<string, number>).paid || 0;
       }
       if (p.roles) {
         for (const r of p.roles) {
@@ -169,14 +169,14 @@ export async function getEngineStats(): Promise<EngineStats> {
   }
 
   const catSum =
-    rawCategories.public_free + rawCategories.included + rawCategories.local || totalTokens || 1;
+    rawCategories.public_free + rawCategories.included + rawCategories.local + rawCategories.paid || totalTokens || 1;
   if (catSum === 1) {
     rawCategories.public_free = Math.round(totalTokens * 0.977);
     rawCategories.included = Math.round(totalTokens * 0.02);
     rawCategories.local = Math.round(totalTokens * 0.003);
+    rawCategories.paid = 0;
   }
 
-  // Format Roles
   const totalRoleTokens = Object.values(rawRoles).reduce((a, b) => a + b, 0) || totalTokens;
   const roles: RoleStat[] = Object.entries(rawRoles)
     .sort(([, a], [, b]) => b - a)
@@ -197,7 +197,6 @@ export async function getEngineStats(): Promise<EngineStats> {
       };
     });
 
-  // Format Models
   const totalModelTokens = Object.values(rawModels).reduce((a, b) => a + b, 0) || totalTokens;
   const models: ModelStat[] = Object.entries(rawModels)
     .sort(([, a], [, b]) => b - a)
@@ -214,7 +213,6 @@ export async function getEngineStats(): Promise<EngineStats> {
       };
     });
 
-  // Format Providers
   const providerTokens: Record<string, { tokens: number; color: string }> = {};
   for (const m of models) {
     if (!providerTokens[m.provider]) {

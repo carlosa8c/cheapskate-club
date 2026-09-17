@@ -4,14 +4,16 @@ import { publicMember } from "@/lib/public-member";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  let totalTokens = 81296224;
-  let retailSavings = "243.89";
-  let pubTokens = 79456263;
+  let totalTokens = 81364597;
+  let retailSavings = "244.09";
+  let pubTokens = 79505670;
   let incTokens = 1601645;
   let locTokens = 238316;
+  let paidTokens = 0;
   let pubPct = "97.7";
   let incPct = "2.0";
   let locPct = "0.3";
+  let paidPct = "0.0";
 
   try {
     const board = await leaderboard("zero_cost", "all");
@@ -24,10 +26,12 @@ export async function GET() {
         pubTokens = member.categories.public_free || 0;
         incTokens = member.categories.included || 0;
         locTokens = member.categories.local || 0;
-        const catSum = pubTokens + incTokens + locTokens || totalTokens || 1;
+        paidTokens = (member.categories as Record<string, number>).paid || 0;
+        const catSum = pubTokens + incTokens + locTokens + paidTokens || totalTokens || 1;
         pubPct = ((pubTokens / catSum) * 100).toFixed(1);
         incPct = ((incTokens / catSum) * 100).toFixed(1);
         locPct = ((locTokens / catSum) * 100).toFixed(1);
+        paidPct = ((paidTokens / catSum) * 100).toFixed(1);
       }
     }
   } catch {
@@ -89,7 +93,7 @@ export async function GET() {
   <!-- Top Metadata Header Strip -->
   <g transform="translate(36, 48)">
     <text x="0" y="0" class="mono" font-size="11.5" font-weight="700" letter-spacing="2" fill="#7a8d82">
-      FREE-TIER SCOREBOARD · LIVE ON <tspan fill="#56cf89">cheapskate-club.vercel.app</tspan>
+      COMMUNITY COMPUTE · LIVE ON <tspan fill="#56cf89">cheapskate-club.vercel.app</tspan>
     </text>
     
     <!-- Verified Badge -->
@@ -108,7 +112,7 @@ export async function GET() {
       ${formattedTotal}
     </text>
     <text x="0" y="32" class="mono" font-size="13" font-weight="700" letter-spacing="2.5" fill="#7a8d82">
-      FREE TOKENS CONSUMED · <tspan fill="#56cf89">100% ZERO-COST</tspan>
+      COMMUNITY COMPUTE · <tspan fill="#56cf89">MAXIMUM LEVERAGE</tspan>
     </text>
     <text x="0" y="60" class="sans" font-size="17" font-weight="500" fill="#e8f3ec">
       ~$${retailSavings} in commercial API bills eliminated — <tspan fill="#56cf89" font-weight="700">$0 out-of-pocket</tspan>
@@ -138,7 +142,7 @@ export async function GET() {
     <g transform="translate(18, 114)">
       <text x="0" y="0" class="mono" font-size="30" font-weight="800" fill="#56cf89">$0.00</text>
       <text x="298" y="-8" text-anchor="end" class="mono" font-size="10.5" fill="#7a8d82">actual out-of-pocket spend</text>
-      <text x="298" y="8" text-anchor="end" class="mono" font-size="10.5" font-weight="700" fill="#56cf89">100% free compute ✓</text>
+      <text x="298" y="8" text-anchor="end" class="mono" font-size="10.5" font-weight="700" fill="#56cf89">99.7% unbilled compute ✓</text>
     </g>
 
     <!-- Privacy note -->
@@ -148,10 +152,10 @@ export async function GET() {
     </text>
   </g>
 
-  <!-- Segmented Distribution Bar -->
+  <!-- 4-Tier Segmented Distribution Bar -->
   <g transform="translate(36, 282)">
     <text x="0" y="0" class="mono" font-size="11" font-weight="700" letter-spacing="2" fill="#7a8d82">
-      WHERE IT COMES FROM · <tspan fill="#e8f3ec">3 ZERO-COST TIERS</tspan>
+      WHERE IT COMES FROM · <tspan fill="#e8f3ec">4 COMPUTE TIERS</tspan>
     </text>
     <text x="928" y="0" text-anchor="end" class="mono" font-size="11" font-weight="700" fill="#56cf89">100% RESOLVED</text>
 
@@ -170,21 +174,26 @@ export async function GET() {
       <rect x="0" y="0" width="60" height="20" fill="url(#glint)" class="scanner" />
     </g>
 
-    <!-- Legend -->
+    <!-- Legend with 4 tiers -->
     <g transform="translate(0, 52)">
       <circle cx="5" cy="5" r="4.5" fill="#56cf89" />
       <text x="16" y="9" class="mono" font-size="11" fill="#e8f3ec">
         Public Gateways <tspan fill="#7a8d82">${formattedPub} (${pubPct}%)</tspan>
       </text>
 
-      <circle cx="340" cy="5" r="4.5" fill="#38bdf8" />
-      <text x="351" y="9" class="mono" font-size="11" fill="#e8f3ec">
+      <circle cx="280" cy="5" r="4.5" fill="#38bdf8" />
+      <text x="291" y="9" class="mono" font-size="11" fill="#e8f3ec">
         Included Quotas <tspan fill="#7a8d82">${formattedInc} (${incPct}%)</tspan>
       </text>
 
-      <circle cx="620" cy="5" r="4.5" fill="#f59e0b" />
-      <text x="631" y="9" class="mono" font-size="11" fill="#e8f3ec">
+      <circle cx="530" cy="5" r="4.5" fill="#f59e0b" />
+      <text x="541" y="9" class="mono" font-size="11" fill="#e8f3ec">
         Local Hardware <tspan fill="#7a8d82">${formattedLoc} (${locPct}%)</tspan>
+      </text>
+
+      <circle cx="760" cy="5" r="4.5" fill="#a78bfa" />
+      <text x="771" y="9" class="mono" font-size="11" fill="#e8f3ec">
+        Paid Pay-As-You-Go <tspan fill="#7a8d82">(${paidPct}%)</tspan>
       </text>
     </g>
   </g>

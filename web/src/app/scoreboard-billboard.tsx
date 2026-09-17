@@ -43,19 +43,17 @@ export default function ScoreboardBillboard({
   const [displayCount, setDisplayCount] = useState(0);
   const [isClient, setIsClient] = useState(false);
 
-  // Easing count-up animation on client mount
   useEffect(() => {
     setIsClient(true);
     let start: number | null = null;
     let animId: number;
     const duration = 1500;
-    const target = totalTokens > 0 ? totalTokens : 81296224;
+    const target = totalTokens > 0 ? totalTokens : 81364597;
 
     function step(timestamp: number) {
       if (!start) start = timestamp;
       const elapsed = timestamp - start;
       const progress = Math.min(elapsed / duration, 1);
-      // easeOutExpo
       const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
       setDisplayCount(Math.floor(ease * target));
 
@@ -70,33 +68,35 @@ export default function ScoreboardBillboard({
     return () => cancelAnimationFrame(animId);
   }, [totalTokens]);
 
-  const target = totalTokens > 0 ? totalTokens : 81296224;
+  const target = totalTokens > 0 ? totalTokens : 81364597;
   const countToShow = isClient ? displayCount : target;
 
-  // Categories resolution
   const categories = championMember?.categories || {
     public_free: Math.round(target * 0.977),
     included: Math.round(target * 0.02),
     local: Math.round(target * 0.003),
+    paid: 0,
   };
-
-  const catTotal =
-    (categories.public_free || 0) +
-      (categories.included || 0) +
-      (categories.local || 0) || target || 1;
 
   const pubTokens = categories.public_free || 0;
   const incTokens = categories.included || 0;
   const locTokens = categories.local || 0;
+  const paidTokens = (categories as Record<string, number>).paid || 0;
+
+  const catTotal = pubTokens + incTokens + locTokens + paidTokens || target || 1;
 
   const pubPct = ((pubTokens / catTotal) * 100).toFixed(1);
   const incPct = ((incTokens / catTotal) * 100).toFixed(1);
   const locPct = ((locTokens / catTotal) * 100).toFixed(1);
+  const paidPct = ((paidTokens / catTotal) * 100).toFixed(1);
 
-  // Honest math ($3/M tokens industry standard retail estimate)
+  const unbilledPct = (
+    ((pubTokens + incTokens + locTokens) / catTotal) *
+    100
+  ).toFixed(1);
+
   const retailEstimate = (target * 0.000003).toFixed(2);
 
-  // Roles resolution
   const roles = championMember?.roles?.length
     ? championMember.roles
     : [
@@ -108,7 +108,6 @@ export default function ScoreboardBillboard({
 
   const totalRoleTokens = roles.reduce((sum, r) => sum + r.tokens, 0) || target;
 
-  // Models resolution
   const models = championMember?.models?.length
     ? championMember.models
     : [
@@ -123,12 +122,12 @@ export default function ScoreboardBillboard({
   const remainingModelCount = Math.max(0, models.length - 5);
 
   return (
-    <section className="scoreboard-billboard" aria-label="Zero-Cost Token Scoreboard">
+    <section className="scoreboard-billboard" aria-label="Community Compute Scoreboard">
       <div className="billboard-content">
         {/* Top Status Strip */}
         <div className="billboard-header">
           <span className="billboard-title">
-            FREE-TIER SCOREBOARD · LIVE ON <strong>cheapskate-club.vercel.app</strong>
+            COMMUNITY COMPUTE · LIVE ON <strong>cheapskate-club.vercel.app</strong>
           </span>
           <div className="pulse-pill">
             <span className="pulse-dot" aria-hidden="true"></span>
@@ -143,7 +142,7 @@ export default function ScoreboardBillboard({
               {countToShow.toLocaleString("en-US")}
             </div>
             <div className="big-counter-label">
-              FREE TOKENS CONSUMED · <strong>100% ZERO-COST</strong>
+              COMMUNITY COMPUTE · <strong>MAXIMUM LEVERAGE</strong>
             </div>
             <div className="big-counter-headline">
               ~${retailEstimate} in commercial API bills eliminated —{" "}
@@ -155,7 +154,7 @@ export default function ScoreboardBillboard({
             </div>
           </div>
 
-          {/* The Honest Math Box (OmniRoute Pattern) */}
+          {/* The Honest Math Box */}
           <div className="honest-math-box">
             <div className="honest-math-header">
               <span>THE HONEST MATH</span>
@@ -176,7 +175,7 @@ export default function ScoreboardBillboard({
               <div className="honest-val-real">$0.00</div>
               <div className="honest-desc-real">
                 actual out-of-pocket spend
-                <span className="real-sub">100% free compute ✓</span>
+                <span className="real-sub">{unbilledPct}% unbilled compute ✓</span>
               </div>
             </div>
 
@@ -186,16 +185,22 @@ export default function ScoreboardBillboard({
           </div>
         </div>
 
-        {/* Segmented Distribution Bar ("WHERE IT COMES FROM") */}
+        {/* 4-Tier Segmented Distribution Bar */}
         <div className="bar-section">
           <div className="bar-section-title">
             <span>
-              WHERE IT COMES FROM · <strong>3 ZERO-COST TIERS</strong>
+              WHERE IT COMES FROM · <strong>4 COMPUTE TIERS</strong>
             </span>
             <span className="resolved-tag">100% RESOLVED</span>
           </div>
 
-          <div className="segmented-bar-track" role="progressbar" aria-valuenow={100} aria-valuemin={0} aria-valuemax={100}>
+          <div
+            className="segmented-bar-track"
+            role="progressbar"
+            aria-valuenow={100}
+            aria-valuemin={0}
+            aria-valuemax={100}
+          >
             <div
               className="bar-seg public-free"
               style={{ width: `${pubPct}%` }}
@@ -211,6 +216,13 @@ export default function ScoreboardBillboard({
               style={{ width: `${locPct}%` }}
               title={`Local Hardware: ${locTokens.toLocaleString()} tokens (${locPct}%)`}
             />
+            {Number(paidPct) > 0 && (
+              <div
+                className="bar-seg paid"
+                style={{ width: `${paidPct}%` }}
+                title={`Paid Keys: ${paidTokens.toLocaleString()} tokens (${paidPct}%)`}
+              />
+            )}
             <div className="bar-scanner" aria-hidden="true" />
           </div>
 
@@ -226,6 +238,10 @@ export default function ScoreboardBillboard({
             <div className="legend-item">
               <span className="legend-dot dot-local" aria-hidden="true"></span>
               Local Hardware <span>{locTokens.toLocaleString()} ({locPct}%)</span>
+            </div>
+            <div className="legend-item">
+              <span className="legend-dot dot-paid" aria-hidden="true"></span>
+              Paid Pay-As-You-Go <span>{paidTokens.toLocaleString()} ({paidPct}%)</span>
             </div>
           </div>
         </div>
