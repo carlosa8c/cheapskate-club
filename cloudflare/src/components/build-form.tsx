@@ -149,7 +149,7 @@ export function BuildForm({
 
     let finalDesc = cleanDesc;
     if (benchmark) {
-      finalDesc = cleanDesc + encodeBenchmarkComment(benchmark);
+      finalDesc = cleanDesc + encodeBenchmarkComment(benchmark, "pending_operator_review");
     }
 
     const payload = {

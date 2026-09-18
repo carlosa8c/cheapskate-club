@@ -125,21 +125,47 @@ export function parseTaskJson(rawInput: string | Record<string, any>): ParsedTas
   };
 }
 
-export function encodeBenchmarkComment(benchmark: BenchmarkTelemetry): string {
-  const compact = JSON.stringify(benchmark);
+export interface BenchmarkEnvelope {
+  benchmark: BenchmarkTelemetry;
+  status?: "pending_operator_review" | "approved" | "rejected";
+  submitted_at?: string;
+  reviewed_at?: string;
+}
+
+export function encodeBenchmarkComment(
+  benchmark: BenchmarkTelemetry,
+  status: "pending_operator_review" | "approved" | "rejected" = "pending_operator_review"
+): string {
+  const envelope: BenchmarkEnvelope = {
+    benchmark,
+    status,
+    submitted_at: new Date().toISOString(),
+  };
+  const compact = JSON.stringify(envelope);
   return `\n\n<!-- cheapoS-benchmark:${compact} -->`;
 }
 
-export function decodeBenchmarkComment(text: string): { cleanText: string; benchmark: BenchmarkTelemetry | null } {
-  if (!text) return { cleanText: text || "", benchmark: null };
+export function decodeBenchmarkComment(text: string): {
+  cleanText: string;
+  benchmark: BenchmarkTelemetry | null;
+  status: "pending_operator_review" | "approved" | "rejected";
+} {
+  if (!text) return { cleanText: text || "", benchmark: null, status: "approved" };
   const match = text.match(/<!--\s*cheapoS-benchmark:(.*?)\s*-->/s);
-  if (!match) return { cleanText: text, benchmark: null };
+  if (!match) return { cleanText: text, benchmark: null, status: "approved" };
 
   try {
     const parsed = JSON.parse(match[1]);
     const cleanText = text.replace(match[0], "").trim();
-    return { cleanText, benchmark: parsed };
+    if (parsed && typeof parsed === "object" && "benchmark" in parsed) {
+      return {
+        cleanText,
+        benchmark: parsed.benchmark,
+        status: parsed.status || "pending_operator_review",
+      };
+    }
+    return { cleanText, benchmark: parsed, status: "approved" };
   } catch {
-    return { cleanText: text, benchmark: null };
+    return { cleanText: text, benchmark: null, status: "approved" };
   }
 }

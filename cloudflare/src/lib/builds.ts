@@ -1,4 +1,5 @@
-import { SHOWCASE_PROJECTS, getShowcaseProject, type ShowcaseProject } from "./showcase-projects";
+import { SHOWCASE_PROJECTS, getShowcaseProject, type ShowcaseProject, type BenchmarkTelemetry } from "./showcase-projects";
+import { decodeBenchmarkComment } from "./task-parser";
 
 export type Build = {
   id: string;
@@ -19,14 +20,23 @@ export type Build = {
   hook?: string;
   telemetry?: any;
   narrative?: any;
+  review_status?: "pending_operator_review" | "approved" | "rejected";
+  benchmark?: BenchmarkTelemetry;
 };
 
-export async function builds(options: { id?: string; handle?: string; page?: number } = {}): Promise<{ items: Build[]; unavailable: boolean }> {
+export async function builds(
+  options: {
+    id?: string;
+    handle?: string;
+    page?: number;
+    filterStatus?: "approved" | "pending" | "all";
+  } = {}
+): Promise<{ items: Build[]; unavailable: boolean }> {
   // 1. If an exact showcase ID or slug was requested, return it immediately
   if (options.id) {
     const showcase = getShowcaseProject(options.id);
     if (showcase) {
-      return { items: [showcase], unavailable: false };
+      return { items: [{ ...showcase, review_status: "approved" }], unavailable: false };
     }
   }
 
@@ -38,7 +48,7 @@ export async function builds(options: { id?: string; handle?: string; page?: num
     const filtered = options.handle
       ? SHOWCASE_PROJECTS.filter((p) => p.handle.toLowerCase() === options.handle?.toLowerCase())
       : SHOWCASE_PROJECTS;
-    return { items: filtered, unavailable: false };
+    return { items: filtered.map((p) => ({ ...p, review_status: "approved" })), unavailable: false };
   }
 
   try {
@@ -55,26 +65,67 @@ export async function builds(options: { id?: string; handle?: string; page?: num
 
     if (!response.ok) {
       // Fallback to showcase projects on upstream error
-      return { items: SHOWCASE_PROJECTS, unavailable: false };
+      return { items: SHOWCASE_PROJECTS.map((p) => ({ ...p, review_status: "approved" })), unavailable: false };
     }
 
     const data = await response.json();
     if (!Array.isArray(data)) {
-      return { items: SHOWCASE_PROJECTS, unavailable: false };
+      return { items: SHOWCASE_PROJECTS.map((p) => ({ ...p, review_status: "approved" })), unavailable: false };
     }
 
-    // Combine Supabase builds with showcase exemplars (avoiding duplicate IDs)
-    const dbIds = new Set((data as Build[]).map((b) => b.id.toLowerCase()));
-    const missingShowcases = SHOWCASE_PROJECTS.filter((p) => !dbIds.has(p.id.toLowerCase()));
-    
-    // Showcase projects lead the workbench feed, followed by community contributions
-    const combined = (options.page === 0 || !options.page)
-      ? [...missingShowcases, ...(data as Build[])]
-      : (data as Build[]);
+    // Process and decode embedded benchmark & review status for each database record
+    const processed: Build[] = (data as any[]).map((item) => {
+      const decoded = decodeBenchmarkComment(item.description || "");
+      const bm = decoded.benchmark;
+      return {
+        ...item,
+        description: decoded.cleanText,
+        review_status: decoded.status,
+        benchmark: bm || undefined,
+        telemetry: item.telemetry || (bm ? {
+          cost: bm.dimension1_cost_tokens.billedCost,
+          tokens: bm.dimension1_cost_tokens.totalTokens,
+          tests: bm.dimension5_quality.checksSummary,
+          autonomy: bm.dimension4_autonomy.resumeIncidents,
+          models: bm.dimension3_swarm.workers.join(", "),
+        } : undefined),
+      };
+    });
+
+    // If a specific ID was requested, return it (whether approved or pending review)
+    if (options.id) {
+      const found = processed.find(
+        (b) => b.id.toLowerCase() === options.id!.toLowerCase() || b.slug?.toLowerCase() === options.id!.toLowerCase()
+      );
+      if (found) {
+        return { items: [found], unavailable: false };
+      }
+    }
+
+    // Filter by review status
+    if (options.filterStatus === "pending") {
+      const pendingOnly = processed.filter((b) => b.review_status === "pending_operator_review");
+      return { items: pendingOnly, unavailable: false };
+    }
+
+    // Public feed: only show approved builds
+    const approvedDbBuilds = processed.filter(
+      (b) => b.review_status !== "pending_operator_review" && b.review_status !== "rejected"
+    );
+
+    const dbIds = new Set(approvedDbBuilds.map((b) => b.id.toLowerCase()));
+    const missingShowcases = SHOWCASE_PROJECTS.filter((p) => !dbIds.has(p.id.toLowerCase())).map((p) => ({
+      ...p,
+      review_status: "approved" as const,
+    }));
+
+    const combined =
+      options.page === 0 || !options.page
+        ? [...missingShowcases, ...approvedDbBuilds]
+        : approvedDbBuilds;
 
     return { items: combined, unavailable: false };
   } catch {
-    // High-availability fallback
-    return { items: SHOWCASE_PROJECTS, unavailable: false };
+    return { items: SHOWCASE_PROJECTS.map((p) => ({ ...p, review_status: "approved" })), unavailable: false };
   }
 }

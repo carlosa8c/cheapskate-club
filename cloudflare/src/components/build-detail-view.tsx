@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { createClient, type SupabaseClient, type User } from "@supabase/supabase-js";
 import type { Build } from "../lib/builds";
-import { decodeBenchmarkComment } from "../lib/task-parser";
+import { decodeBenchmarkComment, encodeBenchmarkComment } from "../lib/task-parser";
 import { BenchmarkPanel } from "./benchmark-panel";
 
 type BuildDetailViewProps = {
@@ -11,15 +11,6 @@ type BuildDetailViewProps = {
   supabaseUrl?: string;
   supabaseKey?: string;
   siteUrl?: string;
-};
-
-type CommentItem = {
-  id: string;
-  author: string;
-  handle: string;
-  avatar: string;
-  text: string;
-  time: string;
 };
 
 export function BuildDetailView({
@@ -37,20 +28,14 @@ export function BuildDetailView({
   const [deleting, setDeleting] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
-  // Community commenting state
-  const [comments, setComments] = useState<CommentItem[]>([]);
-  const [commentText, setCommentText] = useState("");
-  const [postingComment, setPostingComment] = useState(false);
+  // Decode embedded metadata & benchmark
+  const decoded = decodeBenchmarkComment(build.description);
+  const [reviewStatus, setReviewStatus] = useState<string>(
+    build.review_status || decoded.status || "approved"
+  );
+  const [operatorActionLoading, setOperatorActionLoading] = useState(false);
 
   useEffect(() => {
-    // Load local project discussion comments
-    const saved = localStorage.getItem(`comments_${build.id}`);
-    if (saved) {
-      try {
-        setComments(JSON.parse(saved));
-      } catch {}
-    }
-
     if (!supabaseUrl || !supabaseKey) return;
     const sb = createClient(supabaseUrl, supabaseKey);
     setClient(sb);
@@ -183,7 +168,6 @@ export function BuildDetailView({
   const shareUrl = `${shareOrigin.replace(/\/$/, "")}/community/${targetId}`;
   const tweetText = encodeURIComponent(`${build.title} — autonomous zero-cost showcase on The Cheapskate Club`);
   // Decode embedded benchmark if not present directly in build.telemetry
-  const decoded = decodeBenchmarkComment(build.description);
   const displayDescription = decoded.cleanText;
   const benchmark = build.telemetry?.benchmark || decoded.benchmark;
   const telemetry = build.telemetry || (benchmark ? {
@@ -208,6 +192,61 @@ export function BuildDetailView({
           ← Around the workbench
         </a>
       </div>
+
+      {reviewStatus === "pending_operator_review" && (
+        <aside
+          role="status"
+          style={{
+            margin: "0 0 32px",
+            padding: "20px 24px",
+            borderRadius: "10px",
+            background: "rgba(217, 119, 6, 0.12)",
+            border: "1px solid rgba(217, 119, 6, 0.4)",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: "16px",
+          }}
+        >
+          <div style={{ maxWidth: "680px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", fontWeight: "bold", color: "var(--status-warning)" }}>
+              <span style={{ fontSize: "18px" }}>⏳</span>
+              <span>PENDING OPERATOR REVIEW</span>
+            </div>
+            <p style={{ margin: "6px 0 0", fontSize: "14px", lineHeight: "1.5" }}>
+              {isOperator
+                ? "This community project was submitted to the workbench and requires operator approval before appearing on the public feed."
+                : isOwn
+                ? "Your build has been received and is waiting for review by @carlosa8c before going live to the public workbench."
+                : "This community project has been submitted and is currently awaiting operator review by @carlosa8c."}
+            </p>
+          </div>
+
+          {isOperator && (
+            <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+              <button
+                type="button"
+                className="button primary"
+                disabled={operatorActionLoading}
+                onClick={handleApproveBuild}
+                
+              >
+                {operatorActionLoading ? "Saving…" : "✓ Approve & Publish"}
+              </button>
+              <button
+                type="button"
+                className="button"
+                disabled={operatorActionLoading}
+                onClick={handleRejectBuild}
+                style={{ color: "var(--status-brand)" }}
+              >
+                ✕ Reject
+              </button>
+            </div>
+          )}
+        </aside>
+      )}
 
       <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "8px", flexWrap: "wrap" }}>
         <p className="eyebrow" style={{ margin: 0 }}>
@@ -470,134 +509,36 @@ export function BuildDetailView({
         </details>
       )}
 
-      {/* Project Discussion & Builder Chat Section */}
-      <section
-        className="build-discussion-section"
-        style={{
-          marginTop: "50px",
-          paddingTop: "35px",
-          borderTop: "1px solid var(--line)",
-        }}
-      >
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: "12px" }}>
-          <div>
-            <span className="eyebrow" style={{ fontSize: "var(--text-meta)", letterSpacing: "1px" }}>COMMUNITY WORKBENCH CHAT</span>
-            <h2 style={{ font: "32px var(--serif)", margin: "8px 0" }}>Project Discussion</h2>
-            <p style={{ color: "var(--muted)", margin: "4px 0 20px" }}>
-              Chat with the builder, ask questions about prompts and setup, or share feedback.
-            </p>
-          </div>
-          {build.discussion_url && (
+      {/* Project Discussion - Commenting temporarily disabled */}
+      {build.discussion_url && (
+        <section
+          className="build-discussion-section"
+          style={{
+            marginTop: "50px",
+            paddingTop: "35px",
+            borderTop: "1px solid var(--line)",
+          }}
+        >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: "12px" }}>
+            <div>
+              <span className="eyebrow" style={{ fontSize: "var(--text-meta)", letterSpacing: "1px" }}>COMMUNITY DISCUSSION</span>
+              <h2 style={{ font: "32px var(--serif)", margin: "8px 0" }}>Project Discussion</h2>
+              <p style={{ color: "var(--muted)", margin: "4px 0 20px" }}>
+                Workbench comments are temporarily disabled while edit and delete controls are being added. Follow the project conversation on X.
+              </p>
+            </div>
             <a
               href={build.discussion_url}
               target="_blank"
               rel="noopener noreferrer ugc"
-              className="button"
+              className="button primary"
               style={{ fontSize: "var(--text-meta)" }}
             >
               View thread on X ↗
             </a>
-          )}
-        </div>
-
-        {/* Comment List */}
-        <div className="comments-list" style={{ display: "grid", gap: "16px", margin: "24px 0" }}>
-          {comments.length > 0 ? (
-            comments.map((c) => (
-              <div
-                key={c.id}
-                style={{
-                  padding: "18px",
-                  borderRadius: "10px",
-                  border: "1px solid var(--card-border)",
-                  background: "var(--card-bg)",
-                }}
-              >
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                    <span
-                      style={{
-                        width: "28px",
-                        height: "28px",
-                        borderRadius: "50%",
-                        background: "var(--line)",
-                        display: "grid",
-                        placeItems: "center",
-                        fontSize: "var(--text-meta)",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {c.avatar}
-                    </span>
-                    <strong style={{ fontSize: "14px" }}>{c.author}</strong>
-                    <span style={{ fontSize: "var(--text-meta)", color: "var(--muted)", fontFamily: "var(--mono)" }}>
-                      @{c.handle}
-                    </span>
-                  </div>
-                  <span style={{ fontSize: "var(--text-meta)", color: "var(--muted)" }}>{c.time}</span>
-                </div>
-                <p style={{ margin: "4px 0 0", fontSize: "15px", lineHeight: "1.6", whiteSpace: "pre-wrap" }}>
-                  {c.text}
-                </p>
-              </div>
-            ))
-          ) : (
-            <div
-              style={{
-                padding: "24px",
-                border: "1px dashed var(--line)",
-                borderRadius: "10px",
-                textAlign: "center",
-                color: "var(--muted)",
-              }}
-            >
-              <p style={{ margin: "6px 0" }}>No comments yet on this project.</p>
-              <p style={{ fontSize: "var(--text-meta)", margin: "0" }}>
-                Be the first to share your thoughts or ask @{build.handle} about this build.
-              </p>
-            </div>
-          )}
-        </div>
-
-        {/* Comment Composer */}
-        <form onSubmit={handlePostComment} style={{ marginTop: "24px" }}>
-          <label htmlFor="comment-box" style={{ fontWeight: "bold", fontSize: "14px", display: "block", marginBottom: "8px" }}>
-            Add to the discussion
-          </label>
-          <textarea
-            id="comment-box"
-            rows={3}
-            value={commentText}
-            onChange={(e) => setCommentText(e.target.value)}
-            placeholder={`Ask @${build.handle} about their prompts, models used, or build architecture…`}
-            style={{
-              width: "100%",
-              boxSizing: "border-box",
-              padding: "14px",
-              borderRadius: "8px",
-              border: "1px solid var(--input-border)",
-              background: "var(--input-bg)",
-              color: "var(--input-color)",
-              font: "inherit",
-              resize: "vertical",
-            }}
-          />
-          <div style={{ marginTop: "12px", display: "flex", gap: "12px", alignItems: "center" }}>
-            <button
-              type="submit"
-              className="button primary"
-              disabled={postingComment || !commentText.trim()}
-            >
-              {postingComment ? "Posting…" : "Post Comment"}
-            </button>
-            {!user && (
-              <a href="/join" className="text-button" style={{ fontSize: "var(--text-meta)" }}>
-                Join with X or GitHub to get verified badge →
-              </a>
-            )}
           </div>
-        </form>
-      </section>
+        </section>
+      )}
     </section>
   );
 }
