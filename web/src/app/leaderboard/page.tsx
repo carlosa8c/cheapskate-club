@@ -101,6 +101,19 @@ export default async function LeaderboardPage({
             <span className="join-fine">Spots #11–20 feature additional thrift badges.</span>
           </section>
 
+          <section className="join-card sponsor-sidebar-card">
+            <div className="eyebrow">FEATURED FRUGAL ENGINE</div>
+            <div className="join-art" aria-hidden="true">⚡</div>
+            <h3>Spotlight Partner</h3>
+            <p>
+              Autonomous cheapoS agents benchmarked on real code tasks. Zero synthetic fluff.
+            </p>
+            <Link className="button secondary" href="/sponsors" style={{ width: '100%', justifyContent: 'center', marginTop: 12 }}>
+              Sponsor next spotlight ↗
+            </Link>
+            <span className="join-fine">🛡️ No prized games · Unbuyable rankings</span>
+          </section>
+
           <section className="small-note">
             <span aria-hidden="true">↳</span>
             <div>

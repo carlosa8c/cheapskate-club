@@ -66,7 +66,10 @@ export default async function Layout({children}: {children: React.ReactNode}) {
     <footer className="site-footer">
      <Link className="brand" href="/"><Image src="/brand-icon.svg" width="25" height="25" alt=""/>cheapoS</Link>
      <span>Make expensive compute the exception.</span>
-     <Link className="text-button" href="/account">Your data, your call</Link>
+     <div className="footer-links">
+       <Link className="text-button" href="/sponsors">Sponsor the Club ✳</Link>
+       <Link className="text-button" href="/account">Your data, your call</Link>
+     </div>
     </footer>
    </body>
   </html>

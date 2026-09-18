@@ -1,3 +1,4 @@
+import SponsorHero from "./sponsor-hero";
 import Link from "next/link";
 import { currentMember } from "@/lib/current-member";
 import { leaderboard } from "@/lib/leaderboard";
@@ -104,6 +105,9 @@ export default async function Home() {
         entryCount={all.entries.length}
         championMember={championMember}
       />
+
+      {/* Featured Frugal Engine / Sponsor Spotlight */}
+      <SponsorHero />
 
       {/* Gateway Teasers: Dedicated Leaderboard & Community Pages */}
       <section className="home-gateways" aria-label="Explore the Club">
