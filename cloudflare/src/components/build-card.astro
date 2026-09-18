@@ -6,23 +6,62 @@ interface Props {
 }
 
 const { build } = Astro.props;
+const targetHref = build.slug ? `/community/${build.slug}` : `/community/${build.id}`;
+const isShowcase = Boolean(build.telemetry);
 ---
 
 <article class="build-card">
-  <a href={`/community/${build.id}`} class="build-cover" aria-label={`View ${build.title}`}>
+  <a href={targetHref} class="build-cover" aria-label={`View ${build.title}`}>
     {build.screenshot_url ? (
       <img src={build.screenshot_url} alt={`Screenshot of ${build.title}`} loading="lazy" referrerpolicy="no-referrer" />
     ) : (
-      <span aria-hidden="true">✳</span>
+      <div class="showcase-card-fallback" style="display: grid; place-items: center; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(209, 102, 71, 0.12), rgba(36, 63, 50, 0.15));">
+        <span style="font-size: 56px; color: var(--accent, #d16647);" aria-hidden="true">
+          {build.title.slice(0, 2).toUpperCase()}
+        </span>
+      </div>
     )}
   </a>
   <div class="build-card-body">
-    <p class="eyebrow">BUILT WITH A LITTLE INGENUITY</p>
-    <h2>
-      <a href={`/community/${build.id}`}>{build.title}</a>
+    <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;">
+      <p class="eyebrow" style="margin: 0; font-size: 10px; letter-spacing: 1px;">
+        {isShowcase ? "AUTONOMOUS BUILD · $0.00 COMPUTE" : "BUILT WITH A LITTLE INGENUITY"}
+      </p>
+      {isShowcase && (
+        <span class="pill" style="margin: 0; padding: 2px 8px; border-radius: 12px; background: var(--line, #e2ded4); font-size: 9px; font-weight: bold;">
+          VERIFIED RUN
+        </span>
+      )}
+    </div>
+
+    <h2 style="font-size: 22px; line-height: 1.2; margin: 12px 0 8px;">
+      <a href={targetHref}>{build.title}</a>
     </h2>
-    <p class="build-excerpt">{build.description}</p>
-    <div class="build-byline">
+
+    <p class="build-excerpt" style="font-size: 13.5px; line-height: 1.5; color: var(--muted); margin-bottom: 16px;">
+      {build.hook || build.description}
+    </p>
+
+    {isShowcase && build.telemetry && (
+      <div class="card-telemetry-strip" style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; font-family: var(--mono); font-size: 11px;">
+        <span style="background: rgba(36, 63, 50, 0.1); color: #243f32; padding: 3px 6px; border-radius: 4px; font-weight: bold;">
+          💰 $0.00
+        </span>
+        <span style="background: rgba(36, 63, 50, 0.08); padding: 3px 6px; border-radius: 4px;">
+          ⚡ {(build.telemetry.tokens / 1_000_000).toFixed(2)}M tok
+        </span>
+        <span style="background: rgba(36, 63, 50, 0.08); color: #243f32; padding: 3px 6px; border-radius: 4px;">
+          🟢 0 Resumes
+        </span>
+        {build.telemetry.tests && (
+          <span style="background: rgba(0, 0, 0, 0.05); padding: 3px 6px; border-radius: 4px;">
+            🧪 {build.telemetry.tests.split(" ")[0]}
+          </span>
+        )}
+      </div>
+    )}
+
+    <div class="build-byline" style="border-top: 1px solid var(--line); padding-top: 12px; margin-top: 0;">
       {build.profile_public ? (
         <a href={`/@${build.handle}`}>@{build.handle}</a>
       ) : (

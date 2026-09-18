@@ -5,7 +5,7 @@ import { BuildDetailView } from "../../components/build-detail-view";
 
 const { id } = Astro.params;
 
-if (!id || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) {
+if (!id || !/^[a-z0-9_-]{3,64}$/i.test(id)) {
   return Astro.redirect("/community");
 }
 
@@ -38,7 +38,7 @@ const siteUrl =
 
 <Layout
   title={`${build.title} · Community Workbench · The Cheapskate Club`}
-  description={`${build.description.slice(0, 180)} · Built by @${build.handle} on cheapoS`}
+  description={`${(build.hook || build.description).slice(0, 180)} · Built by @${build.handle} on cheapoS`}
 >
   <BuildDetailView
     build={build}
