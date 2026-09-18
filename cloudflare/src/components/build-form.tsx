@@ -130,8 +130,12 @@ export function BuildForm({
       setErrorMessage("Screenshot URL must be a valid HTTPS link.");
       return;
     }
-    if (cleanProject && !validateHttps(cleanProject)) {
-      setErrorMessage("Project URL must be a valid HTTPS link.");
+    if (!cleanProject) {
+      setErrorMessage("GitHub Repository or README link is mandatory to verify project authenticity.");
+      return;
+    }
+    if (!validateHttps(cleanProject) || !/^https:\/\/github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+/.test(cleanProject)) {
+      setErrorMessage("Project URL must be a valid public GitHub repository or README link (e.g. https://github.com/username/repository).");
       return;
     }
     if (cleanDiscussion) {
@@ -351,15 +355,22 @@ export function BuildForm({
       />
       <small>Use a public image link. Image uploads are not available yet.</small>
 
-      <label htmlFor="project_url">GitHub or live demo · optional</label>
+      <label htmlFor="project_url" style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+        <span>GitHub Repository or README Link</span>
+        <strong style={{ color: "var(--accent, #d16647)", fontSize: "11px", fontFamily: "var(--mono)" }}>MANDATORY PROOF</strong>
+      </label>
       <input
         id="project_url"
         name="project_url"
         type="url"
+        required
         value={projectUrl}
         onChange={(e) => setProjectUrl(e.target.value)}
-        placeholder="https://…"
+        placeholder="https://github.com/username/project"
       />
+      <small>
+        Mandatory proof of project authenticity. Must be a public GitHub repository or direct README.md link.
+      </small>
 
       <label htmlFor="discussion_url">Your X post · optional</label>
       <input
