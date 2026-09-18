@@ -1,0 +1,128 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { publicMember, clubOrigin } from "../lib/public-member";
+import { leaderboard } from "../lib/leaderboard";
+import { getCheapoTitle } from "../lib/cheapo-titles";
+import { MemberStats } from "../components/member-stats";
+import { ShareActions } from "../components/share-actions";
+
+const rawHandle = Astro.params.handle || "";
+const cleanHandle = rawHandle.replace(/^@/, "").toLowerCase();
+
+if (!/^[a-z0-9_]{3,30}$/.test(cleanHandle)) {
+  return Astro.redirect("/leaderboard");
+}
+
+let member = null;
+try {
+  member = await publicMember(cleanHandle);
+} catch (e) {
+  // unavailable
+}
+
+if (!member) {
+  return Astro.redirect("/leaderboard");
+}
+
+const board = await leaderboard("zero_cost", "all").catch(() => null);
+const rankIndex = board
+  ? board.entries.findIndex((e) => e.handle.toLowerCase() === member.handle.toLowerCase())
+  : -1;
+const titleInfo = rankIndex >= 0 ? getCheapoTitle(rankIndex + 1) : null;
+
+const rankHeadline =
+  rankIndex === 0
+    ? "REIGNING SUPREME CHEAPO · POLE POSITION"
+    : rankIndex === 1
+    ? "OFFICIAL STANDINGS · RUNNER UP (P2)"
+    : rankIndex === 2
+    ? "OFFICIAL STANDINGS · PODIUM FINISHER (P3)"
+    : rankIndex >= 0
+    ? `OFFICIAL STANDINGS · RANK #${rankIndex + 1} ALL-TIME`
+    : "FELLOW CHEAPSKATE · BUILDER PROFILE";
+---
+
+<Layout
+  title={`${member.display_name} (@${member.handle}) · The Cheapskate Club`}
+  description={`${member.tokens.toLocaleString("en-US")} tokens & counting. Less bill. More brag.`}
+>
+  <section class="member-page">
+    <div class="profile-top-nav">
+      <a href="/leaderboard" class="inline-link">
+        ← The leaderboard
+      </a>
+      <a href="#club-card" class="top-jump-card-link">
+        🪪 Your verified Club Card ↓
+      </a>
+    </div>
+
+    <!-- Upgraded Member Hero Header -->
+    <div class="member-heading-card">
+      <div class="member-monogram-wrap">
+        {rankIndex === 0 && (
+          <span class="profile-crown" aria-hidden="true">
+            👑
+          </span>
+        )}
+        <div
+          class={`member-monogram ${rankIndex === 0 ? "monogram-champion" : ""}`}
+          aria-hidden="true"
+        >
+          {member.display_name.slice(0, 1).toUpperCase()}
+        </div>
+      </div>
+
+      <div class="member-info-col">
+        <div class="member-meta-eyebrow">
+          <span class="little-spark" aria-hidden="true">
+            ✳
+          </span>
+          {rankHeadline}
+        </div>
+
+        <h1 class="member-title-name">{member.display_name}</h1>
+
+        <div class="member-sub-row">
+          <span class="member-handle-tag">@{member.handle}</span>
+          {titleInfo && (
+            <span class={`cheapo-title-pill pill-rank-${rankIndex + 1}`}>
+              <span class="title-icon">{titleInfo.icon}</span>{" "}
+              {titleInfo.title}
+            </span>
+          )}
+          {rankIndex >= 0 && (
+            <span class="member-rank-pill">
+              Rank #{rankIndex + 1} on the Board
+            </span>
+          )}
+          <a href="#club-card" class="jump-card-pill" title="Jump to your verified Club Card">
+            🪪 Club Card ↓
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Unified Stats: Banner + 4-Tier Compute Matrix + Roles Grid + Model Explorer -->
+    <MemberStats member={member} client:load />
+
+    <!-- Graphical Membership Pass / Card Showcase -->
+    <ShareActions
+      handle={member.handle}
+      displayName={member.display_name}
+      tokens={member.tokens}
+      isChampion={rankIndex === 0}
+      url={`${clubOrigin()}/@${member.handle}`}
+      client:load
+    />
+
+    <div class="invite">
+      <div>
+        <h2>Good company. Better ideas.</h2>
+        <p>There’s always room for another builder in the club.</p>
+      </div>
+      <a class="button" href="/leaderboard">
+        Around the club →
+      </a>
+    </div>
+  </section>
+</Layout>

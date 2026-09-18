@@ -1,0 +1,138 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "The Cheapskate Club · cheapoS",
+  description = "Build more. Spend less. A community for resourceful AI builders.",
+} = Astro.props;
+
+const currentPath = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/brand-icon.svg" />
+    <script is:inline>
+      (function () {
+        try {
+          var t = localStorage.getItem("theme");
+          if (
+            t === "dark" ||
+            (!t && window.matchMedia("(prefers-color-scheme:dark)").matches)
+          ) {
+            document.documentElement.setAttribute("data-theme", "dark");
+          } else {
+            document.documentElement.setAttribute("data-theme", "light");
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <style is:global>
+      @import "../styles/globals.css";
+      @import "../styles/club.css";
+    </style>
+  </head>
+  <body data-design="club">
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site-header">
+      <a class="brand" href="/">
+        <img src="/brand-icon.svg" width="38" height="38" alt="" />
+        cheapoS <span>THE CHEAPSKATE CLUB</span>
+      </a>
+      <nav aria-label="Main navigation">
+        <div class="nav-links-group">
+          <a
+            href="/"
+            class:list={["nav-link", { active: currentPath === "/" }]}
+            aria-current={currentPath === "/" ? "page" : undefined}
+          >
+            Home
+          </a>
+          <a
+            href="/leaderboard"
+            class:list={[
+              "nav-link",
+              { active: currentPath.startsWith("/leaderboard") },
+            ]}
+            aria-current={currentPath.startsWith("/leaderboard") ? "page" : undefined}
+          >
+            Leaderboard
+          </a>
+          <a
+            href="/engine"
+            class:list={["nav-link", { active: currentPath.startsWith("/engine") }]}
+            aria-current={currentPath.startsWith("/engine") ? "page" : undefined}
+          >
+            Engine
+          </a>
+          <a
+            href="/sponsors"
+            class:list={[
+              "nav-link",
+              { active: currentPath.startsWith("/sponsors") },
+            ]}
+            aria-current={currentPath.startsWith("/sponsors") ? "page" : undefined}
+          >
+            Sponsors
+          </a>
+          <a
+            href="/about"
+            class:list={["nav-link", { active: currentPath.startsWith("/about") }]}
+            aria-current={currentPath.startsWith("/about") ? "page" : undefined}
+          >
+            How it works
+          </a>
+        </div>
+        <div class="nav-actions">
+          <button
+            type="button"
+            class="theme-toggle"
+            id="theme-btn"
+            aria-label="Toggle color theme"
+          >
+            <span class="theme-toggle-icon" id="theme-icon">◐</span>
+            <span class="theme-toggle-label" id="theme-label">Theme</span>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <main class="page" id="main">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <a class="brand" href="/">
+        <img src="/brand-icon.svg" width="25" height="25" alt="" />
+        cheapoS
+      </a>
+      <span>Make expensive compute the exception. Proudly operated on a $1.80/yr domain.</span>
+      <div class="footer-links">
+        <a class="text-button" href="/sponsors">Sponsor the Club ✳</a>
+        <a class="text-button" href="/about">Your data, your call</a>
+      </div>
+    </footer>
+
+    <script is:inline>
+      const btn = document.getElementById("theme-btn");
+      if (btn) {
+        btn.addEventListener("click", () => {
+          const current = document.documentElement.getAttribute("data-theme");
+          const next = current === "dark" ? "light" : "dark";
+          document.documentElement.setAttribute("data-theme", next);
+          try {
+            localStorage.setItem("theme", next);
+          } catch (e) {}
+        });
+      }
+    </script>
+  </body>
+</html>

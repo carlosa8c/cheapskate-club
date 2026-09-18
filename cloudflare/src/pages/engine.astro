@@ -1,0 +1,234 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getEngineStats } from "../lib/engine-stats";
+import ModelExplorer from "../components/model-explorer";
+
+const stats = await getEngineStats();
+
+const catTotal =
+  stats.categories.public_free +
+  stats.categories.included +
+  stats.categories.local +
+  stats.categories.paid || stats.totalTokens || 1;
+
+const pubPct = ((stats.categories.public_free / catTotal) * 100).toFixed(1);
+const incPct = ((stats.categories.included / catTotal) * 100).toFixed(1);
+const locPct = ((stats.categories.local / catTotal) * 100).toFixed(1);
+const paidPct = ((stats.categories.paid / catTotal) * 100).toFixed(1);
+
+function formatTokens(n: number): string {
+  if (n >= 1_000_000_000) return (n / 1_000_000_000).toFixed(1) + "B";
+  if (n >= 1_000_000) return (n / 1_000_000).toFixed(2) + "M";
+  if (n >= 1_000) return (n / 1_000).toFixed(1) + "K";
+  return n.toLocaleString();
+}
+---
+
+<Layout
+  title="Engine Observatory · The Cheapskate Club"
+  description="Real-time macro telemetry across autonomous cheapoS installations."
+>
+  <div class="engine-page">
+    <section class="intro engine-intro">
+      <div class="eyebrow">
+        <span class="little-spark" aria-hidden="true">⚡</span>
+        COMPUTE OBSERVATORY · TELEMETRY MACRO-DECK
+      </div>
+      <h1>
+        The cheapoS<br />
+        <em>Engine Room.</em>
+      </h1>
+      <p class="lede">
+        Aggregate intelligence across installations. See which models builders deploy,
+        how autonomous agents divide cognitive labor, and where zero-dollar compute
+        replaces commercial retail API spend.
+      </p>
+    </section>
+
+    <!-- Global Telemetry KPI Strip -->
+    <section class="engine-kpis" aria-label="Global compute telemetry">
+      <div class="engine-kpi-card">
+        <span class="kpi-label">TOTAL COMMUNITY COMPUTE</span>
+        <strong class="kpi-val kpi-mint">
+          {stats.totalTokens.toLocaleString("en-US")}
+        </strong>
+        <span class="kpi-sub">Verified machine sync receipts</span>
+      </div>
+
+      <div class="engine-kpi-card">
+        <span class="kpi-label">MODELS BENCHMARKED</span>
+        <strong class="kpi-val">{stats.uniqueModelCount}</strong>
+        <span class="kpi-sub">across major compute gateways</span>
+      </div>
+
+      <div class="engine-kpi-card">
+        <span class="kpi-label">AUTONOMOUS PERSONAS</span>
+        <strong class="kpi-val" style="color: #38bdf8;">
+          {stats.roles.length}
+        </strong>
+        <span class="kpi-sub">Worker, Reviewer, Planner, Coordinator</span>
+      </div>
+
+      <div class="engine-kpi-card">
+        <span class="kpi-label">COMMERCIAL BILLS AVOIDED</span>
+        <strong class="kpi-val" style="color: #a78bfa;">
+          ~${stats.estimatedCommercialRetailTotal.toFixed(2)}
+        </strong>
+        <span class="kpi-sub">Maximum leverage across providers</span>
+      </div>
+    </section>
+
+    <!-- Section 1: Cognitive Division of Labor -->
+    <section class="engine-section" aria-labelledby="roles-heading">
+      <div class="engine-section-header">
+        <div class="engine-eyebrow">
+          <span class="little-spark" aria-hidden="true">🧠</span>
+          COGNITIVE DIVISION OF LABOR
+        </div>
+        <h2 id="roles-heading">Autonomous Workshop Roles</h2>
+        <p class="engine-section-desc">
+          How autonomous cheapoS agent swarms divide their cognitive workloads when
+          executing software tasks.
+        </p>
+      </div>
+
+      <div class="engine-roles-grid">
+        {
+          stats.roles.map((r) => (
+            <div class="engine-role-card">
+              <div class="role-top-row">
+                <span class="role-icon-badge">{r.icon}</span>
+                <span class="role-pct-badge" style={`color: ${r.color};`}>
+                  {r.pct}% share
+                </span>
+              </div>
+              <h3 class="role-title">{r.displayName}</h3>
+              <p class="role-desc">{r.description}</p>
+              <div class="role-footer-stat">
+                <span class="role-tokens-num">{formatTokens(r.tokens)}</span>
+                <span class="role-tokens-lbl">
+                  {r.tokens.toLocaleString("en-US")} tokens
+                </span>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      <!-- Cognitive Ratio Callout Box -->
+      <div class="ratio-callout-box">
+        <div class="ratio-callout-icon" aria-hidden="true">💡</div>
+        <div>
+          <strong>Cognitive Ratio Benchmark:</strong> For every 10 tokens a Worker generates
+          executing code, Reviewers audit ~{stats.cognitiveRatio.reviewerToWorkerRatio} tokens,
+          and Planners structure ~0.7 tokens. Autonomous quality assurance accounts for ~
+          {stats.roles.find((r) => r.name === "reviewer")?.pct || "8"}% of overall compute.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Model Power Rankings -->
+    <section class="engine-section" aria-labelledby="models-heading">
+      <div class="engine-section-header">
+        <div class="engine-eyebrow">
+          <span class="little-spark" aria-hidden="true">📊</span>
+          THE MODEL POWER RANKINGS
+        </div>
+        <h2 id="models-heading">Community Model Index</h2>
+        <p class="engine-section-desc">
+          Which models do software builders actually deploy when maximizing compute
+          efficiency? Live telemetry aggregated across installations.
+        </p>
+      </div>
+
+      <ModelExplorer client:load models={stats.models} />
+    </section>
+
+    <!-- Section 3: 4-Tier Infrastructure Matrix -->
+    <section class="engine-section" aria-labelledby="infra-heading">
+      <div class="engine-section-header">
+        <div class="engine-eyebrow">
+          <span class="little-spark" aria-hidden="true">🌐</span>
+          INFRASTRUCTURE PROVENANCE
+        </div>
+        <h2 id="infra-heading">Where Community Compute Originates</h2>
+        <p class="engine-section-desc">
+          4 compute tiers working together: public free gateways, included developer
+          quotas, local hardware, and pay-as-you-go frontier keys.
+        </p>
+      </div>
+
+      <div class="infra-grid infra-grid-4">
+        <div class="infra-card">
+          <div class="infra-top">
+            <span class="infra-dot dot-public-free" aria-hidden="true"></span>
+            <span class="infra-pct">{pubPct}%</span>
+          </div>
+          <h3>Public Free Gateways</h3>
+          <p>
+            Free developer endpoints from Google AI Studio, Groq Cloud, OpenRouter
+            free tiers, and Cerebras.
+          </p>
+          <strong class="infra-tokens">
+            {stats.categories.public_free.toLocaleString("en-US")} tokens
+          </strong>
+        </div>
+
+        <div class="infra-card">
+          <div class="infra-top">
+            <span class="infra-dot dot-included" aria-hidden="true"></span>
+            <span class="infra-pct">{incPct}%</span>
+          </div>
+          <h3>Included Account Quotas</h3>
+          <p>
+            Pre-bundled developer environment quotas and zero-dollar editor allowances.
+          </p>
+          <strong class="infra-tokens">
+            {stats.categories.included.toLocaleString("en-US")} tokens
+          </strong>
+        </div>
+
+        <div class="infra-card">
+          <div class="infra-top">
+            <span class="infra-dot dot-local" aria-hidden="true"></span>
+            <span class="infra-pct">{locPct}%</span>
+          </div>
+          <h3>Local Hardware</h3>
+          <p>
+            On-device inference powered by Apple Silicon unified memory (MLX), local
+            Ollama, and CPU execution.
+          </p>
+          <strong class="infra-tokens">
+            {stats.categories.local.toLocaleString("en-US")} tokens
+          </strong>
+        </div>
+
+        <div class="infra-card">
+          <div class="infra-top">
+            <span class="infra-dot dot-paid" aria-hidden="true"></span>
+            <span class="infra-pct">{paidPct}%</span>
+          </div>
+          <h3>Paid Pay-As-You-Go</h3>
+          <p>
+            Targeted out-of-pocket tokens reserved for high-stakes frontier reasoning
+            or heavy benchmarks.
+          </p>
+          <strong class="infra-tokens" style="color: #a78bfa;">
+            {stats.categories.paid.toLocaleString("en-US")} tokens
+          </strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="bottom-banner">
+      <span class="banner-star" aria-hidden="true">✳</span>
+      <div>
+        <h2>Want your model featured here?</h2>
+        <p>Sponsor next month's spotlight engine on the observatory.</p>
+      </div>
+      <a class="button" href="/sponsors">
+        Sponsor prospectus ↗
+      </a>
+    </section>
+  </div>
+</Layout>

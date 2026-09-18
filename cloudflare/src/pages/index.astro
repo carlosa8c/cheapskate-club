@@ -1,0 +1,164 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { leaderboard } from "../lib/leaderboard";
+import { publicMember } from "../lib/public-member";
+import { Avatar, Trophy } from "../components/club-art";
+import ScoreboardBillboard from "../components/scoreboard-billboard";
+import SponsorHero from "../components/sponsor-hero";
+
+const all = await leaderboard("zero_cost", "all");
+const champion = all.entries[0];
+const total = all.entries.reduce((n, p) => n + p.tokens, 0);
+const championMember = champion
+  ? await publicMember(champion.handle).catch(() => null)
+  : null;
+---
+
+<Layout title="The Cheapskate Club · cheapoS" description="Less bill. More brag. A community for resourceful AI builders.">
+  <section class="hero club-hero">
+    <div class="hero-copy">
+      <div class="eyebrow">
+        <span class="little-spark" aria-hidden="true">✳</span>
+        FOR THE PROUDLY ECONOMICAL
+      </div>
+      <h1>
+        Less bill.<br />
+        <em>More brag.</em>
+      </h1>
+      <p>
+        You bring the ideas. cheapoS stretches every token.<br />
+        We bring a wildly unnecessary leaderboard.
+      </p>
+      <div class="hero-actions">
+        <a class="button primary" href="/leaderboard">
+          View Leaderboard <span aria-hidden="true">→</span>
+        </a>
+        <a class="button" href="/engine">
+          Engine Observatory <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="champion-card">
+      <span class="eyebrow">ALL-TIME COMMUNITY CHAMPION</span>
+      <h2>Top Cheapo</h2>
+      <div class="trophy-stage">
+        <span class="orbit orbit-one" aria-hidden="true">✦</span>
+        <Trophy />
+        <span class="orbit orbit-two" aria-hidden="true">✧</span>
+        <span class="trophy-caption">
+          BIG BRAIN<br />SMALL BILL
+        </span>
+      </div>
+      <div class="champion-person">
+        <Avatar name={champion?.display_name || "You"} />
+        <div>
+          <strong>
+            {
+              champion?.display_name ||
+                (all.state === "ready" ? "Your name here" : "Crown on standby")
+            }
+          </strong>
+          <span>
+            {
+              champion
+                ? "@" + champion.handle
+                : all.state === "ready"
+                ? "The first spot is waiting."
+                : "Checking the scoreboard."
+            }
+          </span>
+          {
+            champion && (
+              <span
+                class="cheapo-title-pill pill-rank-1"
+                style="margin-top: 4px; display: inline-flex;"
+              >
+                👑 Supreme Frugal Overlord
+              </span>
+            )
+          }
+        </div>
+        <span class="champion-link" aria-hidden="true">↗</span>
+      </div>
+      <div class="champion-score">
+        <strong>
+          {
+            champion
+              ? new Intl.NumberFormat("en-US", {
+                  notation: "compact",
+                  maximumFractionDigits: 2,
+                }).format(champion.tokens)
+              : "—"
+          }
+        </strong>
+        <span>
+          community tokens<br />and counting
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- The OmniRoute-Style Big Centerpiece Scoreboard -->
+  <ScoreboardBillboard
+    client:load
+    totalTokens={total}
+    entryCount={all.entries.length}
+    championMember={championMember}
+  />
+
+  <!-- Featured Frugal Engine / Sponsor Spotlight -->
+  <SponsorHero client:load />
+
+  <!-- Gateway Teasers: Dedicated Leaderboard & Engine Pages -->
+  <section class="home-gateways" aria-label="Explore the Club">
+    <a class="home-gateway-card" href="/leaderboard">
+      <div>
+        <div class="gateway-eyebrow">
+          <span class="gateway-icon" aria-hidden="true">🏆</span>
+          STANDINGS · TOP 100
+        </div>
+        <h2>The Leaderboard</h2>
+        <p>
+          See who's extracting maximum compute with minimum bill. Filter by month or
+          all-time, inspect model distributions, and claim your place on the board.
+        </p>
+      </div>
+      <div class="gateway-footer">
+        <span class="gateway-pill">
+          {all.entries.length} proud cheapo{all.entries.length === 1 ? "" : "s"} on the board
+        </span>
+        <span class="gateway-arrow" aria-hidden="true">Explore leaderboard ↗</span>
+      </div>
+    </a>
+
+    <a class="home-gateway-card" href="/engine">
+      <div>
+        <div class="gateway-eyebrow">
+          <span class="gateway-icon" aria-hidden="true">⚡</span>
+          ENGINE OBSERVATORY
+        </div>
+        <h2>Model Index & Telemetry</h2>
+        <p>
+          Live telemetric breakdown of the frontier and free models cheapoS builders use
+          to eliminate commercial API bills.
+        </p>
+      </div>
+      <div class="gateway-footer">
+        <span class="gateway-pill">Telemetry observatory</span>
+        <span class="gateway-arrow" aria-hidden="true">View compute models ↗</span>
+      </div>
+    </a>
+  </section>
+
+  <section class="bottom-banner">
+    <span class="banner-star" aria-hidden="true">✳</span>
+    <div>
+      <h2>Being cheap looks good on you.</h2>
+      <p>Your next side project might just earn you a spot on the board.</p>
+    </div>
+    <a class="button" href="/leaderboard">
+      Explore the board ↗
+    </a>
+  </section>
+</Layout>
