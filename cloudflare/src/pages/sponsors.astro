@@ -1,225 +1,224 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { SPONSOR_TIERS, FRUGAL_TOOLS } from "../lib/sponsor-data";
+
+const inquiryHref = "mailto:sponsors@cheapos.lol?subject=Cheapskate%20Club%20Sponsorship%20Inquiry";
 ---
 
 <Layout
   title="Sponsor the Club · The Cheapskate Club"
-  description="Partner with the Cheapskate Club. Reach autonomous AI builders obsessively optimizing cost per completed task."
+  description="Become an early partner of the Cheapskate Club. Explore proposed sponsorships and help shape a community for practical, lower-cost coding workflows."
 >
   <div class="sponsors-page">
-    <!-- Hero Section -->
-    <section class="intro sponsors-intro">
+    <section class="intro sponsors-intro" aria-labelledby="sponsors-title">
       <div class="eyebrow">
         <span class="little-spark" aria-hidden="true">✳</span>
-        B2B INFRASTRUCTURE & TOOL SPONSORSHIPS
+        Early partnerships · preparing for launch
       </div>
-      <h1>
-        Where builders obsess over<br />
-        <em>cost per completed task.</em>
+      <h1 id="sponsors-title">
+        Build with the club.<br />
+        <em>Be here from the start.</em>
       </h1>
       <p class="lede">
-        cheapoS builders don’t read synthetic benchmarks. They run autonomous multi-agent
-        coding swarms with API keys in hand, obsessively hunting for the highest intelligence
-        at the lowest cost.
+        Cheapskate Club is live and preparing for launch. We’re inviting model providers
+        and developer-tool makers to help shape a community focused on practical,
+        lower-cost coding workflows. Bring your platform, your ideas, and a useful way
+        for builders to get started.
       </p>
-      <div class="hero-actions" style="margin-top: 24px;">
-        <a
-          class="button primary"
-          href="mailto:sponsors@cheapos.lol?subject=Cheapskate%20Club%20Sponsorship%20Inquiry"
-        >
-          Email sponsors@cheapos.lol ✉️
-        </a>
-        <a class="button" href="/engine">
-          View live compute telemetry →
-        </a>
+      <div class="hero-actions">
+        <a class="button primary" href="#packages-title">Explore launch partnerships ↓</a>
+        <a class="button" href="/engine">Explore current usage →</a>
       </div>
+      <p class="sponsors-contact">
+        Have a partnership in mind? <a href={inquiryHref}>sponsors@cheapos.lol</a>
+      </p>
     </section>
 
-    <!-- Telemetry Strip -->
-    <section class="sponsors-stats-strip" aria-label="Audience telemetry">
-      <div class="sponsor-stat">
-        <span class="stat-num">40M+</span>
-        <span class="stat-label">Verified Tokens Benchmarked</span>
-      </div>
-      <div class="sponsor-stat">
-        <span class="stat-num">&lt; $0.01</span>
-        <span class="stat-label">Average Task Cost Target</span>
-      </div>
-      <div class="sponsor-stat">
-        <span class="stat-num">1-Click</span>
-        <span class="stat-label">Local cheapoS CLI Config</span>
-      </div>
-      <div class="sponsor-stat">
-        <span class="stat-num">100%</span>
-        <span class="stat-label">Cryptographic Receipt Proofs</span>
-      </div>
+    <section class="sponsor-benefits" aria-label="Why partner with the club">
+      <article>
+        <h2>Introduce your platform</h2>
+        <p>Plan a clear, labeled placement that helps builders discover your model or tool as the club grows.</p>
+      </article>
+      <article>
+        <h2>Make it easy to try</h2>
+        <p>Pair your placement with clear setup guidance and an optional trial-credit offer.</p>
+      </article>
+      <article>
+        <h2>Help shape the launch</h2>
+        <p>Work with us on useful setup guides, member offers, and ideas for the first community projects.</p>
+      </article>
     </section>
 
-    <!-- The Anti-Cheat Axiom (Trust Callout) -->
-    <section class="anti-cheat-section" aria-labelledby="anti-cheat-title">
-      <div class="anti-cheat-box">
-        <div class="anti-cheat-header">
-          <span class="shield-icon" aria-hidden="true">🛡️</span>
-          <div>
-            <div class="eyebrow-small">OUR PLATFORM ETHICS</div>
-            <h2 id="anti-cheat-title">The Anti-Cheat Axiom: Zero Prized Games</h2>
-          </div>
-        </div>
-        <div class="anti-cheat-body">
-          <p>
-            <strong>Nothing motivates people to cheat more than money.</strong> The minute a
-            platform offers cash prizes, bounties, or paid rank manipulation, adversarial gaming
-            explodes: sybil accounts, forged receipts, mock token counters, and synthetic spam.
-          </p>
-          <p>
-            To preserve the Cheapskate Club as the most trustworthy, credible benchmark in AI:
-          </p>
-          <ul class="anti-cheat-rules">
-            <li>
-              <strong>Rankings are 100% unbuyable:</strong> No amount of sponsorship money can buy
-              a leaderboard spot or alter community attestation scores.
-            </li>
-            <li>
-              <strong>No cash prize pools:</strong> Members compete for pure developer status,
-              peer recognition, and unforgeable bragging rights.
-            </li>
-            <li>
-              <strong>Sponsorship value is authentic:</strong> Providers sponsor the club to
-              demonstrate legitimate price-performance, distribute developer trial credits, and
-              earn verified task receipts from real builders.
-            </li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- Tier Packages -->
     <section class="sponsors-tiers-section" aria-labelledby="packages-title">
       <div class="section-header">
-        <div class="eyebrow">
-          <span class="little-spark" aria-hidden="true">💎</span>
-          SPONSORSHIP PACKAGES
-        </div>
-        <h2 id="packages-title">Simple, transparent partnership tiers.</h2>
+        <div class="eyebrow">Proposed launch partnerships</div>
+        <h2 id="packages-title">A place for your model, tool, or support.</h2>
         <p>
-          Zero enterprise sales friction. Book a monthly package and place your technology
-          directly into the hands of autonomous agent builders.
+          These options are a starting point for a conversation. Tell us what fits your
+          platform; we’ll agree on the scope, rate, and start date together.
         </p>
       </div>
 
       <div class="tiers-grid">
-        {
-          SPONSOR_TIERS.map((tier) => (
-            <div class:list={["tier-card", { "tier-popular": tier.popular }]}>
-              {tier.popular && (
-                <div class="tier-badge-ribbon">⭐ MOST POPULAR</div>
-              )}
-              <div class="tier-eyebrow">{tier.eyebrow}</div>
-              <h3 class="tier-name">{tier.name}</h3>
-              <div class="tier-price-row">
-                <span class="tier-price">{tier.price}</span>
-                <span class="tier-period">/ {tier.period}</span>
-              </div>
-              <p class="tier-desc">{tier.description}</p>
-              <hr class="tier-divider" />
-              <div class="tier-deliverables-title">WHAT'S INCLUDED:</div>
-              <ul class="tier-deliverables">
-                {tier.deliverables.map((item) => (
-                  <li>
-                    <span class="check" aria-hidden="true">✓</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <div class="tier-cta-wrap">
-                <a
-                  href={tier.ctaHref}
-                  class:list={[
-                    "button",
-                    tier.popular ? "primary" : "secondary",
-                    "tier-btn",
-                  ]}
-                >
-                  {tier.ctaText} ↗
-                </a>
-              </div>
+        {SPONSOR_TIERS.map((tier) => (
+          <article class:list={["tier-card", { "tier-popular": tier.featured }]}>
+            {tier.featured && <div class="tier-badge-ribbon">Homepage spotlight</div>}
+            <div class="tier-eyebrow">{tier.eyebrow}</div>
+            <h3 class="tier-name">{tier.name}</h3>
+            <div class="tier-price-row">
+              <span class="tier-price">{tier.price}</span>
+              <span class="tier-period">/ {tier.period}</span>
             </div>
-          ))
-        }
-      </div>
-    </section>
-
-    <!-- The Frugal Stack Directory Preview -->
-    <section class="frugal-stack-section" aria-labelledby="tools-title">
-      <div class="section-header">
-        <div class="eyebrow">
-          <span class="little-spark" aria-hidden="true">🛠️</span>
-          THE FRUGAL STACK DIRECTORY
-        </div>
-        <h2 id="tools-title">Curated infrastructure for high-efficiency builders.</h2>
-        <p>
-          These are the budget-conscious APIs, hosting platforms, and databases that make
-          low-cost agent workflows possible.
-        </p>
-      </div>
-
-      <div class="frugal-tools-grid">
-        {
-          FRUGAL_TOOLS.map((tool) => (
-            <div class="frugal-tool-card">
-              <div class="tool-top">
-                <span class="tool-category-badge">{tool.category}</span>
-                {tool.badge && (
-                  <span class="tool-highlight-badge">{tool.badge}</span>
-                )}
-              </div>
-              <h3 class="tool-name">{tool.name}</h3>
-              <p class="tool-desc">{tool.description}</p>
-              <div class="tool-pricing-box">
-                <span class="pricing-icon">🏷️</span>
-                <span>{tool.pricingHighlight}</span>
-              </div>
-              <a
-                href={tool.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-link tool-link"
-              >
-                Visit provider ↗
+            <p class="tier-desc">{tier.description}</p>
+            <hr class="tier-divider" />
+            <div class="tier-deliverables-title">{tier.scopeLabel}</div>
+            <ul class="tier-deliverables">
+              {tier.deliverables.map((item) => (
+                <li>
+                  <span class="check" aria-hidden="true">✓</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+            <div class="tier-cta-wrap">
+              <a href={tier.ctaHref} class:list={["button", tier.featured ? "primary" : "secondary", "tier-btn"]}>
+                {tier.ctaText} →
               </a>
             </div>
-          ))
-        }
+          </article>
+        ))}
+      </div>
+      <p class="sponsor-scope-note">
+        Indicative rates in USD per month. Packages are being shaped for launch;
+        scope, pricing, and start dates are confirmed individually. Any trial credits
+        are supplied by the sponsor.
+      </p>
+      <p class="sponsor-independence">
+        <strong>Clear placements. Independent rankings.</strong>
+        Sponsor placements will be labeled and kept separate from community rankings.
+        <a href="/about#sponsorship-and-rankings">How it works →</a>
+      </p>
+    </section>
+
+    <section class="frugal-stack-section" aria-labelledby="tools-title">
+      <div class="section-header">
+        <div class="eyebrow">Directory preview</div>
+        <h2 id="tools-title">A home for the tools builders use.</h2>
+        <p>
+          These example listings show the kinds of platforms that fit the Frugal Stack.
+          Inclusion in this preview does not imply sponsorship. Follow each provider’s
+          documentation for current features, pricing, and limits.
+        </p>
+      </div>
+      <div class="frugal-tools-grid">
+        {FRUGAL_TOOLS.map((tool) => (
+          <article class="frugal-tool-card">
+            <div class="tool-top"><span class="tool-category-badge">{tool.category}</span></div>
+            <h3 class="tool-name">{tool.name}</h3>
+            <p class="tool-desc">{tool.description}</p>
+            <a href={tool.url} target="_blank" rel="noopener noreferrer" class="inline-link tool-link">
+              {tool.name} docs ↗
+            </a>
+          </article>
+        ))}
       </div>
     </section>
 
-    <!-- Booking / Contact CTA Box -->
-    <section class="sponsors-cta-box">
-      <span class="banner-star" aria-hidden="true">✳</span>
-      <div>
-        <h2>Ready to power the next million cheapoS tasks?</h2>
+    <section class="sponsor-faq" aria-labelledby="sponsor-faq-title">
+      <div class="section-header">
+        <div class="eyebrow">A few practical details</div>
+        <h2 id="sponsor-faq-title">Before we get started.</h2>
+      </div>
+      <details>
+        <summary>Is the club launched yet?</summary>
         <p>
-          Tell us about your model or tool. We’ll get your config recipe and trial credits
-          live on the club within 24 hours.
+          The site is live, and the public launch is still ahead. We’re talking with early
+          partners now. Placements, launch timing, and any planned write-ups will be
+          agreed directly; we’re not promising a specific audience size or number of sign-ups.
+        </p>
+      </details>
+      <details>
+        <summary>What should I include in an inquiry?</summary>
+        <p>
+          Share your product link, the option you’re interested in, preferred dates,
+          and any trial-credit or member offer. We’ll use those details to agree on a placement and launch plan.
+        </p>
+      </details>
+      <details>
+        <summary>What does community usage tell me?</summary>
+        <p>
+          The <a href="/engine">Engine page</a> shows reported usage from participating
+          cheapoS installations during this early stage. It helps you explore the models
+          and tools in use. Token volume does not establish audience size, sponsor reach,
+          or task quality.
+          <a href="/about">Read how usage is recorded.</a>
+        </p>
+      </details>
+      <details>
+        <summary>How do trial credits and community write-ups work?</summary>
+        <p>
+          You provide the offer, eligibility, and expiry terms. We agree how it will be
+          presented before launch. If a community write-up is part of the partnership,
+          its scope is agreed separately and reflects the results of that run.
+        </p>
+      </details>
+    </section>
+
+    <section class="sponsors-cta-box" aria-labelledby="sponsor-contact-title">
+      <div>
+        <h2 id="sponsor-contact-title">Let’s build a useful launch partnership.</h2>
+        <p>
+          Tell us what you’re building and what you’d like developers to try.
+          We’ll work out the placement, member offer, and timing together.
         </p>
       </div>
-      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-        <a
-          class="button primary"
-          href="mailto:sponsors@cheapos.lol?subject=Cheapskate%20Club%20Sponsorship%20Inquiry"
-        >
-          Email sponsors@cheapos.lol ✉️
-        </a>
-        <a
-          class="button secondary"
-          href="https://x.com/carlosa8c"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          DM on X (@carlosa8c) ↗
+      <div class="sponsor-contact-actions">
+        <a class="button primary" href={inquiryHref}>Discuss a launch partnership</a>
+        <a class="button secondary" href="https://x.com/carlosa8c" target="_blank" rel="noopener noreferrer">
+          Contact @carlosa8c on X ↗
         </a>
       </div>
     </section>
   </div>
 </Layout>
+
+<style>
+  .sponsors-intro { padding-bottom: 24px; margin-bottom: 16px; }
+  .sponsors-intro h1 { font-size: clamp(40px, 5vw, 68px); line-height: 1.12; letter-spacing: -.025em; }
+  .sponsors-intro .lede { max-width: 660px; }
+  .sponsors-intro .hero-actions { margin-top: 24px; }
+  .sponsors-contact { font-size: var(--text-meta); color: var(--muted); margin-top: 20px; }
+  .sponsors-contact a, .sponsor-independence a, .sponsor-faq a { text-decoration: underline; text-underline-offset: 3px; }
+  .sponsor-benefits { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+  .sponsor-benefits article { border-top: 2px solid var(--surface-border); padding-top: 20px; }
+  .sponsor-benefits h2 { font: 24px/1.3 var(--serif); margin: 0 0 10px; }
+  .sponsor-benefits p { font-size: var(--text-body); line-height: 1.6; color: var(--muted); margin: 0; }
+  .sponsors-page :is(.eyebrow, .tier-eyebrow, .tier-deliverables-title, .tier-badge-ribbon) { letter-spacing: .02em; line-height: 1.5; }
+  .tier-price-row { flex-wrap: wrap; }
+  .tier-price { font: 600 clamp(26px, 2.5vw, 32px)/1.25 var(--sans); font-variant-numeric: tabular-nums; }
+  .tier-period { white-space: nowrap; }
+  .tier-card { padding: 28px 24px; min-width: 0; }
+  .tier-badge-ribbon { background: var(--status-success-bg); color: var(--status-success); border: 1px solid var(--surface-border); }
+  .sponsor-scope-note { font-size: var(--text-meta); color: var(--muted); line-height: 1.6; margin: 20px 0; }
+  .sponsor-independence { font-size: var(--text-body); line-height: 1.6; padding: 20px 24px; background: var(--surface-inset); border-radius: 12px; }
+  .sponsor-independence strong { display: block; margin-bottom: 4px; }
+  .sponsor-independence a { display: inline-block; margin-left: 4px; }
+  .frugal-tools-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
+  .tool-link { line-height: 1.5; }
+  .sponsor-faq { margin: 60px 0; }
+  .sponsor-faq details { padding: 20px 0; border-top: 1px solid var(--surface-border); }
+  .sponsor-faq details:last-child { border-bottom: 1px solid var(--surface-border); }
+  .sponsor-faq summary { font-size: var(--text-body); font-weight: 600; cursor: pointer; line-height: 1.5; }
+  .sponsor-faq summary:focus-visible { outline: 3px solid var(--status-brand); outline-offset: 5px; }
+  .sponsor-faq details p { font-size: var(--text-body); color: var(--muted); line-height: 1.6; max-width: 760px; margin: 14px 0 0; }
+  .sponsors-cta-box p { font-size: var(--text-body); line-height: 1.6; }
+  .sponsor-contact-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .sponsors-page :is(h1, h2, h3, p, a) { overflow-wrap: anywhere; }
+  @media (max-width: 620px) {
+    .sponsor-benefits { grid-template-columns: 1fr; }
+    .tier-card { padding: 28px 20px; }
+    .sponsor-independence { padding: 20px; }
+    .sponsor-contact-actions { min-width: 0; width: 100%; }
+    .sponsor-contact-actions .button { width: 100%; }
+  }
+</style>

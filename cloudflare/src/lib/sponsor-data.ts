@@ -22,9 +22,7 @@ export interface FrugalTool {
   name: string;
   category: "Inference" | "Database" | "Hosting" | "Cache / Proxy";
   description: string;
-  pricingHighlight: string;
   url: string;
-  badge?: string;
 }
 
 export interface SponsorTier {
@@ -35,7 +33,8 @@ export interface SponsorTier {
   eyebrow: string;
   description: string;
   deliverables: string[];
-  popular?: boolean;
+  featured?: boolean;
+  scopeLabel: string;
   ctaText: string;
   ctaHref: string;
 }
@@ -64,98 +63,90 @@ export const CURRENT_SPOTLIGHT: SpotlightSponsor = {
 export const SPONSOR_TIERS: SponsorTier[] = [
   {
     id: "spotlight",
-    name: "Model of the Month Spotlight",
+    name: "Model spotlight",
     price: "$350 – $750",
-    period: "per month",
-    eyebrow: "MAXIMUM ADOPTION & PROOF",
-    popular: true,
+    period: "month",
+    eyebrow: "For model and inference providers",
+    featured: true,
+    scopeLabel: "Proposed placement and options",
     description:
-      "For inference providers and model labs who want developers actively plugging their API keys into autonomous coding agents.",
+      "Introduce your model with a sponsored homepage placement and a clear path for builders to try it.",
     deliverables: [
-      "Hero spotlight card on Homepage and Observatory (/engine)",
-      "Featured badge and model filter pill on the Leaderboard",
-      "1-Click configuration recipe in cheapoS onboarding docs",
-      "Community trial credit distribution (give $5–$10 in tokens to active builders)",
-      "Monthly verified task case study featured on X / Twitter (@cheapoS)",
-      "Zero-fluff social proof: real agent runs proving your low cost per completed task",
+      "Homepage spotlight with your model, description, and provider link",
+      "Setup guidance linking to your provider documentation",
+      "Optional member trial-credit offer with your terms clearly stated",
+      "Community run write-up available by agreement",
     ],
-    ctaText: "Inquire about Spotlight",
-    ctaHref: "mailto:sponsors@cheapos.lol?subject=Cheapskate%20Club%20-%20Model%20of%20the%20Month%20Spotlight",
+    ctaText: "Plan a launch spotlight",
+    ctaHref: "mailto:sponsors@cheapos.lol?subject=Cheapskate%20Club%20-%20Model%20Spotlight",
   },
   {
     id: "directory",
-    name: "The Frugal Stack Directory",
+    name: "Frugal Stack listing",
     price: "$49",
-    period: "per month",
-    eyebrow: "CURATED TOOL DIRECTORY",
-    popular: false,
+    period: "month",
+    eyebrow: "For developer tools and infrastructure",
+    scopeLabel: "Proposed listing",
     description:
-      "For developer tools, serverless DBs, and lean hosting providers who align with our anti-waste, small-bill philosophy.",
+      "Give your API, database, hosting platform, or developer tool a clear introduction in the club’s directory.",
     deliverables: [
-      "Permanent placement in our curated /tools directory",
-      "Featured badge: 'Verified Frugal Tool'",
-      "Direct referral link and promotional perk code for members",
-      "Inclusion in the Cheapskate Club newsletter and monthly roundup",
+      "Sponsored listing on this page for the agreed sponsorship period",
+      "Product description and direct link to your platform",
+      "Optional member offer with eligibility and expiry terms",
     ],
-    ctaText: "List Your Tool",
+    ctaText: "Plan a launch listing",
     ctaHref: "mailto:sponsors@cheapos.lol?subject=Cheapskate%20Club%20-%20Directory%20Listing%20Inquiry",
   },
   {
     id: "patron",
-    name: "The Tightwad Patron",
+    name: "Community patron",
     price: "$1 – $5",
-    period: "per month",
-    eyebrow: "COMMUNITY MICRO-PATRON",
-    popular: false,
+    period: "month",
+    eyebrow: "For individual supporters",
+    scopeLabel: "Your support helps with",
     description:
-      "For individual developers who love the cheapoS ethos and want to help cover Supabase & Vercel hosting costs.",
+      "Like what we’re building? Help cover the small, ongoing costs of running the club.",
     deliverables: [
-      "Exclusive '🪙 Tightwad Patron' badge on your public profile card",
-      "Bragging rights in the club directory and Discord/X",
-      "The warm feeling of keeping a non-commercial open-source benchmark alive",
+      "Site hosting and maintenance",
+      "Continued work on the community’s tools and documentation",
+      "Contact us to arrange a way to contribute",
     ],
-    ctaText: "Back on Polar / GitHub ($1)",
-    ctaHref: "https://polar.sh",
+    ctaText: "Ask about supporting",
+    ctaHref: "mailto:sponsors@cheapos.lol?subject=Cheapskate%20Club%20-%20Community%20Patron",
   },
 ];
 
+// Illustrative directory entries; these do not establish a sponsorship or endorsement.
+// Link to primary documentation instead of maintaining volatile third-party prices here.
 export const FRUGAL_TOOLS: FrugalTool[] = [
   {
     name: "Groq Cloud",
     category: "Inference",
-    description: "Ultra-fast LPU inference with generous free-tier quotas and penny-fraction pricing.",
-    pricingHighlight: "Generous Free Tier · Fast TTFT",
-    url: "https://groq.com",
-    badge: "Community Favorite",
+    description: "Hosted language-model inference with an OpenAI-compatible API.",
+    url: "https://console.groq.com/docs/overview",
   },
   {
     name: "Cerebras Inference",
     category: "Inference",
-    description: "Wafer-scale engine delivering 2,000+ tokens/sec on Llama models for fractions of a cent.",
-    pricingHighlight: "Extreme Speed · $0.10 / 1M tokens",
-    url: "https://cerebras.ai",
-    badge: "Speed Champion",
+    description: "Model inference APIs for coding, reasoning, and agent applications.",
+    url: "https://inference-docs.cerebras.ai/",
   },
   {
     name: "DeepSeek API",
     category: "Inference",
-    description: "Frontier reasoning and coding capabilities at 1/10th the cost of legacy models.",
-    pricingHighlight: "$0.14 / 1M tokens (Cache Hit $0.014)",
-    url: "https://deepseek.com",
-    badge: "Thrift Standard",
+    description: "API access to DeepSeek models for text generation and agent workflows.",
+    url: "https://api-docs.deepseek.com/",
   },
   {
     name: "Supabase",
     category: "Database",
-    description: "Generous Postgres, Auth, and Storage free tier powering the Cheapskate Club backend.",
-    pricingHighlight: "Free 500MB DB · 50k MAU",
-    url: "https://supabase.com",
+    description: "Postgres, authentication, and storage for application backends.",
+    url: "https://supabase.com/docs",
   },
   {
     name: "Cloudflare Workers AI",
-    category: "Hosting",
-    description: "Serverless edge compute and serverless AI inference on Cloudflare global network.",
-    pricingHighlight: "10,000 free requests / day",
-    url: "https://workers.cloudflare.com",
+    category: "Inference",
+    description: "Serverless model inference on Cloudflare’s network.",
+    url: "https://developers.cloudflare.com/workers-ai/",
   },
 ];
