@@ -291,7 +291,7 @@ export function BuildDetailView({
               </div>
               <h3 style={{ font: "24px var(--serif)", margin: "4px 0" }}>Autonomous Execution Benchmark</h3>
               <p style={{ fontSize: "13px", color: "var(--muted)", margin: 0 }}>
-                Standardized telemetry captured directly from permanent JSON task traces on disk (<code>task.json</code>).
+                Standardized telemetry measured directly from the cheapoS autonomous execution engine.
               </p>
             </div>
 

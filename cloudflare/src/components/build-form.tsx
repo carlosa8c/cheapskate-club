@@ -245,15 +245,15 @@ export function BuildForm({
                 BENCHMARK TEMPLATE
               </span>
             </div>
-            <h3 style={{ font: "20px var(--serif)", margin: "4px 0" }}>Auto-Fill from your cheapoS <code>task.json</code></h3>
+            <h3 style={{ font: "20px var(--serif)", margin: "4px 0" }}>Auto-Fill from your cheapoS Task JSON</h3>
             <p style={{ margin: 0, fontSize: "13px", color: "var(--muted)" }}>
-              Upload your task log (<code>~/Library/Application Support/cheapoS/tasks/&lt;id&gt;/task.json</code>) to automatically generate the verified 5-dimension benchmark matrix!
+              Export or copy your task JSON from cheapoS to automatically generate your verified 5-dimension benchmark matrix.
             </p>
           </div>
 
           <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
             <label className="button primary" style={{ fontSize: "12px", cursor: "pointer", margin: 0 }}>
-              <span>📁 Drop / Select task.json</span>
+              <span>📁 Upload exported task.json</span>
               <input
                 type="file"
                 accept=".json,application/json"
@@ -270,7 +270,7 @@ export function BuildForm({
               style={{ fontSize: "12px" }}
               onClick={() => setShowPasteJson(!showPasteJson)}
             >
-              {showPasteJson ? "Hide paste box" : "Paste JSON"}
+              {showPasteJson ? "Hide paste box" : "📋 Paste task JSON"}
             </button>
           </div>
         </div>
@@ -279,7 +279,7 @@ export function BuildForm({
           <div style={{ marginTop: "14px" }}>
             <textarea
               rows={4}
-              placeholder="Paste raw task.json text here..."
+              placeholder="Paste your copied cheapoS task JSON here..."
               value={taskJsonText}
               onChange={(e) => setTaskJsonText(e.target.value)}
               style={{ fontFamily: "var(--mono)", fontSize: "12px" }}
