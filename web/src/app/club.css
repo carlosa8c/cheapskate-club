@@ -2589,3 +2589,241 @@ select{background:var(--input-bg);color:var(--input-color);border:1px solid var(
     grid-template-columns: 1fr;
   }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   UNIFIED PROFILE PAGE ELEVATION & STYLING
+   ════════════════════════════════════════════════════════════════════ */
+.member-heading-card {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  margin: 36px 0 32px;
+  padding: 24px 28px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  position: relative;
+}
+
+.member-monogram-wrap {
+  position: relative;
+  flex: none;
+}
+
+.member-monogram {
+  display: grid;
+  place-items: center;
+  width: 90px;
+  height: 90px;
+  background: var(--monogram-bg);
+  border-radius: 50%;
+  font: 44px Georgia, serif;
+  color: var(--ink);
+  border: 2px solid var(--card-border);
+  position: relative;
+}
+
+.monogram-champion {
+  border-color: #f59e0b;
+  box-shadow: 0 0 25px rgba(245, 158, 11, 0.25);
+}
+
+.profile-crown {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 32px;
+  line-height: 1;
+  filter: drop-shadow(0 2px 8px rgba(245, 158, 11, 0.4));
+  animation: crownFloat 2.6s ease-in-out infinite alternate;
+  z-index: 2;
+}
+
+.member-info-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.member-meta-eyebrow {
+  font: 700 11px var(--mono);
+  letter-spacing: 1.5px;
+  color: var(--accent-mint);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.member-title-name {
+  font: clamp(32px, 4.5vw, 56px)/1.08 var(--serif);
+  letter-spacing: -1.5px;
+  margin: 0;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.member-sub-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.member-handle-tag {
+  font: 700 13.5px var(--mono);
+  color: var(--muted);
+}
+
+.member-rank-pill {
+  font: 700 11px var(--mono);
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--paper);
+  border: 1px solid var(--card-border);
+  color: var(--ink);
+}
+
+.profile-token-banner {
+  margin-top: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.token-banner-meta-strip {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.badge-pill-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 700 11px var(--mono);
+  background: rgba(86, 207, 137, 0.16);
+  color: var(--accent-mint);
+  border: 1px solid rgba(86, 207, 137, 0.4);
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+.badge-pill-stat {
+  font: 600 11px var(--mono);
+  background: rgba(0, 0, 0, 0.25);
+  color: #c9ded0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+/* Card Showcase Box */
+.share-pass-showcase {
+  margin-top: 48px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 32px;
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 36px;
+  align-items: center;
+}
+
+.club-card-preview-frame {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--card-border);
+  transition: transform 0.2s ease;
+}
+.club-card-preview-frame:hover {
+  transform: scale(1.02);
+}
+
+.club-card-preview-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.share-pass-content h2 {
+  font: 30px/1.2 var(--serif);
+  margin: 6px 0 10px;
+  color: var(--ink);
+}
+
+.share-pass-content p {
+  color: var(--muted);
+  font-size: 14.5px;
+  line-height: 1.5;
+  margin: 0 0 20px;
+}
+
+.share-action-btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.copy-badge-code-box {
+  margin-top: 18px;
+  background: var(--paper);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.copy-badge-code-box code {
+  font: 11px var(--mono);
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.copy-mini-btn {
+  font: 700 11px var(--mono);
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  color: var(--ink);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+.copy-mini-btn:hover {
+  border-color: var(--accent-mint);
+  color: var(--accent-mint);
+}
+
+@media (max-width: 900px) {
+  .share-pass-showcase {
+    grid-template-columns: 1fr;
+    padding: 24px;
+  }
+}
+
+@media (max-width: 620px) {
+  .member-heading-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 16px;
+    gap: 16px;
+  }
+  .member-monogram {
+    width: 64px;
+    height: 64px;
+    font-size: 32px;
+  }
+}

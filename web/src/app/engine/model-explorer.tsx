@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import type { ModelStat } from "@/lib/engine-stats";
+import type { ModelStat } from "@/lib/model-helpers";
 
 export interface ModelExplorerProps {
   models: ModelStat[];
