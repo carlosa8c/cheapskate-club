@@ -9,4 +9,4 @@ export const publicMember=cache(async(handle:string)=>{
  if(!response.ok)throw Error('Profile unavailable');
  return memberData(await response.json());
 });
-export function clubOrigin(){return (process.env.SITE_URL||'https://cheapskate-club.vercel.app').replace(/\/$/,'');}
+export function clubOrigin(){return (process.env.SITE_URL||'https://cheapos.lol').replace(/\/$/,'');}

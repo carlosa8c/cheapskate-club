@@ -190,7 +190,7 @@ export default function ScoreboardBillboard({
         {/* Top Status Strip */}
         <div className="billboard-header">
           <span className="billboard-title">
-            COMMUNITY COMPUTE · LIVE ON <strong>cheapskate-club.vercel.app</strong>
+            COMMUNITY COMPUTE · LIVE ON <strong>cheapos.lol</strong>
           </span>
           <div className="pulse-pill" title="Live telemetry synced every 10s">
             <span className="pulse-dot live-pulse-active" aria-hidden="true"></span>

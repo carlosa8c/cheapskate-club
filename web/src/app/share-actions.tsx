@@ -42,7 +42,7 @@ export function ShareActions({
   }, []);
 
   const cardImageUrl = `/api/cards/${handle}?theme=${currentTheme}`;
-  const markdownSnippet = `[![cheapoS Club Card](https://cheapskate-club.vercel.app/api/cards/${handle}?theme=${currentTheme})](https://cheapskate-club.vercel.app/@${handle})`;
+  const markdownSnippet = `[![cheapoS Club Card](https://cheapos.lol/api/cards/${handle}?theme=${currentTheme})](https://cheapos.lol/@${handle})`;
 
   const handleCopyLink = async () => {
     try {

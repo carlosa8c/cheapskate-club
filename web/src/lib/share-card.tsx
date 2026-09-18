@@ -109,7 +109,7 @@ export function ShareCard({
 
           <div style={{display:'flex',fontSize:16,color:textMuted,marginTop:20}}>Free remote + included + local</div>
           <div style={{display:'flex',fontSize:18,marginTop:18,fontWeight:700}}>cheapoS · The Cheapskate Club</div>
-          <div style={{display:'flex',fontSize:14,color:textMuted,marginTop:6}}>{date} · cheapskate-club.vercel.app</div>
+          <div style={{display:'flex',fontSize:14,color:textMuted,marginTop:6}}>{date} · cheapos.lol</div>
         </div>
       </div>
     </div>

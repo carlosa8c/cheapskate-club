@@ -93,7 +93,7 @@ export async function GET() {
   <!-- Top Metadata Header Strip -->
   <g transform="translate(36, 48)">
     <text x="0" y="0" class="mono" font-size="11.5" font-weight="700" letter-spacing="2" fill="#7a8d82">
-      COMMUNITY COMPUTE · LIVE ON <tspan fill="#56cf89">cheapskate-club.vercel.app</tspan>
+      COMMUNITY COMPUTE · LIVE ON <tspan fill="#56cf89">cheapos.lol</tspan>
     </text>
     
     <!-- Verified Badge -->
