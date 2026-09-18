@@ -286,6 +286,17 @@ export function BuildForm({
               placeholder="Paste your copied cheapoS task JSON here..."
               value={taskJsonText}
               onChange={(e) => setTaskJsonText(e.target.value)}
+              onPaste={(e) => {
+                const pasted = e.clipboardData?.getData("text");
+                if (pasted && pasted.length > 200) {
+                  e.preventDefault();
+                  setTaskJsonStatus("Parsing task JSON…");
+                  setTimeout(() => {
+                    processTaskJsonString(pasted);
+                    setTaskJsonText(`[Task JSON loaded: ${(pasted.length / 1024).toFixed(1)} KB]`);
+                  }, 20);
+                }
+              }}
               style={{ fontFamily: "var(--mono)", fontSize: "var(--text-meta)" }}
             />
             <button

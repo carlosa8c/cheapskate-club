@@ -11,13 +11,13 @@ export function parseTaskJson(rawInput: string | Record<string, any>): ParsedTas
   const data: Record<string, any> = typeof rawInput === "string" ? JSON.parse(rawInput) : rawInput;
 
   // 1. Dimension 1: Cost & Tokens
-  const usage = data.usage || {};
+  const usage = (data && typeof data.usage === "object") ? data.usage : {};
   const workerTokens = usage.worker?.tokens || 0;
   const reviewerTokens = usage.reviewer?.tokens || 0;
   const plannerTokens = usage.planner?.tokens || 0;
   const coordinatorTokens = usage.coordinator?.tokens || 0;
   const totalTokens = workerTokens + reviewerTokens + plannerTokens + coordinatorTokens;
-  const costNumber = usage.cost || 0;
+  const costNumber = typeof usage.cost === "number" ? usage.cost : 0;
   const billedCost = costNumber > 0 ? `$${costNumber.toFixed(2)}` : "$0.00";
 
   const runMetrics = Array.isArray(data.run_metrics) && data.run_metrics.length > 0 ? data.run_metrics[0] : {};
@@ -26,7 +26,9 @@ export function parseTaskJson(rawInput: string | Record<string, any>): ParsedTas
   const controllerSec = runMetrics.controller_work_seconds || 0;
 
   // 2. Dimension 2: Effort Fingerprint
-  const sessionActions = data.session_actions?.counts || {};
+  const sessionActions = (data.session_actions && typeof data.session_actions.counts === "object")
+    ? data.session_actions.counts
+    : {};
   const workerCalls = sessionActions.worker || data.worker_turns || 0;
   const toolActions = sessionActions.tools || data.tool_actions || 0;
   const reviewerCalls = sessionActions.reviewer || data.review_count || 0;
@@ -43,6 +45,7 @@ export function parseTaskJson(rawInput: string | Record<string, any>): ParsedTas
 
   if (Array.isArray(data.request_metrics)) {
     for (const req of data.request_metrics) {
+      if (!req) continue;
       const rawModel = req.model || req.route || "";
       const cleanName = rawModel.includes("/") ? rawModel.split("/").pop()! : rawModel;
       if (!cleanName) continue;
@@ -56,12 +59,24 @@ export function parseTaskJson(rawInput: string | Record<string, any>): ParsedTas
 
   const handoffs = Array.isArray(data.routing_traces) ? data.routing_traces.length : 0;
 
-  // 4. Dimension 4: Autonomy
+  // 4. Dimension 4: Autonomy & Resumes
+  const events = Array.isArray(data.events) ? data.events : [];
+  let detectedResumes = 0;
+  for (const ev of events) {
+    if (ev && (ev.kind === "resume" || ev.kind === "operator_resume")) {
+      detectedResumes++;
+    }
+  }
+  const operatorResumes = typeof data.resumes === "number" ? data.resumes : detectedResumes;
+  const resumeIncidents = operatorResumes === 0
+    ? "0 incidents (100% unattended)"
+    : `${operatorResumes} operator resume${operatorResumes > 1 ? "s" : ""}`;
+
   const checks = Array.isArray(data.checks) ? data.checks : [];
   const autoApprovedChecks = checks.length;
   let checksPassed = 0;
   for (const c of checks) {
-    if (c.success || c.exit_code === 0) checksPassed++;
+    if (c && (c.success || c.exit_code === 0)) checksPassed++;
   }
 
   // 5. Dimension 5: Quality & Test Score
@@ -72,14 +87,30 @@ export function parseTaskJson(rawInput: string | Record<string, any>): ParsedTas
   const commitSha = (data.snapshot?.commit || data.id || "").slice(0, 7);
 
   // Title extraction
-  let extractedTitle = data.title || "";
-  if (!extractedTitle && typeof data.prompt === "string") {
+  let extractedTitle = "";
+  if (typeof data.title === "string" && data.title.trim()) {
+    extractedTitle = data.title.trim();
+  } else if (typeof data.prompt === "string" && data.prompt.trim()) {
     extractedTitle = data.prompt.slice(0, 70).replace(/[\r\n]+/g, " ").trim();
+  }
+
+  // Hook extraction (bulletproof type handling)
+  let extractedHook = "";
+  if (typeof data.hook === "string" && data.hook.trim()) {
+    extractedHook = data.hook.slice(0, 180).trim();
+  } else if (typeof data.subtitle === "string" && data.subtitle.trim()) {
+    extractedHook = data.subtitle.slice(0, 180).trim();
+  } else if (typeof data.project_brief === "string" && data.project_brief.trim()) {
+    extractedHook = data.project_brief.slice(0, 180).trim();
+  } else if (data.branch_run?.plan?.goal && typeof data.branch_run.plan.goal === "string") {
+    extractedHook = data.branch_run.plan.goal.slice(0, 180).replace(/[\r\n]+/g, " ").trim();
+  } else if (typeof data.prompt === "string" && data.prompt.trim()) {
+    extractedHook = data.prompt.slice(0, 180).replace(/[\r\n]+/g, " ").trim();
   }
 
   return {
     title: extractedTitle,
-    hook: data.project_brief?.slice(0, 180) || "",
+    hook: extractedHook,
     models: Array.from(allModels),
     benchmark: {
       dimension1_cost_tokens: {
@@ -109,8 +140,8 @@ export function parseTaskJson(rawInput: string | Record<string, any>): ParsedTas
         providerHandoffs: handoffs,
       },
       dimension4_autonomy: {
-        operatorResumes: 0,
-        resumeIncidents: "0 incidents (100% unattended)",
+        operatorResumes,
+        resumeIncidents,
         autoApprovedChecks,
         mergeBlockers: "None (clean trunk merge)",
       },
