@@ -122,7 +122,7 @@ export function ShareActions({
         </div>
       </div>
 
-      {/* Share Actions & Embed Codes */}
+      {/* Share Actions */}
       <div className="share-pass-content">
         <div className="engine-eyebrow">
           <span className="little-spark" aria-hidden="true">🪪</span>
@@ -131,7 +131,7 @@ export function ShareActions({
         <h2>Your verified Club Card.</h2>
         <p>
           Showcase your machine-verified compute mileage on X, in project docs, or
-          embedded live in your GitHub README. Card dynamically matches dark &amp; light theme.
+          embed the live badge in your GitHub README. Card dynamically matches dark &amp; light theme.
         </p>
 
         <div className="share-action-btn-group">
@@ -153,22 +153,18 @@ export function ShareActions({
           <button className="button" type="button" onClick={handleCopyLink}>
             {copiedLink ? "✓ Link Copied" : "Copy Link 🔗"}
           </button>
+          <button className="button" type="button" onClick={handleCopyBadge}>
+            {copiedBadge ? "✓ README Badge Copied" : "Copy README Badge 📋"}
+          </button>
         </div>
 
-        <div className="embed-badge-section">
-          <div className="embed-badge-label">Embed live badge in GitHub README:</div>
-          <div className="copy-badge-code-box">
-            <code>{markdownSnippet}</code>
-            <button
-              className="copy-mini-btn"
-              type="button"
-              onClick={handleCopyBadge}
-              title="Copy Markdown badge to embed in GitHub README"
-            >
-              {copiedBadge ? "✓ Copied" : "Copy Badge 📋"}
-            </button>
-          </div>
-        </div>
+        {(copiedLink || copiedBadge) && (
+          <p role="status" className="share-status-msg" style={{ margin: "12px 0 0", font: "600 13px var(--mono)", color: "var(--accent-mint)" }}>
+            {copiedLink
+              ? "✓ Profile link copied to clipboard."
+              : "✓ GitHub README Markdown badge copied to clipboard (ready to paste)."}
+          </p>
+        )}
       </div>
     </section>
   );

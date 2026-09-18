@@ -2883,59 +2883,6 @@ select{background:var(--input-bg);color:var(--input-color);border:1px solid var(
   margin-bottom: 20px;
 }
 
-.embed-badge-section {
-  background: var(--paper);
-  border: 1px solid var(--card-border);
-  border-radius: 12px;
-  padding: 14px 16px;
-}
-
-.embed-badge-label {
-  font: 700 11px var(--mono);
-  color: var(--muted);
-  margin-bottom: 8px;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-
-.copy-badge-code-box {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  min-width: 0;
-}
-
-.copy-badge-code-box code {
-  font: 11px var(--mono);
-  color: var(--ink);
-  opacity: 0.85;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  flex: 1;
-  min-width: 0;
-}
-
-.copy-mini-btn {
-  font: 700 11px var(--mono);
-  padding: 6px 14px;
-  border-radius: 999px;
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  color: var(--ink);
-  cursor: pointer;
-  white-space: nowrap;
-  flex-shrink: 0;
-  transition: all 0.15s ease;
-}
-.copy-mini-btn:hover {
-  border-color: var(--accent-mint);
-  color: var(--accent-mint);
-  background: rgba(86, 207, 137, 0.12);
-  transform: translateY(-1px);
-}
-
 @media (max-width: 900px) {
   .share-pass-showcase {
     grid-template-columns: 1fr;
