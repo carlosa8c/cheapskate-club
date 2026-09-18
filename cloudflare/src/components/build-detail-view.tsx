@@ -599,62 +599,6 @@ export function BuildDetailView({
         </div>
       )}
 
-      {/* Embedded Project README Documentation */}
-      {build.readme_content && (
-        <section
-          className="project-readme-section"
-          style={{
-            padding: "24px",
-            borderRadius: "12px",
-            background: "var(--card-bg, #f7f5ef)",
-            border: "1px solid var(--card-border, #e2ded4)",
-            marginBottom: "32px",
-          }}
-        >
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: "10px", marginBottom: "16px" }}>
-            <div>
-              <span className="eyebrow" style={{ fontSize: "10px", letterSpacing: "1px" }}>DOCUMENTATION</span>
-              <h3 style={{ font: "24px var(--serif)", margin: "4px 0", display: "flex", alignItems: "center", gap: "8px" }}>
-                <span>📖</span> Project README & Architecture
-              </h3>
-              <p style={{ fontSize: "13px", color: "var(--muted)", margin: 0 }}>
-                Authored autonomously by cheapoS during task execution.
-              </p>
-            </div>
-            {build.readme_url && (
-              <a
-                href={build.readme_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="button primary"
-                style={{ fontSize: "12px", display: "inline-flex", alignItems: "center", gap: "6px" }}
-              >
-                <span>📖</span> View README on GitHub ↗
-              </a>
-            )}
-          </div>
-
-          <div
-            className="readme-markdown-box"
-            style={{
-              padding: "20px",
-              borderRadius: "8px",
-              background: "var(--bg, #faf8f5)",
-              border: "1px solid var(--line)",
-              fontFamily: "var(--mono)",
-              fontSize: "13px",
-              lineHeight: "1.65",
-              whiteSpace: "pre-wrap",
-              overflowX: "auto",
-              maxHeight: "480px",
-              overflowY: "auto",
-            }}
-          >
-            {build.readme_content}
-          </div>
-        </section>
-      )}
-
       {/* Repository Source File Inspector */}
       {telemetry && telemetry.files && telemetry.files.length > 0 && (
         <section
