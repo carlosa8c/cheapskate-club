@@ -110,6 +110,17 @@ const currentPath = Astro.url.pathname;
             <span class="nav-avatar" aria-hidden="true">C</span>
             <span>My Card</span>
           </a>
+          <a
+            href="/account"
+            class:list={[
+              "button",
+              "nav-account-btn",
+              { active: currentPath.startsWith("/account") },
+            ]}
+            title="Account & Installation Settings"
+          >
+            Account ⚙️
+          </a>
           <button
             type="button"
             class="theme-toggle"
@@ -135,7 +146,7 @@ const currentPath = Astro.url.pathname;
       <span>Make expensive compute the exception. Proudly operated on a $1.80/yr domain.</span>
       <div class="footer-links">
         <a class="text-button" href="/sponsors">Sponsor the Club ✳</a>
-        <a class="text-button" href="/about">Your data, your call</a>
+        <a class="text-button" href="/account">Your data, your call</a>
       </div>
     </footer>
 

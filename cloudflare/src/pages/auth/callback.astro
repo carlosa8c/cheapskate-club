@@ -1,0 +1,24 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { AuthCallback } from "../../components/auth-callback";
+
+const supabaseUrl =
+  import.meta.env.SUPABASE_URL ||
+  (typeof process !== "undefined" && process.env?.SUPABASE_URL) ||
+  "";
+const supabaseKey =
+  import.meta.env.SUPABASE_PUBLISHABLE_KEY ||
+  (typeof process !== "undefined" && process.env?.SUPABASE_PUBLISHABLE_KEY) ||
+  "";
+---
+
+<Layout
+  title="Signing in · The Cheapskate Club"
+  description="Completing sign-in to The Cheapskate Club"
+>
+  <AuthCallback
+    supabaseUrl={supabaseUrl}
+    supabaseKey={supabaseKey}
+    client:load
+  />
+</Layout>

@@ -1,0 +1,30 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { AccountManager } from "../components/account-manager";
+
+const supabaseUrl =
+  import.meta.env.SUPABASE_URL ||
+  (typeof process !== "undefined" && process.env?.SUPABASE_URL) ||
+  "";
+const supabaseKey =
+  import.meta.env.SUPABASE_PUBLISHABLE_KEY ||
+  (typeof process !== "undefined" && process.env?.SUPABASE_PUBLISHABLE_KEY) ||
+  "";
+const siteUrl =
+  import.meta.env.SITE_URL ||
+  (typeof process !== "undefined" && process.env?.SITE_URL) ||
+  "https://cheapos.lol";
+---
+
+<Layout
+  title="Join the Club · The Cheapskate Club"
+  description="Join with X or GitHub. We’ll use your profile name to get you started—you can change it anytime."
+>
+  <AccountManager
+    supabaseUrl={supabaseUrl}
+    supabaseKey={supabaseKey}
+    siteUrl={siteUrl}
+    initialMode="join"
+    client:load
+  />
+</Layout>

@@ -1,0 +1,29 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { ConnectManager } from "../components/connect-manager";
+
+const supabaseUrl =
+  import.meta.env.SUPABASE_URL ||
+  (typeof process !== "undefined" && process.env?.SUPABASE_URL) ||
+  "";
+const supabaseKey =
+  import.meta.env.SUPABASE_PUBLISHABLE_KEY ||
+  (typeof process !== "undefined" && process.env?.SUPABASE_PUBLISHABLE_KEY) ||
+  "";
+const siteUrl =
+  import.meta.env.SITE_URL ||
+  (typeof process !== "undefined" && process.env?.SITE_URL) ||
+  "https://cheapos.lol";
+---
+
+<Layout
+  title="Connect Installation · The Cheapskate Club"
+  description="Connect your cheapoS installation to your Club account."
+>
+  <ConnectManager
+    supabaseUrl={supabaseUrl}
+    supabaseKey={supabaseKey}
+    siteUrl={siteUrl}
+    client:load
+  />
+</Layout>
