@@ -7,70 +7,79 @@ interface Props {
 
 const { build } = Astro.props;
 const targetHref = build.slug ? `/community/${build.slug}` : `/community/${build.id}`;
-const isShowcase = Boolean(build.telemetry);
+const benchmark = build.benchmark || build.telemetry?.benchmark;
+const cost = benchmark?.dimension1_cost_tokens?.billedCost || build.telemetry?.cost;
+const tokens = benchmark?.dimension1_cost_tokens?.totalTokens ?? build.telemetry?.tokens;
+const hasTokens = typeof tokens === "number" && Number.isFinite(tokens) && tokens >= 0;
+const tokenLabel = hasTokens
+  ? new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 2 }).format(tokens)
+  : "";
+const verification = benchmark
+  ? benchmark.dimension5_quality?.finalUnitTestScore
+  : build.telemetry?.tests;
+const testScore = typeof verification === "string"
+  ? verification.match(/^\s*(\d+)\s*\/\s*(\d+)(?=\s|$)/)
+  : null;
 ---
 
-<article class="build-card">
-  <a href={targetHref} class="build-cover" aria-label={`View ${build.title}`}>
-    {build.screenshot_url ? (
-      <img src={build.screenshot_url} alt={`Screenshot of ${build.title}`} loading="lazy" referrerpolicy="no-referrer" />
+<article class="build-card compact-build-card">
+  <div class="compact-build-heading">
+    {build.screenshot_url && (
+      <img class="compact-build-thumbnail" src={build.screenshot_url} alt="" width="48" height="48" loading="lazy" referrerpolicy="no-referrer" />
+    )}
+    <h2><a href={targetHref}>{build.title}</a></h2>
+  </div>
+
+  {(build.hook || build.description) && (
+    <p class="build-excerpt">{build.hook || build.description}</p>
+  )}
+
+  {(cost || hasTokens || testScore) && (
+    <dl class="compact-build-metrics">
+      {cost && <div><dt>Cost</dt><dd>{cost}</dd></div>}
+      {hasTokens && (
+        <div>
+          <dt>Tokens</dt>
+          <dd title={`${tokens.toLocaleString("en-US")} tokens`}>
+            <span aria-hidden="true">{tokenLabel}</span>
+            <span class="sr-only">{tokens.toLocaleString("en-US")}</span>
+          </dd>
+        </div>
+      )}
+      {testScore && (
+        <div>
+          <dt>Tests</dt>
+          <dd title={verification}>
+            <span aria-hidden="true">{testScore[1]}/{testScore[2]}</span>
+            <span class="sr-only">{verification}</span>
+          </dd>
+        </div>
+      )}
+    </dl>
+  )}
+
+  <div class="compact-build-footer">
+    {build.profile_public ? (
+      <a href={`/@${build.handle}`} class="compact-build-author">@{build.handle}</a>
     ) : (
-      <div class="showcase-card-fallback" style="display: grid; place-items: center; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(209, 102, 71, 0.12), rgba(36, 63, 50, 0.15));">
-        <span style="font-size: 56px; color: var(--accent, #d16647);" aria-hidden="true">
-          {build.title.slice(0, 2).toUpperCase()}
-        </span>
-      </div>
+      <span class="compact-build-author">@{build.handle}</span>
     )}
-  </a>
-  <div class="build-card-body">
-    <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;">
-      <p class="eyebrow" style="margin: 0; font-size: var(--text-meta);">
-        {isShowcase ? "Autonomous build · $0.00 compute" : "Built with a little ingenuity"}
-      </p>
-      {isShowcase && (
-        <span class="pill" style="margin: 0; padding: 2px 8px; border-radius: 12px; background: var(--status-success-bg); color: var(--status-success); font-size: var(--text-meta); font-weight: bold;">
-          Verified run
-        </span>
-      )}
-    </div>
-
-    <h2 style="font-size: 22px; line-height: 1.2; margin: 12px 0 8px;">
-      <a href={targetHref}>{build.title}</a>
-    </h2>
-
-    <p class="build-excerpt" style="font-size: var(--text-body); line-height: 1.5; color: var(--muted); margin-bottom: 16px;">
-      {build.hook || build.description}
-    </p>
-
-    {isShowcase && build.telemetry && (
-      <div class="card-telemetry-strip">
-        <span class="telemetry-success">
-          💰 $0.00
-        </span>
-        <span>
-          ⚡ {(build.telemetry.tokens / 1_000_000).toFixed(2)}M tok
-        </span>
-        <span class="telemetry-success">
-          🟢 0 Resumes
-        </span>
-        {build.telemetry.tests && (
-          <span>
-            🧪 {build.telemetry.tests.split(" ")[0]}
-          </span>
-        )}
-        <span>
-          📖 README
-        </span>
-      </div>
-    )}
-
-    <div class="build-byline" style="border-top: 1px solid var(--line); padding-top: 12px; margin-top: 0;">
-      {build.profile_public ? (
-        <a href={`/@${build.handle}`}>@{build.handle}</a>
-      ) : (
-        <span>@{build.handle}</span>
-      )}
-      <span>✦ {build.cheers} cheers</span>
-    </div>
+    <a href={targetHref} class="compact-build-link" aria-label={`View build: ${build.title}`}>View build →</a>
   </div>
 </article>
+
+<style>
+  .compact-build-card { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+  .compact-build-heading { display: flex; align-items: flex-start; gap: 12px; }
+  .compact-build-thumbnail { width: 48px; height: 48px; flex: 0 0 48px; border-radius: 8px; object-fit: cover; background: var(--surface-inset); }
+  .compact-build-heading h2 { font: 22px/1.3 var(--serif); margin: 0; min-width: 0; overflow-wrap: anywhere; }
+  .compact-build-card .build-excerpt { font: var(--text-body)/1.5 var(--sans); margin: 0; -webkit-line-clamp: 2; }
+  .compact-build-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(70px, 1fr)); gap: 12px; margin: 0; padding: 12px; border-radius: 8px; background: var(--surface-inset); }
+  .compact-build-metrics > div { min-width: 0; }
+  .compact-build-metrics dt { font: var(--text-meta)/1.4 var(--sans); color: var(--muted); margin-bottom: 4px; }
+  .compact-build-metrics dd { font: 600 var(--text-metric)/1.3 var(--sans); font-variant-numeric: tabular-nums; color: var(--ink); margin: 0; overflow-wrap: anywhere; }
+  .compact-build-footer { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 12px; margin-top: auto; padding-top: 12px; border-top: 1px solid var(--surface-border); font: var(--text-meta)/1.5 var(--sans); }
+  .compact-build-author { color: var(--muted); overflow-wrap: anywhere; min-width: 0; }
+  .compact-build-link { color: var(--ink); font-weight: 600; white-space: nowrap; }
+  @media (max-width: 620px) { .compact-build-card { padding: 16px; } }
+</style>
