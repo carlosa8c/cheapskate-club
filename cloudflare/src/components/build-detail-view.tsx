@@ -1,3 +1,18 @@
+function getGitHubFileUrl(projectUrl: string | undefined, filePath: string): string {
+  if (!projectUrl || !projectUrl.includes("github.com")) {
+    return `https://github.com/carlosa8c/cheapoS/blob/main/${filePath.replace(/^\//, "")}`;
+  }
+  const match = projectUrl.match(/^https:\/\/github\.com\/([^\/]+)\/([^\/]+)/);
+  if (!match) {
+    return `https://github.com/carlosa8c/cheapoS/blob/main/${filePath.replace(/^\//, "")}`;
+  }
+  const user = match[1];
+  const repo = match[2].replace(/\.git$/, "");
+  const branchMatch = projectUrl.match(/\/(?:blob|tree)\/([^\/]+)/);
+  const branch = branchMatch ? branchMatch[1] : "main";
+  return `https://github.com/${user}/${repo}/blob/${branch}/${filePath.replace(/^\//, "")}`;
+}
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -212,6 +227,7 @@ export function BuildDetailView({
   // Decode embedded benchmark if not present directly in build.telemetry
   const displayDescription = decoded.cleanText;
   const benchmark = build.telemetry?.benchmark || decoded.benchmark;
+  const files = build.telemetry?.files || decoded.files || [];
   const telemetry = build.telemetry || (benchmark ? {
     benchmark,
     tokens: benchmark.dimension1_cost_tokens.totalTokens,
@@ -219,7 +235,11 @@ export function BuildDetailView({
     requests: benchmark.dimension2_effort.totalActions,
     tests: benchmark.dimension5_quality.finalUnitTestScore,
     commitSha: benchmark.dimension5_quality.commitSha,
+    files,
   } : null);
+  if (telemetry && (!telemetry.files || telemetry.files.length === 0) && files.length > 0) {
+    telemetry.files = files;
+  }
 
   const readmeUrl = build.readme_url || (
     build.project_url && build.project_url.includes("github.com")

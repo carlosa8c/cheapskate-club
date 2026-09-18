@@ -1,10 +1,17 @@
 import type { BenchmarkTelemetry } from "./showcase-projects";
 
+export interface TaskFileItem {
+  name: string;
+  path: string;
+  description: string;
+}
+
 export interface ParsedTaskResult {
   title?: string;
   hook?: string;
   benchmark: BenchmarkTelemetry;
   models: string[];
+  files: TaskFileItem[];
 }
 
 export function parseTaskJson(rawInput: string | Record<string, any>): ParsedTaskResult {
@@ -108,10 +115,32 @@ export function parseTaskJson(rawInput: string | Record<string, any>): ParsedTas
     extractedHook = data.prompt.slice(0, 180).replace(/[\r\n]+/g, " ").trim();
   }
 
+  // Extract files from checkpoint diffs
+  const files: TaskFileItem[] = [];
+  const seenPaths = new Set<string>();
+  if (Array.isArray(data.checkpoints)) {
+    for (const cp of data.checkpoints) {
+      const diff = cp?.diff || "";
+      const matches = diff.matchAll(/diff --git a\/.*? b\/(.*)/g);
+      for (const m of matches) {
+        const filePath = m[1]?.trim();
+        if (filePath && !filePath.startsWith(".") && !filePath.startsWith("test_fts") && !seenPaths.has(filePath)) {
+          seenPaths.add(filePath);
+          const name = filePath.split("/").pop() || filePath;
+          const isTest = name.startsWith("test_");
+          const isDoc = name.endsWith(".md");
+          const description = isTest ? "Unit test suite" : isDoc ? "Project documentation" : "Source implementation";
+          files.push({ name, path: filePath, description });
+        }
+      }
+    }
+  }
+
   return {
     title: extractedTitle,
     hook: extractedHook,
     models: Array.from(allModels),
+    files,
     benchmark: {
       dimension1_cost_tokens: {
         totalTokens,
@@ -161,16 +190,19 @@ export interface BenchmarkEnvelope {
   status?: "pending_operator_review" | "approved" | "rejected";
   submitted_at?: string;
   reviewed_at?: string;
+  files?: TaskFileItem[];
 }
 
 export function encodeBenchmarkComment(
   benchmark: BenchmarkTelemetry,
-  status: "pending_operator_review" | "approved" | "rejected" = "pending_operator_review"
+  status: "pending_operator_review" | "approved" | "rejected" = "pending_operator_review",
+  files?: TaskFileItem[]
 ): string {
   const envelope: BenchmarkEnvelope = {
     benchmark,
     status,
     submitted_at: new Date().toISOString(),
+    ...(files && files.length > 0 ? { files } : {}),
   };
   const compact = JSON.stringify(envelope);
   return `\n\n<!-- cheapoS-benchmark:${compact} -->`;
@@ -180,10 +212,11 @@ export function decodeBenchmarkComment(text: string): {
   cleanText: string;
   benchmark: BenchmarkTelemetry | null;
   status: "pending_operator_review" | "approved" | "rejected";
+  files?: TaskFileItem[];
 } {
-  if (!text) return { cleanText: text || "", benchmark: null, status: "approved" };
+  if (!text) return { cleanText: text || "", benchmark: null, status: "approved", files: [] };
   const match = text.match(/<!--\s*cheapoS-benchmark:(.*?)\s*-->/s);
-  if (!match) return { cleanText: text, benchmark: null, status: "approved" };
+  if (!match) return { cleanText: text, benchmark: null, status: "approved", files: [] };
 
   try {
     const parsed = JSON.parse(match[1]);
@@ -193,10 +226,11 @@ export function decodeBenchmarkComment(text: string): {
         cleanText,
         benchmark: parsed.benchmark,
         status: parsed.status || "pending_operator_review",
+        files: parsed.files || [],
       };
     }
-    return { cleanText, benchmark: parsed, status: "approved" };
+    return { cleanText, benchmark: parsed, status: "approved", files: [] };
   } catch {
-    return { cleanText: text, benchmark: null, status: "approved" };
+    return { cleanText: text, benchmark: null, status: "approved", files: [] };
   }
 }

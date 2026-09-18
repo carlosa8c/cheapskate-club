@@ -33,6 +33,7 @@ export function BuildForm({
   const [discussionUrl, setDiscussionUrl] = useState(build?.discussion_url || "");
   const [showUsage, setShowUsage] = useState(build?.show_usage || false);
   const [benchmark, setBenchmark] = useState<BenchmarkTelemetry | null>(null);
+  const [taskFiles, setTaskFiles] = useState<any[]>([]);
   const [taskJsonStatus, setTaskJsonStatus] = useState<string | null>(null);
   const [taskJsonText, setTaskJsonText] = useState("");
   const [showPasteJson, setShowPasteJson] = useState(false);
@@ -65,6 +66,7 @@ export function BuildForm({
     try {
       const res = parseTaskJson(content);
       setBenchmark(res.benchmark);
+      setTaskFiles(res.files || []);
       if (!title && res.title) setTitle(res.title);
       if (!description && res.hook) setDescription(res.hook);
       setTaskJsonStatus(
@@ -150,7 +152,7 @@ export function BuildForm({
 
     let finalDesc = cleanDesc;
     if (benchmark) {
-      finalDesc = cleanDesc + encodeBenchmarkComment(benchmark, "pending_operator_review");
+      finalDesc = cleanDesc + encodeBenchmarkComment(benchmark, "pending_operator_review", taskFiles);
     }
 
     const payload = {
