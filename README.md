@@ -50,3 +50,10 @@ options. These documents do not change the prototype into a live service.
 The Next.js implementation lives in [web/](web/README.md). Run it separately
 from the original static prototypes. See its README for local setup and the
 pending Supabase/Vercel connection steps.
+
+## Private stats roadmap
+
+[Stats: launch and premium roadmap](docs/stats-and-premium-roadmap.md) maps the
+current cheapoS collector and Cloudflare/Supabase implementation to launch metrics,
+future collection contracts, and optional hosted premium analytics. This is a
+private design proposal, not an enabled telemetry feature.
