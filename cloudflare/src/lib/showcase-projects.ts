@@ -347,16 +347,7 @@ cheapoS planned 4 items: Markdown parser, CSS slide presentation engine, asset b
     slug: "cheapskate-status",
     title: "CheapskateStatus · Static API & Server Heartbeat Dashboard",
     hook: "Autonomous HTTP endpoint prober and latency dashboard compiler. Generates zero-dependency static status pages hosted for free on Cloudflare Pages or GitHub Pages.",
-    description: `CheapskateStatus monitors endpoints and web services, generating lightweight static status dashboards that run completely free on static hosting.
-
-### What It Does
-- Probes configured HTTP/HTTPS endpoints concurrently with configurable timeout thresholds
-- Records latency percentiles, error rates, and uptime availability records
-- Compiles a single-file static status page ready for hosting on Cloudflare Pages or GitHub Pages
-- Outputs machine-readable status JSON for integration into notifications and webhooks
-
-### How cheapoS Built It Autonomously
-cheapoS authored the 5 planned items (network prober, latency collector, HTML compiler, test suite, and configuration). It autonomously verified 12/12 passing unit tests before integrating into main.`,
+    description: "CheapskateStatus monitors endpoints and web services, generating lightweight static status dashboards that run completely free on GitHub Pages, Cloudflare Pages, or Netlify.",
     screenshot_url: "",
     project_url: "https://github.com/carlosa8c/cheapoS/tree/main/examples/cheapskate-status",
     readme_url: "https://github.com/carlosa8c/cheapoS/blob/main/examples/cheapskate-status/README.md",
