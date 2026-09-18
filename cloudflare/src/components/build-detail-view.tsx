@@ -183,7 +183,7 @@ export function BuildDetailView({
   const telemetry = build.telemetry;
 
   return (
-    <section className="build-detail" style={{ maxWidth: "860px", margin: "40px auto" }}>
+    <section className="build-detail" style={{ maxWidth: "100%", margin: "32px 0 60px" }}>
       <div style={{ marginBottom: "24px" }}>
         <a href="/community" className="inline-link" style={{ textDecoration: "underline", color: "var(--muted)" }}>
           ← Around the workbench
