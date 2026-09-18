@@ -3,6 +3,7 @@ import Link from "next/link";
 import {currentMember} from "@/lib/current-member";
 import Image from "next/image";
 import {ThemeToggle} from "./theme-toggle";
+import {NavLinks} from "./nav-links";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -24,39 +25,41 @@ export default async function Layout({children}: {children: React.ReactNode}) {
    <body data-design="club">
     <a className="skip" href="#main">Skip to content</a>
     <header className="site-header">
-     <Link className="brand" href="/"><Image src="/brand-icon.svg" width="38" height="38" alt=""/>cheapoS <span>THE CHEAPSKATE CLUB</span></Link>
+     <Link className="brand" href="/">
+      <Image src="/brand-icon.svg" width="38" height="38" alt=""/>
+      cheapoS <span>THE CHEAPSKATE CLUB</span>
+     </Link>
      <nav aria-label="Main navigation">
-      <Link href="/">Home</Link>
-      <Link href="/leaderboard">Leaderboard</Link>
-      <Link href="/engine">Engine</Link>
-      <Link href="/community">Community</Link>
-      <Link href="/about">How it works</Link>
-      <ThemeToggle />
-      {member ? (
-        <>
-          <Link
-            href={member.profileUrl}
-            className="nav-profile-pill"
-            title={`View @${member.handle} profile`}
-          >
-            <span className="nav-avatar" aria-hidden="true">
-              {member.name.slice(0, 1).toUpperCase()}
-            </span>
-            <span>Profile</span>
+      <NavLinks />
+      <div className="nav-actions">
+        {member ? (
+          <>
+            <Link
+              href={member.profileUrl}
+              className="nav-profile-pill"
+              title={`View @${member.handle} profile`}
+            >
+              <span className="nav-avatar" aria-hidden="true">
+                {member.name.slice(0, 1).toUpperCase()}
+              </span>
+              <span>Profile</span>
+            </Link>
+            <Link
+              className="button nav-account-btn"
+              href="/account"
+              title="Account & Installation Settings"
+            >
+              Account ⚙️
+            </Link>
+          </>
+        ) : (
+          <Link className="button primary nav-join-btn" href="/join">
+            Join the club ↗
           </Link>
-          <Link
-            className="button"
-            href="/account"
-            title="Account & Installation Settings"
-          >
-            Account ⚙️
-          </Link>
-        </>
-      ) : (
-        <Link className="button primary" href="/join">
-          Join the club ↗
-        </Link>
-      )}
+        )}
+        <div className="nav-divider" aria-hidden="true" />
+        <ThemeToggle />
+      </div>
      </nav>
     </header>
     <main className="page" id="main">{children}</main>
