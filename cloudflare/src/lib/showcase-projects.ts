@@ -84,16 +84,7 @@ export const SHOWCASE_PROJECTS: ShowcaseProject[] = [
     slug: "penny-pinner",
     title: "PennyPinner · Autonomous Dependency Pinning & Security Auditor",
     hook: "Audits Python project dependencies, calculates sha256 artifact hashes, and creates strict reproducible lockfiles without pip-tools or Poetry overhead.",
-    description: `PennyPinner is a lightweight, zero-dependency Python tool that generates cryptographically-pinned lockfiles from requirements.txt and pyproject.toml specifications.
-
-### What It Does
-- Scans loose requirements and queries PyPI JSON API for exact release artifacts
-- Calculates SHA-256 hashes for source distributions and platform-compatible wheels
-- Generates reproducible, auditable lockfiles formatted with pip hash-checking mode
-- Audits known vulnerabilities against Python ecosystem security databases
-
-### How cheapoS Built It Autonomously
-cheapoS planned and decomposed PennyPinner into 8 granular work items. The autonomous swarm authored the core resolution engine, PyPI client, unit tests, and CLI runner. It validated 29 verification commands completely unattended before issuing a clean trunk merge into main.`,
+    description: 'PennyPinner is a lightweight, zero-dependency Python tool that generates cryptographically-pinned lockfiles from requirements.txt and pyproject.toml specifications.',
     screenshot_url: "",
     project_url: "https://github.com/carlosa8c/cheapoS/tree/main/examples/penny-pinner",
     readme_url: "https://github.com/carlosa8c/cheapoS/blob/main/examples/penny-pinner/README.md",
@@ -172,16 +163,7 @@ cheapoS planned and decomposed PennyPinner into 8 granular work items. The auton
     slug: "git-receipt",
     title: "GitReceipt · Cryptographic Repository Checkpoint & Receipt Issuer",
     hook: "Signs and seals git repository commits into tamper-evident JSON cryptographic receipts, tracking authorship proof and SHA-256 tree states with zero external infra.",
-    description: `GitReceipt creates verifiable cryptographic receipts for Git commits and repository states, enabling decentralized verification of code provenance.
-
-### What It Does
-- Extracts tree SHA, author timestamp, and commit parent hashes from the active git tree
-- Calculates deterministic canonical JSON signatures of repository metadata
-- Generates portable verification receipts that can be validated offline
-- Audits git repository integrity against expected receipts without remote API access
-
-### How cheapoS Built It Autonomously
-cheapoS authored GitReceipt across 4 work items: receipt signing logic, hash generator, verification validator, and comprehensive unit tests. The swarm executed 341 actions with 0 operator interventions.`,
+    description: 'GitReceipt creates verifiable cryptographic receipts for Git commits and repository states, enabling decentralized verification of code provenance.',
     screenshot_url: "",
     project_url: "https://github.com/carlosa8c/cheapoS/tree/main/examples/git-receipt",
     readme_url: "https://github.com/carlosa8c/cheapoS/blob/main/examples/git-receipt/README.md",
@@ -260,16 +242,7 @@ cheapoS authored GitReceipt across 4 work items: receipt signing logic, hash gen
     slug: "markdown-deck",
     title: "MarkdownDeck · Zero-Dependency Single-File Slide Generator",
     hook: "Transforms plain GitHub-flavored markdown files into sleek, standalone HTML presentations with responsive touch navigation, inline CSS, and zero client JS libraries.",
-    description: `MarkdownDeck converts structured Markdown documents into standalone HTML slide decks with zero build tools and zero runtime dependencies.
-
-### What It Does
-- Parses Markdown files split by horizontal rules (---) into animated HTML slides
-- Embeds a sleek dark theme with inline CSS and responsive keyboard/touch controls
-- Supports code syntax highlighting, speaker notes, and instant print-to-PDF
-- Inlines all assets into a single self-contained .html file shareable anywhere
-
-### How cheapoS Built It Autonomously
-cheapoS planned 4 items: Markdown parser, CSS slide presentation engine, asset bundler, and CLI runner. The multi-model swarm auto-verified 9/9 passing tests before completing the final merge.`,
+    description: 'MarkdownDeck converts structured Markdown documents into standalone HTML slide decks with zero build tools and zero runtime dependencies.',
     screenshot_url: "",
     project_url: "https://github.com/carlosa8c/cheapoS/tree/main/examples/markdown-deck",
     readme_url: "https://github.com/carlosa8c/cheapoS/blob/main/examples/markdown-deck/README.md",
@@ -425,16 +398,7 @@ cheapoS planned 4 items: Markdown parser, CSS slide presentation engine, asset b
     slug: "log-whisperer",
     title: "LogWhisperer · Lightweight Zero-Dependency Server Log Clusterer",
     hook: "Extracts recurring log patterns, clusters millions of log lines using tokenized signature matching, and detects anomaly spikes without expensive cloud log monitoring services.",
-    description: `LogWhisperer digests high-volume log streams (Nginx, access logs, system logs) and clusters them into distinct architectural signatures, identifying novel errors and anomaly spikes.
-
-### What It Does
-- Sanitizes timestamps, UUIDs, IP addresses, and IDs to distill log lines into structural signatures
-- Groups high-frequency repeated logs into compact cluster summaries
-- Flags rare anomalies and sudden rate spikes that indicate emerging production bugs
-- Provides top-N cluster reports in both CLI table and JSON formats
-
-### How cheapoS Built It Autonomously
-cheapoS planned and implemented LogWhisperer in an unattended session across 181 actions. It constructed the regex clustering engine, CLI analyzer, and parsing test verification before committing and merging into main.`,
+    description: 'LogWhisperer digests high-volume log streams (Nginx, access logs, system logs) and clusters them into distinct architectural signatures, identifying novel errors and anomaly spikes.',
     screenshot_url: "",
     project_url: "https://github.com/carlosa8c/cheapoS/tree/main/examples/log-whisperer",
     readme_url: "https://github.com/carlosa8c/cheapoS/blob/main/examples/log-whisperer/README.md",
@@ -511,16 +475,7 @@ cheapoS planned and implemented LogWhisperer in an unattended session across 181
     slug: "prompt-diet",
     title: "PromptDiet · Zero-Cost Prompt Token Minimizer & Diff Optimizer",
     hook: "Minimizes LLM prompt token consumption through AST-aware whitespace reduction, redundant instruction deduplication, and visual diff analysis.",
-    description: `PromptDiet helps AI engineers reduce token costs and latency by compressing bloated system prompts and user templates while preserving semantic fidelity.
-
-### What It Does
-- Trims redundant boilerplate, whitespace, and verbose instructions from prompt files
-- Estimates token savings across Claude, GPT-4, and Llama tokenizer rules
-- Generates side-by-side terminal diffs highlighting removed tokens and compressed phrases
-- Includes a benchmark suite of sample system and agent prompts
-
-### How cheapoS Built It Autonomously
-cheapoS authored 6 items: tokenizer estimator, minification rules, diff visualizer, prompt fixtures, CLI interface, and unit tests. All 8/8 unit tests were verified in 0.091s before automated trunk merge into main.`,
+    description: 'PromptDiet helps AI engineers reduce token costs and latency by compressing bloated system prompts and user templates while preserving semantic fidelity.',
     screenshot_url: "",
     project_url: "https://github.com/carlosa8c/cheapoS/tree/main/examples/prompt-diet",
     readme_url: "https://github.com/carlosa8c/cheapoS/blob/main/examples/prompt-diet/README.md",

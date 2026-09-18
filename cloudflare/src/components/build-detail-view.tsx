@@ -212,7 +212,6 @@ export function BuildDetailView({
   // Decode embedded benchmark if not present directly in build.telemetry
   const displayDescription = decoded.cleanText;
   const benchmark = build.telemetry?.benchmark || decoded.benchmark;
-  const files = build.telemetry?.files || decoded.files || [];
   const telemetry = build.telemetry || (benchmark ? {
     benchmark,
     tokens: benchmark.dimension1_cost_tokens.totalTokens,
@@ -220,11 +219,7 @@ export function BuildDetailView({
     requests: benchmark.dimension2_effort.totalActions,
     tests: benchmark.dimension5_quality.finalUnitTestScore,
     commitSha: benchmark.dimension5_quality.commitSha,
-    files,
   } : null);
-  if (telemetry && (!telemetry.files || telemetry.files.length === 0) && files.length > 0) {
-    telemetry.files = files;
-  }
 
   const readmeUrl = build.readme_url || (
     build.project_url && build.project_url.includes("github.com")
@@ -310,7 +305,7 @@ export function BuildDetailView({
         {build.title}
       </h1>
 
-      <p className="lede" style={{ marginBottom: "28px" }}>
+      <p className="lede" style={{ marginBottom: build.hook ? "12px" : "28px" }}>
         By{" "}
         {build.profile_public ? (
           <a href={`/@${build.handle}`} style={{ textDecoration: "underline", fontWeight: "bold" }}>
@@ -322,6 +317,12 @@ export function BuildDetailView({
           </span>
         )}
       </p>
+
+      {build.hook && (
+        <p style={{ fontSize: "18px", color: "var(--muted)", maxWidth: "800px", lineHeight: "1.5", margin: "0 0 28px" }}>
+          {build.hook}
+        </p>
+      )}
 
       {telemetry && (
         <BenchmarkPanel
@@ -341,12 +342,14 @@ export function BuildDetailView({
         />
       )}
 
-      <div
-        className="build-description"
-        style={{ fontSize: "17px", lineHeight: "1.7", whiteSpace: "pre-wrap", marginBottom: "32px" }}
-      >
-        {displayDescription}
-      </div>
+      {!telemetry && displayDescription && (
+        <div
+          className="build-description"
+          style={{ fontSize: "17px", lineHeight: "1.7", whiteSpace: "pre-wrap", marginBottom: "32px" }}
+        >
+          {displayDescription}
+        </div>
+      )}
 
       
 
