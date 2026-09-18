@@ -29,7 +29,7 @@ export default function SponsorsPage() {
         <div className="hero-actions" style={{ marginTop: 24 }}>
           <a
             className="button primary"
-            href="mailto:carlos@tumblr.com?subject=Cheapskate%20Club%20Sponsorship%20Inquiry"
+            href="mailto:sponsors@cheapos.lol?subject=Cheapskate%20Club%20Sponsorship%20Inquiry"
           >
             Inquire about sponsorship ✉️
           </a>
@@ -205,9 +205,9 @@ export default function SponsorsPage() {
         <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
           <a
             className="button primary"
-            href="mailto:carlos@tumblr.com?subject=Cheapskate%20Club%20Sponsorship%20Inquiry"
+            href="mailto:sponsors@cheapos.lol?subject=Cheapskate%20Club%20Sponsorship%20Inquiry"
           >
-            Email Carlos ✉️
+            Email sponsors@cheapos.lol ✉️
           </a>
           <a
             className="button secondary"

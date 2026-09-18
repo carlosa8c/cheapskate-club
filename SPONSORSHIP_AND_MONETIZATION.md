@@ -159,7 +159,7 @@ To iterate and deploy an MVP monetization foundation *today* without getting bog
      - **Package A: "Model of the Month"** ($350/mo) — Hero banner, model badge on matching leaderboard entries, sponsored recipe.
      - **Package B: "The 10-Cent Challenge Sponsor"** ($150 fee + $250 prize pool) — Branded efficiency challenge.
      - **Package C: "Directory Tool Placement"** ($49/mo) — Featured listing on the Frugal Stack.
-   - Direct CTA: A simple mailto / X DM link (`mailto:sponsors@cheapos.invalid` or `@carlosa8c on X`).
+   - Direct CTA: A simple mailto / X DM link (`mailto:sponsors@cheapos.lol` or `@carlosa8c on X`).
 
 ### Phase 3: The $1 Micro-Patron Button (Estimated Time: 30 Minutes)
 1. Set up a free account on **Polar.sh** or **GitHub Sponsors**.

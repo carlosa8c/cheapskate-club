@@ -80,7 +80,7 @@ export const SPONSOR_TIERS: SponsorTier[] = [
       "Zero-fluff social proof: real agent runs proving your low cost per completed task",
     ],
     ctaText: "Inquire about Spotlight",
-    ctaHref: "mailto:carlos@tumblr.com?subject=Cheapskate%20Club%20-%20Model%20of%20the%20Month%20Spotlight",
+    ctaHref: "mailto:sponsors@cheapos.lol?subject=Cheapskate%20Club%20-%20Model%20of%20the%20Month%20Spotlight",
   },
   {
     id: "directory",
@@ -98,7 +98,7 @@ export const SPONSOR_TIERS: SponsorTier[] = [
       "Inclusion in the Cheapskate Club newsletter and monthly roundup",
     ],
     ctaText: "List Your Tool",
-    ctaHref: "mailto:carlos@tumblr.com?subject=Cheapskate%20Club%20-%20Directory%20Listing%20Inquiry",
+    ctaHref: "mailto:sponsors@cheapos.lol?subject=Cheapskate%20Club%20-%20Directory%20Listing%20Inquiry",
   },
   {
     id: "patron",

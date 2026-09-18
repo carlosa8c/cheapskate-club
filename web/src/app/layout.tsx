@@ -65,7 +65,7 @@ export default async function Layout({children}: {children: React.ReactNode}) {
     <main className="page" id="main">{children}</main>
     <footer className="site-footer">
      <Link className="brand" href="/"><Image src="/brand-icon.svg" width="25" height="25" alt=""/>cheapoS</Link>
-     <span>Make expensive compute the exception.</span>
+     <span>Make expensive compute the exception. Proudly operated on a .80/yr domain.</span>
      <div className="footer-links">
        <Link className="text-button" href="/sponsors">Sponsor the Club ✳</Link>
        <Link className="text-button" href="/account">Your data, your call</Link>
