@@ -194,7 +194,7 @@ export function BuildDetailView({
     commitSha: benchmark.dimension5_quality.commitSha,
   } : null);
 
-  const readmeUrl = readmeUrl || (
+  const readmeUrl = build.readme_url || (
     build.project_url && build.project_url.includes("github.com")
       ? `${build.project_url.replace(/\/$/, "")}/blob/main/README.md`
       : null
