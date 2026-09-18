@@ -1,0 +1,50 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { builds } from "../../lib/builds";
+import { BuildDetailView } from "../../components/build-detail-view";
+
+const { id } = Astro.params;
+
+if (!id || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) {
+  return Astro.redirect("/community");
+}
+
+let feed = null;
+try {
+  feed = await builds({ id });
+} catch (e) {
+  feed = { items: [], unavailable: true };
+}
+
+if (!feed || feed.unavailable || !feed.items || feed.items.length === 0) {
+  return Astro.redirect("/community");
+}
+
+const build = feed.items[0];
+
+const supabaseUrl =
+  import.meta.env.SUPABASE_URL ||
+  (typeof process !== "undefined" && process.env?.SUPABASE_URL) ||
+  "";
+const supabaseKey =
+  import.meta.env.SUPABASE_PUBLISHABLE_KEY ||
+  (typeof process !== "undefined" && process.env?.SUPABASE_PUBLISHABLE_KEY) ||
+  "";
+const siteUrl =
+  import.meta.env.SITE_URL ||
+  (typeof process !== "undefined" && process.env?.SITE_URL) ||
+  "https://cheapos.lol";
+---
+
+<Layout
+  title={`${build.title} · Community Workbench · The Cheapskate Club`}
+  description={`${build.description.slice(0, 180)} · Built by @${build.handle} on cheapoS`}
+>
+  <BuildDetailView
+    build={build}
+    supabaseUrl={supabaseUrl}
+    supabaseKey={supabaseKey}
+    siteUrl={siteUrl}
+    client:load
+  />
+</Layout>

@@ -1,0 +1,67 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { builds } from "../../../lib/builds";
+import { BuildForm } from "../../../components/build-form";
+
+const { id } = Astro.params;
+
+if (!id || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) {
+  return Astro.redirect("/community");
+}
+
+let feed = null;
+try {
+  feed = await builds({ id });
+} catch (e) {
+  feed = { items: [], unavailable: true };
+}
+
+if (!feed || feed.unavailable || !feed.items || feed.items.length === 0) {
+  return Astro.redirect("/community");
+}
+
+const build = feed.items[0];
+
+const supabaseUrl =
+  import.meta.env.SUPABASE_URL ||
+  (typeof process !== "undefined" && process.env?.SUPABASE_URL) ||
+  "";
+const supabaseKey =
+  import.meta.env.SUPABASE_PUBLISHABLE_KEY ||
+  (typeof process !== "undefined" && process.env?.SUPABASE_PUBLISHABLE_KEY) ||
+  "";
+const siteUrl =
+  import.meta.env.SITE_URL ||
+  (typeof process !== "undefined" && process.env?.SITE_URL) ||
+  "https://cheapos.lol";
+---
+
+<Layout
+  title={`Edit ${build.title} · Community Workbench · The Cheapskate Club`}
+  description={`Edit project showcase for ${build.title}`}
+>
+  <section class="prose" style="max-width: 780px; margin: 40px auto;">
+    <div style="margin-bottom: 20px;">
+      <a href={`/community/${build.id}`} style="text-decoration: underline; color: var(--muted);">
+        ← Back to project showcase
+      </a>
+    </div>
+
+    <p class="eyebrow">EDIT BUILD</p>
+    <h1>
+      Update your<br />
+      <em>project showcase.</em>
+    </h1>
+    <p class="lede">
+      Revise what your build does, update links, or change your screenshots.
+    </p>
+
+    <BuildForm
+      build={build}
+      supabaseUrl={supabaseUrl}
+      supabaseKey={supabaseKey}
+      siteUrl={siteUrl}
+      client:load
+    />
+  </section>
+</Layout>

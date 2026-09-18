@@ -9,7 +9,7 @@ const { build } = Astro.props;
 ---
 
 <article class="build-card">
-  <a href={`/@${build.handle}`} class="build-cover" aria-label={`View build by @${build.handle}`}>
+  <a href={`/community/${build.id}`} class="build-cover" aria-label={`View ${build.title}`}>
     {build.screenshot_url ? (
       <img src={build.screenshot_url} alt={`Screenshot of ${build.title}`} loading="lazy" referrerpolicy="no-referrer" />
     ) : (
@@ -19,11 +19,15 @@ const { build } = Astro.props;
   <div class="build-card-body">
     <p class="eyebrow">BUILT WITH A LITTLE INGENUITY</p>
     <h2>
-      <a href={build.project_url || `/@${build.handle}`}>{build.title}</a>
+      <a href={`/community/${build.id}`}>{build.title}</a>
     </h2>
     <p class="build-excerpt">{build.description}</p>
     <div class="build-byline">
-      <a href={`/@${build.handle}`}>@{build.handle}</a>
+      {build.profile_public ? (
+        <a href={`/@${build.handle}`}>@{build.handle}</a>
+      ) : (
+        <span>@{build.handle}</span>
+      )}
       <span>✦ {build.cheers} cheers</span>
     </div>
   </div>

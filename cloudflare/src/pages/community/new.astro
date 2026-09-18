@@ -1,0 +1,46 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { BuildForm } from "../../components/build-form";
+
+const supabaseUrl =
+  import.meta.env.SUPABASE_URL ||
+  (typeof process !== "undefined" && process.env?.SUPABASE_URL) ||
+  "";
+const supabaseKey =
+  import.meta.env.SUPABASE_PUBLISHABLE_KEY ||
+  (typeof process !== "undefined" && process.env?.SUPABASE_PUBLISHABLE_KEY) ||
+  "";
+const siteUrl =
+  import.meta.env.SITE_URL ||
+  (typeof process !== "undefined" && process.env?.SITE_URL) ||
+  "https://cheapos.lol";
+---
+
+<Layout
+  title="Share a Build · Community Workbench · The Cheapskate Club"
+  description="Showcase what you've built with cheapoS. Big brain, small bill. Every experiment belongs here."
+>
+  <section class="prose" style="max-width: 780px; margin: 40px auto;">
+    <div style="margin-bottom: 20px;">
+      <a href="/community" style="text-decoration: underline; color: var(--muted);">
+        ← Around the workbench
+      </a>
+    </div>
+
+    <p class="eyebrow">SHOW & TELL</p>
+    <h1>
+      Made something?<br />
+      <em>Show it off.</em>
+    </h1>
+    <p class="lede">
+      Big brain, small bill. Showcase what you built with cheapoS to inspire other builders across the community.
+    </p>
+
+    <BuildForm
+      supabaseUrl={supabaseUrl}
+      supabaseKey={supabaseKey}
+      siteUrl={siteUrl}
+      client:load
+    />
+  </section>
+</Layout>

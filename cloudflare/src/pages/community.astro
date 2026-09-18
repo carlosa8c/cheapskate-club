@@ -22,9 +22,14 @@ const feed = await builds({ page }).catch(() => ({ items: [], unavailable: true 
     <p class="lede">
       Weekend experiments, useful little tools, and wonderfully unnecessary inventions. Built by fellow cheapskates.
     </p>
-    <a class="button" href="https://github.com/carlosa8c/cheapskate-club" target="_blank" rel="noopener noreferrer">
-      Submit a build on GitHub ↗
-    </a>
+    <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+      <a class="button primary" href="/community/new">
+        Share a build ↗
+      </a>
+      <a class="button" href="/leaderboard">
+        Around the club →
+      </a>
+    </div>
   </section>
 
   <div class="board-heading">
@@ -47,6 +52,11 @@ const feed = await builds({ page }).catch(() => ({ items: [], unavailable: true 
       <span aria-hidden="true">✳</span>
       <h3>{page ? "You’ve reached the end." : "Every club starts with a first build."}</h3>
       <p>It doesn’t have to change the world. Show us what you made.</p>
+      <div style="margin-top: 20px;">
+        <a class="button primary" href="/community/new">
+          Submit the first build ↗
+        </a>
+      </div>
     </div>
   )}
 
