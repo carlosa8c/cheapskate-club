@@ -83,16 +83,7 @@ const currentPath = Astro.url.pathname;
           >
             Community
           </a>
-          <a
-            href="/sponsors"
-            class:list={[
-              "nav-link",
-              { active: currentPath.startsWith("/sponsors") },
-            ]}
-            aria-current={currentPath.startsWith("/sponsors") ? "page" : undefined}
-          >
-            Sponsors
-          </a>
+
           <a
             href="/about"
             class:list={["nav-link", { active: currentPath.startsWith("/about") }]}
@@ -145,7 +136,7 @@ const currentPath = Astro.url.pathname;
       </a>
       <span>Make expensive compute the exception. Proudly operated on a $1.80/yr domain.</span>
       <div class="footer-links">
-        <a class="text-button" href="/sponsors">Sponsor the Club ✳</a>
+
         <a class="text-button" href="/account">Your data, your call</a>
       </div>
     </footer>

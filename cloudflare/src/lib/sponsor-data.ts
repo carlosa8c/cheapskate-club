@@ -126,16 +126,10 @@ export const FRUGAL_TOOLS: FrugalTool[] = [
     url: "https://console.groq.com/docs/overview",
   },
   {
-    name: "Cerebras Inference",
+    name: "Google Antigravity",
     category: "Inference",
-    description: "Model inference APIs for coding, reasoning, and agent applications.",
-    url: "https://inference-docs.cerebras.ai/",
-  },
-  {
-    name: "DeepSeek API",
-    category: "Inference",
-    description: "API access to DeepSeek models for text generation and agent workflows.",
-    url: "https://api-docs.deepseek.com/",
+    description: "Free agentic model inference APIs, autonomous execution, and high-quota coding compute powered by Google Gemini.",
+    url: "https://ai.google.dev/gemini-api/docs",
   },
   {
     name: "Supabase",
