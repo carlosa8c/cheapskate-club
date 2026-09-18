@@ -138,29 +138,71 @@ export function BuildDetailView({
     }
   }
 
-  function handlePostComment(e: React.FormEvent) {
-    e.preventDefault();
-    const text = commentText.trim();
-    if (!text) return;
+  const isOperator = Boolean(
+    user &&
+    (
+      user.user_metadata?.user_name?.toLowerCase() === "carlosa8c" ||
+      user.user_metadata?.preferred_username?.toLowerCase() === "carlosa8c" ||
+      user.user_metadata?.user_name?.toLowerCase() === "cheaposnumero1" ||
+      user.user_metadata?.preferred_username?.toLowerCase() === "cheaposnumero1" ||
+      user.email?.toLowerCase().includes("carlosa8c") ||
+      user.email?.toLowerCase().includes("cheapos")
+    )
+  );
 
-    setPostingComment(true);
-    const authorName = user?.user_metadata?.full_name || user?.user_metadata?.name || "Fellow Builder";
-    const authorHandle = user?.user_metadata?.user_name || "cheapskate";
+  async function handleApproveBuild() {
+    if (!client || !isOperator) return;
+    setOperatorActionLoading(true);
+    setStatusMessage(null);
+    try {
+      const { data, error: fetchErr } = await client
+        .from("club_builds")
+        .select("description")
+        .eq("id", build.id)
+        .single();
 
-    const newComment: CommentItem = {
-      id: Date.now().toString(),
-      author: authorName,
-      handle: authorHandle,
-      avatar: authorName.slice(0, 1).toUpperCase(),
-      text,
-      time: "Just now",
-    };
+      if (fetchErr || !data) {
+        throw new Error(fetchErr?.message || "Could not read build record");
+      }
 
-    const updated = [...comments, newComment];
-    setComments(updated);
-    localStorage.setItem(`comments_${build.id}`, JSON.stringify(updated));
-    setCommentText("");
-    setPostingComment(false);
+      const parsed = decodeBenchmarkComment(data.description);
+      let newDesc = parsed.cleanText;
+      if (parsed.benchmark) {
+        newDesc += encodeBenchmarkComment(parsed.benchmark, "approved");
+      }
+
+      const { error: updateErr } = await client
+        .from("club_builds")
+        .update({ description: newDesc })
+        .eq("id", build.id);
+
+      if (updateErr) throw updateErr;
+
+      setReviewStatus("approved");
+      setStatusMessage("Build successfully approved and published to the workbench!");
+    } catch (err: any) {
+      setStatusMessage("Failed to approve build: " + (err.message || "Unknown error"));
+    } finally {
+      setOperatorActionLoading(false);
+    }
+  }
+
+  async function handleRejectBuild() {
+    if (!client || !isOperator) return;
+    if (!window.confirm("Reject and remove this build from the workbench?")) return;
+    setOperatorActionLoading(true);
+    try {
+      const { error } = await client
+        .from("club_builds")
+        .delete()
+        .eq("id", build.id);
+
+      if (error) throw error;
+      window.location.href = "/community";
+    } catch (err: any) {
+      setStatusMessage("Failed to remove build: " + (err.message || "Unknown error"));
+      setOperatorActionLoading(false);
+    }
   }
 
   const shareOrigin = siteUrl || (typeof window !== "undefined" ? window.location.origin : "https://cheapos.lol");
