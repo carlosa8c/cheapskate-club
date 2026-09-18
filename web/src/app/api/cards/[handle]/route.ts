@@ -10,10 +10,11 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request, {params}: {params: Promise<{handle: string}>}){
  const handle = (await params).handle.toLowerCase();
- const headers = {'Cache-Control': 'private, no-store'};
+ const headers = {'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=600'};
+ const errHeaders = {'Cache-Control': 'private, no-store'};
  try{
   const member = await publicMember(handle);
-  if(!member) return new Response('Public profile not found', {status: 404, headers});
+  if(!member) return new Response('Public profile not found', {status: 404, headers: errHeaders});
   const board = await leaderboard('zero_cost', 'all');
   const champion = board.state === 'ready' && board.entries[0]?.handle === handle;
   
@@ -42,6 +43,6 @@ export async function GET(request: Request, {params}: {params: Promise<{handle: 
     }
   );
  } catch {
-  return new Response('Card unavailable. Please try again.', {status: 503, headers});
+  return new Response('Card unavailable. Please try again.', {status: 503, headers: errHeaders});
  }
 }
