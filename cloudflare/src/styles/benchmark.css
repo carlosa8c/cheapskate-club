@@ -1,13 +1,13 @@
 /* Keep benchmark colors paired with the site's existing color-scheme toggle. */
 .benchmark-spec-matrix {
   --benchmark-surface: light-dark(#f2f0e7, #101813);
-  --benchmark-card: light-dark(#fffdf7, #1b2820);
-  --benchmark-inset: light-dark(#eeeee5, #25382c);
-  --benchmark-text: light-dark(#243c30, #f2f5ed);
-  --benchmark-muted: light-dark(#556355, #b4c4b6);
-  --benchmark-border: light-dark(#cfd5c8, #3e5345);
-  --benchmark-success: light-dark(#2e632c, #a6e98a);
-  --benchmark-success-bg: light-dark(#e6f0dc, #2b422b);
+  --benchmark-card: var(--surface-card);
+  --benchmark-inset: var(--surface-inset);
+  --benchmark-text: var(--text-primary);
+  --benchmark-muted: var(--text-secondary);
+  --benchmark-border: var(--surface-border);
+  --benchmark-success: var(--status-success);
+  --benchmark-success-bg: var(--status-success-bg);
   padding: 24px;
   margin-bottom: 32px;
   border: 1px solid var(--benchmark-border);

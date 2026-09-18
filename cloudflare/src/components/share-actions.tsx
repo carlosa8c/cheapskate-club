@@ -121,7 +121,7 @@ export function ShareActions({
             border: "1px solid rgba(86, 207, 137, 0.3)",
             borderRadius: "999px",
             padding: "4px 12px",
-            fontSize: "12px",
+            fontSize: "var(--text-meta)",
             fontWeight: 600,
             color: "var(--accent-mint)",
             margin: "10px 0 6px"

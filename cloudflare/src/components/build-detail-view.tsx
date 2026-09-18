@@ -214,7 +214,7 @@ export function BuildDetailView({
           {telemetry ? "AUTONOMOUS CHEAPOS SHOWCASE · ZERO-COST COMPUTE" : "A FELLOW CHEAPSKATE MADE THIS"}
         </p>
         {telemetry && (
-          <span className="pill" style={{ margin: 0, padding: "2px 8px", borderRadius: "12px", background: "var(--line)", fontWeight: "bold" }}>
+          <span className="pill" style={{ margin: 0, padding: "2px 8px", borderRadius: "12px", background: "var(--status-success-bg)", color: "var(--status-success)", fontWeight: "bold" }}>
             100% FREE TIER
           </span>
         )}
@@ -267,15 +267,15 @@ export function BuildDetailView({
           style={{
             padding: "20px",
             borderRadius: "8px",
-            background: "var(--ink, #1f2320)",
-            color: "var(--bg, #f7f5ef)",
+            background: "var(--surface-inset)",
+            color: "var(--ink)",
             marginBottom: "32px",
           }}
         >
-          <div style={{ fontSize: "11px", fontFamily: "var(--mono)", color: "var(--accent, #d16647)", marginBottom: "8px" }}>
+          <div style={{ fontSize: "var(--text-meta)", fontFamily: "var(--mono)", color: "var(--status-brand)", marginBottom: "8px" }}>
             💻 RUN LOCALLY FROM CHEAPOS CHECKOUT
           </div>
-          <pre style={{ margin: 0, fontFamily: "var(--mono)", fontSize: "13px", overflowX: "auto" }}>
+          <pre style={{ margin: 0, fontFamily: "var(--mono)", fontSize: "var(--text-meta)", overflowX: "auto" }}>
             <code>{build.narrative.quickstart}</code>
           </pre>
         </div>
@@ -295,9 +295,9 @@ export function BuildDetailView({
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: "10px", marginBottom: "16px" }}>
             <div>
-              <span className="eyebrow" style={{ fontSize: "10px", letterSpacing: "1px" }}>CODE PROVENANCE</span>
+              <span className="eyebrow" style={{ fontSize: "var(--text-meta)", letterSpacing: "1px" }}>CODE PROVENANCE</span>
               <h3 style={{ font: "24px var(--serif)", margin: "4px 0" }}>Repository Source Files</h3>
-              <p style={{ fontSize: "13px", color: "var(--muted)", margin: 0 }}>
+              <p style={{ fontSize: "var(--text-meta)", color: "var(--muted)", margin: 0 }}>
                 Inspect the exact files generated and verified autonomously during this run.
               </p>
             </div>
@@ -307,7 +307,7 @@ export function BuildDetailView({
                 target="_blank"
                 rel="noopener noreferrer"
                 className="button"
-                style={{ fontSize: "12px" }}
+                style={{ fontSize: "var(--text-meta)" }}
               >
                 View Folder on GitHub ↗
               </a>
@@ -340,11 +340,11 @@ export function BuildDetailView({
                         href={githubFileUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        style={{ fontFamily: "var(--mono)", fontSize: "13px", fontWeight: "bold", textDecoration: "underline" }}
+                        style={{ fontFamily: "var(--mono)", fontSize: "var(--text-meta)", fontWeight: "bold", textDecoration: "underline" }}
                       >
                         {f.name}
                       </a>
-                      <p style={{ margin: "2px 0 0", fontSize: "12px", color: "var(--muted)" }}>
+                      <p style={{ margin: "2px 0 0", fontSize: "var(--text-meta)", color: "var(--muted)" }}>
                         {f.description}
                       </p>
                     </div>
@@ -353,7 +353,7 @@ export function BuildDetailView({
                     href={githubFileUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{ fontFamily: "var(--mono)", fontSize: "11px", color: "var(--muted)", textDecoration: "underline" }}
+                    style={{ fontFamily: "var(--mono)", fontSize: "var(--text-meta)", color: "var(--muted)", textDecoration: "underline" }}
                   >
                     inspect ↗
                   </a>
@@ -440,7 +440,7 @@ export function BuildDetailView({
                 borderRadius: "10px",
                 background: "var(--card-bg)",
                 fontFamily: "var(--mono)",
-                fontSize: "13px",
+                fontSize: "var(--text-meta)",
               }}
             >
               <strong>@{build.handle}</strong> · Verified cheapskate builder 🪪
@@ -462,7 +462,7 @@ export function BuildDetailView({
               className="button"
               disabled={deleting}
               onClick={handleDeleteBuild}
-              style={{ color: "#d16647" }}
+              style={{ color: "var(--status-brand)" }}
             >
               {deleting ? "Removing…" : "Delete this build"}
             </button>
@@ -481,7 +481,7 @@ export function BuildDetailView({
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: "12px" }}>
           <div>
-            <span className="eyebrow" style={{ fontSize: "11px", letterSpacing: "1px" }}>COMMUNITY WORKBENCH CHAT</span>
+            <span className="eyebrow" style={{ fontSize: "var(--text-meta)", letterSpacing: "1px" }}>COMMUNITY WORKBENCH CHAT</span>
             <h2 style={{ font: "32px var(--serif)", margin: "8px 0" }}>Project Discussion</h2>
             <p style={{ color: "var(--muted)", margin: "4px 0 20px" }}>
               Chat with the builder, ask questions about prompts and setup, or share feedback.
@@ -493,7 +493,7 @@ export function BuildDetailView({
               target="_blank"
               rel="noopener noreferrer ugc"
               className="button"
-              style={{ fontSize: "13px" }}
+              style={{ fontSize: "var(--text-meta)" }}
             >
               View thread on X ↗
             </a>
@@ -523,18 +523,18 @@ export function BuildDetailView({
                         background: "var(--line)",
                         display: "grid",
                         placeItems: "center",
-                        fontSize: "12px",
+                        fontSize: "var(--text-meta)",
                         fontWeight: "bold",
                       }}
                     >
                       {c.avatar}
                     </span>
                     <strong style={{ fontSize: "14px" }}>{c.author}</strong>
-                    <span style={{ fontSize: "12px", color: "var(--muted)", fontFamily: "var(--mono)" }}>
+                    <span style={{ fontSize: "var(--text-meta)", color: "var(--muted)", fontFamily: "var(--mono)" }}>
                       @{c.handle}
                     </span>
                   </div>
-                  <span style={{ fontSize: "11px", color: "var(--muted)" }}>{c.time}</span>
+                  <span style={{ fontSize: "var(--text-meta)", color: "var(--muted)" }}>{c.time}</span>
                 </div>
                 <p style={{ margin: "4px 0 0", fontSize: "15px", lineHeight: "1.6", whiteSpace: "pre-wrap" }}>
                   {c.text}
@@ -552,7 +552,7 @@ export function BuildDetailView({
               }}
             >
               <p style={{ margin: "6px 0" }}>No comments yet on this project.</p>
-              <p style={{ fontSize: "13px", margin: "0" }}>
+              <p style={{ fontSize: "var(--text-meta)", margin: "0" }}>
                 Be the first to share your thoughts or ask @{build.handle} about this build.
               </p>
             </div>
@@ -591,7 +591,7 @@ export function BuildDetailView({
               {postingComment ? "Posting…" : "Post Comment"}
             </button>
             {!user && (
-              <a href="/join" className="text-button" style={{ fontSize: "13px" }}>
+              <a href="/join" className="text-button" style={{ fontSize: "var(--text-meta)" }}>
                 Join with X or GitHub to get verified badge →
               </a>
             )}

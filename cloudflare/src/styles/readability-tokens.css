@@ -1,0 +1,23 @@
+/* Shared readable foreground/surface pairs. Both branches are checked at build time. */
+:root {
+  --text-meta: 14px;
+  --text-label: 15px;
+  --text-body: 16px;
+  --text-metric: 24px;
+  --text-primary: light-dark(#243c30, #f2f5ed);
+  --text-secondary: light-dark(#556355, #b4c4b6);
+  --surface-card: light-dark(#fffdf7, #1b2820);
+  --surface-inset: light-dark(#eeeee5, #25382c);
+  --surface-border: light-dark(#cfd5c8, #3e5345);
+  --status-success: light-dark(#2e632c, #a6e98a);
+  --status-success-bg: light-dark(#e6f0dc, #2b422b);
+  --status-info: light-dark(#075985, #7dd3fc);
+  --status-purple: light-dark(#6d28d9, #c4b5fd);
+  --status-warning: light-dark(#854d0e, #fcd34d);
+  --status-danger: light-dark(#b91c1c, #fca5a5);
+  --status-brand: light-dark(#9b3f20, #f4ab8e);
+  --status-silver: light-dark(#475569, #cbd5e1);
+  --medal-bg: light-dark(#ebd397, #ebd397);
+  --medal-ink: light-dark(#243c30, #243c30);
+  --status-bronze: light-dark(#9a3412, #fdba74);
+}

@@ -21,22 +21,22 @@ export interface ModelStat {
 export const ROLE_META: Record<string, { icon: string; color: string; desc: string }> = {
   worker: {
     icon: "🧑‍💻",
-    color: "var(--accent-mint, #56cf89)",
+    color: "var(--accent-mint)",
     desc: "The execution workhorse: editing files, running terminal checks, and tool calling.",
   },
   reviewer: {
     icon: "🛡️",
-    color: "#38bdf8",
+    color: "var(--status-info)",
     desc: "The quality gatekeeper: auditing diffs, inspecting tests, and enforcing safety.",
   },
   planner: {
     icon: "🗺️",
-    color: "#a78bfa",
+    color: "var(--status-purple)",
     desc: "The architect: breaking complex requests into actionable autonomous milestones.",
   },
   coordinator: {
     icon: "🧭",
-    color: "#f59e0b",
+    color: "var(--status-warning)",
     desc: "The dispatcher: routing tasks between subagents and orchestrating checkpoints.",
   },
 };
@@ -47,18 +47,18 @@ export function classifyProvider(name: string): {
 } {
   const lower = name.toLowerCase();
   if (lower.includes("gemini") || lower.includes("google")) {
-    return { provider: "Google", badgeColor: "#4285F4" };
+    return { provider: "Google", badgeColor: "var(--status-info)" };
   }
   if (lower.includes("groq")) {
-    return { provider: "Groq", badgeColor: "#F55036" };
+    return { provider: "Groq", badgeColor: "var(--status-brand)" };
   }
   if (lower.includes("openrouter") || lower.includes(":free")) {
-    return { provider: "OpenRouter", badgeColor: "#6366F1" };
+    return { provider: "OpenRouter", badgeColor: "var(--status-purple)" };
   }
   if (lower.includes("local") || lower.includes("gemma") || lower.includes("ollama")) {
-    return { provider: "Local", badgeColor: "#10B981" };
+    return { provider: "Local", badgeColor: "var(--status-success)" };
   }
-  return { provider: "Other", badgeColor: "#8B5CF6" };
+  return { provider: "Other", badgeColor: "var(--status-purple)" };
 }
 
 export function cleanModelName(name: string): string {

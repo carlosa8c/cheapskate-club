@@ -242,21 +242,21 @@ export function BuildForm({
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "12px" }}>
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
-              <span style={{ fontFamily: "var(--mono)", fontSize: "10.5px", letterSpacing: "1px", fontWeight: "bold", color: "var(--accent, #d16647)" }}>
+              <span style={{ fontFamily: "var(--mono)", fontSize: "var(--text-meta)", letterSpacing: "1px", fontWeight: "bold", color: "var(--status-brand)" }}>
                 ⚡ CHEAPOS TASK AUTODETECT
               </span>
-              <span className="pill" style={{ margin: 0, padding: "2px 8px", borderRadius: "12px", background: "rgba(36, 63, 50, 0.12)", color: "#243f32", fontSize: "10px", fontWeight: "bold" }}>
+              <span className="pill" style={{ margin: 0, padding: "2px 8px", borderRadius: "12px", background: "rgba(36, 63, 50, 0.12)", color: "var(--status-success)", fontSize: "var(--text-meta)", fontWeight: "bold" }}>
                 BENCHMARK TEMPLATE
               </span>
             </div>
             <h3 style={{ font: "20px var(--serif)", margin: "4px 0" }}>Auto-Fill from your cheapoS Task JSON</h3>
-            <p style={{ margin: 0, fontSize: "13px", color: "var(--muted)" }}>
+            <p style={{ margin: 0, fontSize: "var(--text-meta)", color: "var(--muted)" }}>
               Export or copy your task JSON from cheapoS to automatically generate your verified 5-dimension benchmark matrix.
             </p>
           </div>
 
           <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-            <label className="button primary" style={{ fontSize: "12px", cursor: "pointer", margin: 0 }}>
+            <label className="button primary" style={{ fontSize: "var(--text-meta)", cursor: "pointer", margin: 0 }}>
               <span>📁 Upload exported task.json</span>
               <input
                 type="file"
@@ -271,7 +271,7 @@ export function BuildForm({
             <button
               type="button"
               className="button"
-              style={{ fontSize: "12px" }}
+              style={{ fontSize: "var(--text-meta)" }}
               onClick={() => setShowPasteJson(!showPasteJson)}
             >
               {showPasteJson ? "Hide paste box" : "📋 Paste task JSON"}
@@ -286,12 +286,12 @@ export function BuildForm({
               placeholder="Paste your copied cheapoS task JSON here..."
               value={taskJsonText}
               onChange={(e) => setTaskJsonText(e.target.value)}
-              style={{ fontFamily: "var(--mono)", fontSize: "12px" }}
+              style={{ fontFamily: "var(--mono)", fontSize: "var(--text-meta)" }}
             />
             <button
               type="button"
               className="button"
-              style={{ marginTop: "8px", fontSize: "12px" }}
+              style={{ marginTop: "8px", fontSize: "var(--text-meta)" }}
               onClick={() => {
                 if (taskJsonText.trim()) processTaskJsonString(taskJsonText.trim());
               }}
@@ -308,8 +308,8 @@ export function BuildForm({
               padding: "10px 14px",
               borderRadius: "6px",
               background: taskJsonStatus.startsWith("Error") ? "rgba(209, 102, 71, 0.1)" : "rgba(36, 63, 50, 0.08)",
-              color: taskJsonStatus.startsWith("Error") ? "var(--accent, #d16647)" : "#243f32",
-              fontSize: "12.5px",
+              color: taskJsonStatus.startsWith("Error") ? "var(--status-brand)" : "var(--status-success)",
+              fontSize: "var(--text-meta)",
               fontFamily: "var(--mono)",
             }}
           >
@@ -357,7 +357,7 @@ export function BuildForm({
 
       <label htmlFor="project_url" style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
         <span>GitHub Repository or README Link</span>
-        <strong style={{ color: "var(--accent, #d16647)", fontSize: "11px", fontFamily: "var(--mono)" }}>MANDATORY PROOF</strong>
+        <strong style={{ color: "var(--status-brand)", fontSize: "var(--text-meta)", fontFamily: "var(--mono)" }}>MANDATORY PROOF</strong>
       </label>
       <input
         id="project_url"

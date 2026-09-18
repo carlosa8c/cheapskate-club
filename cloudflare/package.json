@@ -9,7 +9,9 @@
     "dev": "astro dev",
     "build": "astro build && node scripts/postbuild.js",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "check:readability": "node scripts/check-readability.mjs",
+    "prebuild": "npm run check:readability"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.3.2",

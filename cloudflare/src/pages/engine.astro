@@ -48,7 +48,7 @@ function formatTokens(n: number): string {
     <!-- Global Telemetry KPI Strip -->
     <section class="engine-kpis" aria-label="Global compute telemetry">
       <div class="engine-kpi-card">
-        <span class="kpi-label">TOTAL COMMUNITY COMPUTE</span>
+        <span class="kpi-label">Total community compute</span>
         <strong class="kpi-val kpi-mint">
           {stats.totalTokens.toLocaleString("en-US")}
         </strong>
@@ -56,22 +56,22 @@ function formatTokens(n: number): string {
       </div>
 
       <div class="engine-kpi-card">
-        <span class="kpi-label">MODELS BENCHMARKED</span>
+        <span class="kpi-label">Models benchmarked</span>
         <strong class="kpi-val">{stats.uniqueModelCount}</strong>
         <span class="kpi-sub">across major compute gateways</span>
       </div>
 
       <div class="engine-kpi-card">
-        <span class="kpi-label">AUTONOMOUS PERSONAS</span>
-        <strong class="kpi-val" style="color: #38bdf8;">
+        <span class="kpi-label">Autonomous personas</span>
+        <strong class="kpi-val" style="color: var(--status-info);">
           {stats.roles.length}
         </strong>
         <span class="kpi-sub">Worker, Reviewer, Planner, Coordinator</span>
       </div>
 
       <div class="engine-kpi-card">
-        <span class="kpi-label">COMMERCIAL BILLS AVOIDED</span>
-        <strong class="kpi-val" style="color: #a78bfa;">
+        <span class="kpi-label">Commercial bills avoided</span>
+        <strong class="kpi-val" style="color: var(--status-purple);">
           ~${stats.estimatedCommercialRetailTotal.toFixed(2)}
         </strong>
         <span class="kpi-sub">Maximum leverage across providers</span>
@@ -213,7 +213,7 @@ function formatTokens(n: number): string {
             Targeted out-of-pocket tokens reserved for high-stakes frontier reasoning
             or heavy benchmarks.
           </p>
-          <strong class="infra-tokens" style="color: #a78bfa;">
+          <strong class="infra-tokens" style="color: var(--status-purple);">
             {stats.categories.paid.toLocaleString("en-US")} tokens
           </strong>
         </div>

@@ -17,10 +17,10 @@ const ROLE_ICONS: Record<string, string> = {
 };
 
 const ROLE_COLORS: Record<string, string> = {
-  worker: "var(--accent-mint, #56cf89)",
-  reviewer: "#38bdf8",
-  planner: "#a78bfa",
-  coordinator: "#f59e0b",
+  worker: "var(--accent-mint)",
+  reviewer: "var(--status-info)",
+  planner: "var(--status-purple)",
+  coordinator: "var(--status-warning)",
 };
 
 function formatCompact(n: number): string {
@@ -189,11 +189,11 @@ export default function ScoreboardBillboard({
         {/* Top Status Strip */}
         <div className="billboard-header">
           <span className="billboard-title">
-            COMMUNITY COMPUTE · LIVE ON <strong>cheapos.lol</strong>
+            Community compute · live on <strong>cheapos.lol</strong>
           </span>
           <div className="pulse-pill" title="Live telemetry synced every 10s">
             <span className="pulse-dot live-pulse-active" aria-hidden="true"></span>
-            LIVE TELEMETRY · ED25519 VERIFIED
+            Live telemetry · Ed25519 verified
             {showDelta && lastDelta && (
               <span className="live-delta-pill">+{lastDelta.toLocaleString()} synced!</span>
             )}
@@ -213,7 +213,7 @@ export default function ScoreboardBillboard({
               )}
             </div>
             <div className="big-counter-label">
-              COMMUNITY COMPUTE · <strong>MAXIMUM LEVERAGE</strong>
+              Community compute · <strong>Maximum leverage</strong>
             </div>
             <div className="big-counter-headline">
               ~${retailEstimate} in commercial API bills eliminated —{" "}
@@ -228,8 +228,8 @@ export default function ScoreboardBillboard({
           {/* The Honest Math Box */}
           <div className="honest-math-box">
             <div className="honest-math-header">
-              <span>THE HONEST MATH</span>
-              <span className="honest-audit-badge">ED25519 AUDITED</span>
+              <span>The honest math</span>
+              <span className="honest-audit-badge">Ed25519 audited</span>
             </div>
 
             {/* Strikethrough commercial retail price */}
@@ -260,9 +260,9 @@ export default function ScoreboardBillboard({
         <div className="bar-section">
           <div className="bar-section-title">
             <span>
-              WHERE IT COMES FROM · <strong>4 COMPUTE TIERS</strong>
+              Where it comes from · <strong>4 compute tiers</strong>
             </span>
-            <span className="resolved-tag">100% RESOLVED</span>
+            <span className="resolved-tag">100% resolved</span>
           </div>
 
           <div
@@ -320,7 +320,7 @@ export default function ScoreboardBillboard({
         {/* Roles in the Mix Grid */}
         <div className="roles-section">
           <div className="roles-header">
-            ROLES IN THE MIX · <strong>AUTONOMOUS WORKSHOP</strong>
+            Roles in the mix · <strong>Autonomous workshop</strong>
           </div>
 
           <div className="roles-grid">
@@ -347,7 +347,7 @@ export default function ScoreboardBillboard({
 
           {/* Models Strip */}
           <div className="models-strip">
-            <span className="models-label">Top Models:</span>
+            <span className="models-label">Top models:</span>
             {topModels.map((m) => (
               <span className="model-pill" key={m.name}>
                 {cleanModelName(m.name)} <strong>{formatCompact(m.tokens)}</strong>

@@ -49,21 +49,21 @@ export default function SponsorHero() {
 
           <div className="spotlight-telemetry-panel">
             <div className="panel-title">
-              <span className="sparkle">⚡</span> WHY BENCHMARK HERE
+              <span className="sparkle">⚡</span> Why benchmark here
             </div>
             <div className="panel-metrics">
               <div className="panel-metric">
-                <span className="metric-label">COMMUNITY COMPUTE</span>
+                <span className="metric-label">Community compute</span>
                 <strong className="metric-value">40M+ Tokens</strong>
                 <span className="metric-note">Real autonomous tasks</span>
               </div>
               <div className="panel-metric">
-                <span className="metric-label">TARGET AUDIENCE</span>
+                <span className="metric-label">Target audience</span>
                 <strong className="metric-value">Agent Builders</strong>
                 <span className="metric-note">With active API keys</span>
               </div>
               <div className="panel-metric">
-                <span className="metric-label">PROOF MECHANISM</span>
+                <span className="metric-label">Proof mechanism</span>
                 <strong className="metric-value">Cryptographic</strong>
                 <span className="metric-note">Merkle task receipts</span>
               </div>
