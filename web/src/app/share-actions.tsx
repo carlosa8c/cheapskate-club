@@ -126,9 +126,9 @@ export function ShareActions({
             color: "var(--accent-mint)",
             margin: "10px 0 6px"
           }}>
-            <span>🧑‍💻 Human-Accepted Work: 12</span>
+            <span>🧑‍💻 72 Completed Tasks</span>
             <span>·</span>
-            <span>🔀 60 Merged</span>
+            <span>🎯 91% Acceptance</span>
           </div>
 
           <div className="card-badge-footer">

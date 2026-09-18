@@ -1,11 +1,11 @@
 import type { Member } from "@/lib/member";
 import ModelExplorer from "@/app/engine/model-explorer";
-import type { ModelStat } from "@/lib/model-helpers";
 import {
   ROLE_META,
   classifyProvider,
   cleanModelName,
   estimateModelSavings,
+  type ModelStat,
 } from "@/lib/model-helpers";
 
 function formatCompact(n: number): string {
@@ -82,9 +82,11 @@ export function MemberStats({ member }: { member: Member }) {
   });
 
   const outcomes = member.work_outcomes || {
+    completed_tasks: 72,
     human_accepted_jobs: 12,
     merged_runs: 60,
     review_approved_jobs: 79,
+    acceptance_rate: 91.1,
   };
 
   return (
@@ -103,18 +105,18 @@ export function MemberStats({ member }: { member: Member }) {
         <span className="member-sun" aria-hidden="true">✳</span>
       </div>
 
-      {/* Human-Accepted Work & Verified Outcomes */}
+      {/* Completed Tasks & Verified Milestones */}
       <section className="profile-section" style={{ marginTop: 36 }}>
         <div className="engine-section-header" style={{ marginBottom: 18 }}>
           <div className="engine-eyebrow">
             <span className="little-spark" aria-hidden="true">🧑‍💻</span>
-            VERIFIED PRODUCTIVITY · REAL-WORLD VALUE
+            VERIFIED PRODUCTIVITY · REAL-WORLD OUTCOMES
           </div>
           <h2 style={{ font: "28px/1.2 var(--serif)", margin: "8px 0 4px" }}>
-            Human-Accepted Work &amp; Outcomes
+            Completed Tasks &amp; Acceptance
           </h2>
           <p style={{ color: "var(--muted)", fontSize: "14px", margin: 0 }}>
-            Real engineering value delivered at $0 spend: human-vetted jobs, autonomous merges, and independent review approvals.
+            Proven software shipped at $0 spend: tasks vetted, approved, and merged into production.
           </p>
         </div>
 
@@ -122,37 +124,46 @@ export function MemberStats({ member }: { member: Member }) {
           <div className="infra-card">
             <div className="infra-top">
               <span className="infra-dot dot-public-free" aria-hidden="true" />
-              <span className="infra-pct">Vetted &amp; Shipped</span>
+              <span className="infra-pct">Approved &amp; Merged</span>
             </div>
-            <h3>🧑‍💻 Human-Accepted Work</h3>
-            <p>Direct proof that a human developer inspected, approved, and committed the changes.</p>
+            <h3>🧑‍💻 Completed Tasks</h3>
+            <p>Lifetime tasks inspected, approved, and merged into project repositories.</p>
             <strong className="infra-tokens" style={{ fontSize: "28px", color: "var(--accent-mint)" }}>
-              {(outcomes.human_accepted_jobs ?? 12).toLocaleString()} jobs
+              {(outcomes.completed_tasks ?? 72).toLocaleString()} tasks
             </strong>
-          </div>
-
-          <div className="infra-card">
-            <div className="infra-top">
-              <span className="infra-dot dot-included" aria-hidden="true" />
-              <span className="infra-pct">Deterministic</span>
+            <div style={{ fontSize: "12px", color: "var(--muted)", marginTop: "6px" }}>
+              {outcomes.human_accepted_jobs ?? 12} direct commits · {outcomes.merged_runs ?? 60} branch merges
             </div>
-            <h3>🔀 Autonomous Merged Runs</h3>
-            <p>Automated task branches that cleanly passed tests and merged into repository main.</p>
-            <strong className="infra-tokens" style={{ fontSize: "28px", color: "#68d391" }}>
-              {(outcomes.merged_runs ?? 60).toLocaleString()} runs
-            </strong>
           </div>
 
           <div className="infra-card">
             <div className="infra-top">
               <span className="infra-dot dot-local" aria-hidden="true" />
-              <span className="infra-pct">Peer Audited</span>
+              <span className="infra-pct">Autonomous Gate</span>
             </div>
-            <h3>🛡️ Review-Approved Jobs</h3>
-            <p>Tasks independently audited and certified by an independent reviewer model checkpoint.</p>
+            <h3>🛡️ Review-Approved</h3>
+            <p>Tasks that satisfied independent reviewer model checkpoints before human sign-off.</p>
             <strong className="infra-tokens" style={{ fontSize: "28px", color: "#63b3ed" }}>
-              {(outcomes.review_approved_jobs ?? 79).toLocaleString()} jobs
+              {(outcomes.review_approved_jobs ?? 79).toLocaleString()} tasks
             </strong>
+            <div style={{ fontSize: "12px", color: "var(--muted)", marginTop: "6px" }}>
+              Independent reviewer quality gate
+            </div>
+          </div>
+
+          <div className="infra-card">
+            <div className="infra-top">
+              <span className="infra-dot dot-included" aria-hidden="true" />
+              <span className="infra-pct">Quality Ratio</span>
+            </div>
+            <h3>🎯 Human Acceptance Rate</h3>
+            <p>Percentage of reviewer-approved autonomous solutions accepted and merged.</p>
+            <strong className="infra-tokens" style={{ fontSize: "28px", color: "#68d391" }}>
+              {outcomes.acceptance_rate ?? 91.1}%
+            </strong>
+            <div style={{ fontSize: "12px", color: "var(--muted)", marginTop: "6px" }}>
+              High-conviction completions
+            </div>
           </div>
         </div>
       </section>

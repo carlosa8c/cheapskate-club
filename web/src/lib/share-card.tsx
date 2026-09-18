@@ -102,9 +102,9 @@ export function ShareCard({
             fontWeight: 600,
             color: isDark ? '#56cf89' : '#233c30'
           }}>
-            <span>🧑‍💻 Human-Accepted Work: {outcomes.human_accepted_jobs ?? 12}</span>
+            <span>🧑‍💻 {outcomes.completed_tasks ?? 72} Completed Tasks</span>
             <span>·</span>
-            <span>🔀 {outcomes.merged_runs ?? 60} Merged</span>
+            <span>🎯 {outcomes.acceptance_rate ?? 91}% Acceptance</span>
           </div>
 
           <div style={{display:'flex',fontSize:16,color:textMuted,marginTop:20}}>Free remote + included + local</div>

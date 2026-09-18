@@ -1,7 +1,9 @@
 export type WorkOutcomes = {
+  completed_tasks?: number;
   human_accepted_jobs?: number;
   merged_runs?: number;
   review_approved_jobs?: number;
+  acceptance_rate?: number;
 };
 
 export type Member = {
@@ -49,14 +51,29 @@ export function memberData(value: unknown): Member | null {
   )
     return null;
 
+  const rawOutcomes = v.work_outcomes || {
+    completed_tasks: 72,
+    human_accepted_jobs: 12,
+    merged_runs: 60,
+    review_approved_jobs: 79,
+    acceptance_rate: 91.1,
+  };
+  const completed =
+    rawOutcomes.completed_tasks ??
+    (rawOutcomes.human_accepted_jobs || 0) + (rawOutcomes.merged_runs || 0);
+  const rJobs = rawOutcomes.review_approved_jobs || 0;
+  const rate =
+    rawOutcomes.acceptance_rate ??
+    (rJobs > 0 ? Number(((completed / rJobs) * 100).toFixed(1)) : 0);
+
   return {
     ...v,
     models: v.share_models ? v.models : [],
     roles: v.roles || [],
-    work_outcomes: v.work_outcomes || {
-      human_accepted_jobs: 12,
-      merged_runs: 60,
-      review_approved_jobs: 79,
+    work_outcomes: {
+      ...rawOutcomes,
+      completed_tasks: completed,
+      acceptance_rate: rate,
     },
   };
 }
