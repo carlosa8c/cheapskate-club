@@ -54,7 +54,7 @@ export function BuildForm({
     checkUser();
   }, [supabaseUrl, supabaseKey]);
 
-  async function handleOAuth(provider: "github" | "twitter") {
+  async function handleOAuth(provider: "github" | "x") {
     if (!client) return;
     const origin = siteUrl || window.location.origin;
     const redirectTo = origin.replace(/\/$/, "") + "/auth/callback";
@@ -176,7 +176,7 @@ export function BuildForm({
           Join fellow builders in the Cheapskate Club to showcase your project, receive community cheers, and spark discussions.
         </p>
         <div className="signin-options">
-          <button type="button" className="button primary" onClick={() => handleOAuth("twitter")}>
+          <button type="button" className="button primary" onClick={() => handleOAuth("x")}>
             Continue with X →
           </button>
           <button type="button" className="button" onClick={() => handleOAuth("github")}>

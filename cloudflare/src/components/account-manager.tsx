@@ -149,7 +149,7 @@ export function AccountManager({
     }
   }
 
-  async function handleOAuth(provider: "github" | "twitter") {
+  async function handleOAuth(provider: "github" | "x") {
     if (!client) return;
     setSigningIn(provider);
     setStatusMessage(null);
@@ -167,7 +167,7 @@ export function AccountManager({
 
     if (error) {
       setSigningIn(null);
-      setErrorMessage("Could not start sign-in with " + (provider === "twitter" ? "X" : "GitHub") + ": " + error.message);
+      setErrorMessage("Could not start sign-in with " + (provider === "x" ? "X" : "GitHub") + ": " + error.message);
     } else if (data?.url) {
       window.location.href = data.url;
     }
@@ -331,9 +331,9 @@ export function AccountManager({
             type="button"
             className="button primary"
             disabled={Boolean(signingIn)}
-            onClick={() => handleOAuth("twitter")}
+            onClick={() => handleOAuth("x")}
           >
-            {signingIn === "twitter" ? "Opening X…" : "Continue with X →"}
+            {signingIn === "x" ? "Opening X…" : "Continue with X →"}
           </button>
           <button
             type="button"

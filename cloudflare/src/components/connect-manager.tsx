@@ -87,7 +87,7 @@ export function ConnectManager({
     }
   }
 
-  async function handleOAuth(provider: "github" | "twitter") {
+  async function handleOAuth(provider: "github" | "x") {
     if (!client) return;
     const origin = siteUrl || window.location.origin;
     const redirectTo = origin.replace(/\/$/, "") + "/auth/callback";
@@ -127,7 +127,7 @@ export function ConnectManager({
           Sign in to choose the Club account for this installation.
         </p>
         <div className="signin-options">
-          <button type="button" className="button primary" onClick={() => handleOAuth("twitter")}>
+          <button type="button" className="button primary" onClick={() => handleOAuth("x")}>
             Sign in with X to continue →
           </button>
           <button type="button" className="button" onClick={() => handleOAuth("github")}>

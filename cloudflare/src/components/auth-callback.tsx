@@ -23,13 +23,25 @@ export function AuthCallback({
       try {
         const client = createClient(supabaseUrl, supabaseKey);
         const searchParams = new URLSearchParams(window.location.search);
-        const code = searchParams.get("code");
+        
+        // 1. Check for provider error in query string
+        const errorDesc = searchParams.get("error_description") || searchParams.get("error");
+        if (errorDesc) {
+          setErrorDetails(errorDesc);
+          setStatus("error");
+          setTimeout(() => {
+            window.location.href = "/join?status=callback";
+          }, 3000);
+          return;
+        }
 
+        // 2. Check for PKCE authorization code
+        const code = searchParams.get("code");
         if (code) {
-          const { error } = await client.auth.exchangeCodeForSession(code);
-          if (error) {
-            console.error("Exchange error:", error);
-            setErrorDetails(error.message);
+          const { error: exchangeErr } = await client.auth.exchangeCodeForSession(code);
+          if (exchangeErr) {
+            console.error("Exchange error:", exchangeErr);
+            setErrorDetails(exchangeErr.message);
             setStatus("error");
             setTimeout(() => {
               window.location.href = "/join?status=callback";
@@ -38,8 +50,32 @@ export function AuthCallback({
           }
         }
 
-        setStatus("success");
-        window.location.href = "/account";
+        // 3. Verify session was established (via code exchange or implicit hash)
+        const { data: { session } } = await client.auth.getSession();
+        if (session) {
+          setStatus("success");
+          const pairingId = localStorage.getItem("club_pairing");
+          const destination = pairingId ? `/connect?id=${pairingId}` : "/account";
+          window.location.href = destination;
+          return;
+        }
+
+        // 4. Listen for auth change as a fallback if session is still processing
+        const { data: authListener } = client.auth.onAuthStateChange((event, newSession) => {
+          if (newSession) {
+            authListener.subscription.unsubscribe();
+            setStatus("success");
+            const pairingId = localStorage.getItem("club_pairing");
+            const destination = pairingId ? `/connect?id=${pairingId}` : "/account";
+            window.location.href = destination;
+          }
+        });
+
+        // Timeout fallback
+        setTimeout(() => {
+          window.location.href = "/account";
+        }, 2000);
+
       } catch (err: any) {
         console.error("Auth callback error:", err);
         setErrorDetails(err.message || "Unexpected error");
