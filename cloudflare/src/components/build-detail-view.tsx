@@ -211,21 +211,30 @@ export function BuildDetailView({
   const tweetText = encodeURIComponent(`${build.title} — autonomous zero-cost showcase on The Cheapskate Club`);
   // Decode embedded benchmark if not present directly in build.telemetry
   const displayDescription = decoded.cleanText;
-  const benchmark = build.telemetry?.benchmark || decoded.benchmark;
-  const telemetry = build.telemetry || (benchmark ? {
+  const benchmark = build.benchmark || build.telemetry?.benchmark || decoded.benchmark;
+  const telemetry = benchmark ? {
     benchmark,
     tokens: benchmark.dimension1_cost_tokens.totalTokens,
     cost: benchmark.dimension1_cost_tokens.billedCost,
     requests: benchmark.dimension2_effort.totalActions,
-    tests: benchmark.dimension5_quality.finalUnitTestScore,
+    tests: benchmark.dimension5_quality.finalUnitTestScore || benchmark.dimension5_quality.checksSummary,
     commitSha: benchmark.dimension5_quality.commitSha,
-  } : null);
+  } : build.telemetry;
+
+  const hookText = build.hook || (displayDescription && displayDescription.trim().length <= 250 ? displayDescription.trim() : null);
 
   const readmeUrl = build.readme_url || (
     build.project_url && build.project_url.includes("github.com")
       ? `${build.project_url.replace(/\/$/, "")}/blob/main/README.md`
       : null
   );
+
+  const primaryProjectUrl = build.project_url || readmeUrl;
+  const repoLabel = primaryProjectUrl?.includes("gitlab.com")
+    ? "View on GitLab ↗"
+    : primaryProjectUrl?.includes("github.com")
+    ? "View on GitHub ↗"
+    : "View project repository ↗";
 
   return (
     <section className="build-detail" style={{ maxWidth: "100%", margin: "32px 0 60px" }}>
@@ -305,7 +314,7 @@ export function BuildDetailView({
         {build.title}
       </h1>
 
-      <p className="lede" style={{ marginBottom: build.hook ? "12px" : "28px" }}>
+      <p className="lede" style={{ marginBottom: hookText ? "12px" : "28px" }}>
         By{" "}
         {build.profile_public ? (
           <a href={`/@${build.handle}`} style={{ textDecoration: "underline", fontWeight: "bold" }}>
@@ -318,9 +327,9 @@ export function BuildDetailView({
         )}
       </p>
 
-      {build.hook && (
+      {hookText && (
         <p style={{ fontSize: "18px", color: "var(--muted)", maxWidth: "800px", lineHeight: "1.5", margin: "0 0 28px" }}>
-          {build.hook}
+          {hookText}
         </p>
       )}
 
@@ -370,27 +379,15 @@ export function BuildDetailView({
           {cheered ? "✦ Cheered" : "✧ Give a cheer"} · {cheers}
         </button>
 
-        {readmeUrl && (
+        {primaryProjectUrl && (
           <a
             className="button primary"
-            href={readmeUrl}
+            href={primaryProjectUrl}
             target="_blank"
             rel="noopener noreferrer ugc"
             style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
           >
-            <span>📖</span> Read Project README ↗
-          </a>
-        )}
-
-        {build.project_url && (
-          <a
-            className="button"
-            href={build.project_url}
-            target="_blank"
-            rel="noopener noreferrer ugc"
-            style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
-          >
-            <span>📂</span> Browse Source Tree ↗
+            <span>📂</span> {repoLabel}
           </a>
         )}
 

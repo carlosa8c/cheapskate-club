@@ -14,8 +14,78 @@ export interface ParsedTaskResult {
   files: TaskFileItem[];
 }
 
+export interface TaskJsonValidationResult {
+  valid: boolean;
+  error?: string;
+}
+
+export function validateCheapoSTaskJson(data: any): TaskJsonValidationResult {
+  if (!data || typeof data !== "object" || Array.isArray(data)) {
+    return { valid: false, error: "Input must be a valid JSON object." };
+  }
+
+  // Required: must have an identifier
+  if (!data.id && !data.task_id && !data.snapshot?.commit) {
+    return {
+      valid: false,
+      error: "Missing required cheapoS task identifier (id). Make sure this is an authentic task export from cheapoS.",
+    };
+  }
+
+  // Must contain at least two core cheapoS agent execution structures
+  const signatures = [
+    Boolean(data.usage && typeof data.usage === "object"),
+    Boolean(Array.isArray(data.checkpoints)),
+    Boolean(Array.isArray(data.checks)),
+    Boolean(Array.isArray(data.request_metrics) || Array.isArray(data.routing_traces)),
+    Boolean(Array.isArray(data.run_metrics) || (data.session_actions && typeof data.session_actions === "object")),
+    Boolean(data.providers && typeof data.providers === "object"),
+    Boolean(data.snapshot && typeof data.snapshot === "object"),
+    typeof data.worker_turns === "number" || typeof data.tool_actions === "number",
+  ];
+
+  const matchedSignatures = signatures.filter(Boolean).length;
+  if (matchedSignatures < 2) {
+    return {
+      valid: false,
+      error: "Unrecognized JSON format. A valid cheapoS task export must contain agent execution telemetry (such as usage, checkpoints, checks, or routing traces).",
+    };
+  }
+
+  // Must have some prompt, title, or task goal
+  const hasPrompt = Boolean(
+    (typeof data.prompt === "string" && data.prompt.trim()) ||
+    (typeof data.title === "string" && data.title.trim()) ||
+    (typeof data.hook === "string" && data.hook.trim()) ||
+    (data.branch_run?.plan?.goal && typeof data.branch_run.plan.goal === "string")
+  );
+  if (!hasPrompt) {
+    return {
+      valid: false,
+      error: "Task JSON is missing a task prompt, title, or goal.",
+    };
+  }
+
+  return { valid: true };
+}
+
 export function parseTaskJson(rawInput: string | Record<string, any>): ParsedTaskResult {
-  const data: Record<string, any> = typeof rawInput === "string" ? JSON.parse(rawInput) : rawInput;
+  let data: Record<string, any>;
+  if (typeof rawInput === "string") {
+    try {
+      data = JSON.parse(rawInput);
+    } catch (e: any) {
+      throw new Error(`Invalid JSON syntax: ${e?.message || "Malformed JSON"}`);
+    }
+  } else {
+    data = rawInput;
+  }
+
+  const validation = validateCheapoSTaskJson(data);
+  if (!validation.valid) {
+    throw new Error(validation.error);
+  }
+
 
   // 1. Dimension 1: Cost & Tokens
   const usage = (data && typeof data.usage === "object") ? data.usage : {};
@@ -62,6 +132,57 @@ export function parseTaskJson(rawInput: string | Record<string, any>): ParsedTas
       else if (role === "coordinator") coordinators.add(cleanName);
       else workers.add(cleanName);
     }
+  }
+
+  if (Array.isArray(data.routing_traces)) {
+    for (const trace of data.routing_traces) {
+      if (!trace) continue;
+      const role = trace.role;
+      if (trace.requested_route && typeof trace.requested_route === "string") {
+        const clean = trace.requested_route.includes("/") ? trace.requested_route.split("/").pop()! : trace.requested_route;
+        allModels.add(clean);
+        if (role === "reviewer") reviewers.add(clean);
+        else if (role === "coordinator") coordinators.add(clean);
+        else workers.add(clean);
+      }
+      if (Array.isArray(trace.attempts)) {
+        for (const att of trace.attempts) {
+          const modelName = att?.served_model || att?.model;
+          if (typeof modelName === "string" && modelName) {
+            const clean = modelName.includes("/") ? modelName.split("/").pop()! : modelName;
+            allModels.add(clean);
+            if (role === "reviewer") reviewers.add(clean);
+            else if (role === "coordinator") coordinators.add(clean);
+            else workers.add(clean);
+          }
+        }
+      }
+    }
+  }
+
+  if (data.providers && typeof data.providers === "object") {
+    for (const [role, conf] of Object.entries(data.providers)) {
+      const m = (conf as any)?.model;
+      if (typeof m === "string" && m.trim()) {
+        const clean = m.includes("/") ? m.split("/").pop()! : m;
+        allModels.add(clean);
+        if (role === "reviewer") reviewers.add(clean);
+        else if (role === "coordinator") coordinators.add(clean);
+        else workers.add(clean);
+      }
+    }
+  }
+
+  if (workers.size === 0 && allModels.size > 0) {
+    allModels.forEach(m => {
+      if (!reviewers.has(m) && !coordinators.has(m)) workers.add(m);
+    });
+    if (workers.size === 0) {
+      workers.add(Array.from(allModels)[0]);
+    }
+  }
+  if (workers.size === 0) {
+    workers.add("autonomous worker swarm");
   }
 
   const handoffs = Array.isArray(data.routing_traces) ? data.routing_traces.length : 0;

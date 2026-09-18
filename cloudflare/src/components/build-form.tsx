@@ -70,10 +70,11 @@ export function BuildForm({
       if (!title && res.title) setTitle(res.title);
       if (!description && res.hook) setDescription(res.hook);
       setTaskJsonStatus(
-        `Verified cheapoS run: ${(res.benchmark.dimension1_cost_tokens.totalTokens).toLocaleString()} tokens · ${res.benchmark.dimension1_cost_tokens.billedCost} billed · ${res.benchmark.dimension2_effort.totalActions} actions · 0 resumes`
+        `Verified cheapoS run: ${(res.benchmark.dimension1_cost_tokens.totalTokens).toLocaleString()} tokens · ${res.benchmark.dimension1_cost_tokens.billedCost} billed · ${res.benchmark.dimension2_effort.totalActions} actions · ${res.benchmark.dimension4_autonomy.resumeIncidents}`
       );
     } catch (err: any) {
-      setTaskJsonStatus("Error parsing task.json: " + (err?.message || "Invalid JSON"));
+      setBenchmark(null);
+      setTaskJsonStatus("Error: " + (err?.message || "Invalid cheapoS task.json export"));
     }
   }
 
@@ -109,6 +110,11 @@ export function BuildForm({
     const cleanScreenshot = screenshotUrl.trim();
     const cleanProject = projectUrl.trim();
     const cleanDiscussion = discussionUrl.trim();
+
+    if (!benchmark) {
+      setErrorMessage("Please paste or upload a verified cheapoS task.json export to showcase this build on the workbench.");
+      return;
+    }
 
     if (cleanTitle.length < 3 || cleanTitle.length > 100) {
       setErrorMessage("Title must be between 3 and 100 characters.");

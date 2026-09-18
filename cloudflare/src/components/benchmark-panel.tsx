@@ -9,7 +9,7 @@ type BenchmarkPanelProps = {
     requests?: number;
     tests?: string;
   };
-  readmeUrl: string;
+  readmeUrl?: string;
   projectUrl?: string;
 };
 
@@ -31,16 +31,6 @@ export function BenchmarkPanel({ telemetry, readmeUrl, projectUrl }: BenchmarkPa
           </div>
           <h2 id="benchmark-title">Autonomous Execution Benchmark</h2>
           <p>Cost, activity, autonomy and verification from the cheapoS execution engine.</p>
-        </div>
-        <div className="benchmark-links">
-          <a href={readmeUrl} target="_blank" rel="noopener noreferrer" className="button primary">
-            Project README <span aria-hidden="true">↗</span>
-          </a>
-          {projectUrl && (
-            <a href={projectUrl} target="_blank" rel="noopener noreferrer" className="button">
-              Browse files <span aria-hidden="true">↗</span>
-            </a>
-          )}
         </div>
       </header>
 
@@ -89,13 +79,13 @@ export function BenchmarkPanel({ telemetry, readmeUrl, projectUrl }: BenchmarkPa
             </div>
             <dl className="benchmark-roster">
               {([
-                ["Workers", benchmark.dimension3_swarm.workers],
+                ["Workers", (benchmark.dimension3_swarm.workers && benchmark.dimension3_swarm.workers.length > 0) ? benchmark.dimension3_swarm.workers : (benchmark.dimension3_swarm.coordinators && benchmark.dimension3_swarm.coordinators.length > 0 ? benchmark.dimension3_swarm.coordinators : ["autonomous worker swarm"])],
                 ["Reviewers", benchmark.dimension3_swarm.reviewers],
                 ["Coordinators", benchmark.dimension3_swarm.coordinators],
               ] as const).map(([role, models]) => (
                 <div key={role}>
                   <dt>{role}</dt>
-                  <dd>{models.length ? models.map((model) => <code key={model}>{model}</code>) : <span className="benchmark-note">None recorded</span>}</dd>
+                  <dd>{models && models.length ? models.map((model) => <code key={model}>{model}</code>) : <span className="benchmark-note">None recorded</span>}</dd>
                 </div>
               ))}
             </dl>

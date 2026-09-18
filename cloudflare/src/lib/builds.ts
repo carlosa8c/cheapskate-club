@@ -80,15 +80,17 @@ export async function builds(
       return {
         ...item,
         description: decoded.cleanText,
-        review_status: decoded.status,
+        hook: item.hook || (decoded.cleanText && decoded.cleanText.length <= 250 ? decoded.cleanText : undefined),
+        review_status: decoded.status || item.review_status,
         benchmark: bm || undefined,
-        telemetry: item.telemetry || (bm ? {
+        telemetry: bm ? {
+          benchmark: bm,
           cost: bm.dimension1_cost_tokens.billedCost,
           tokens: bm.dimension1_cost_tokens.totalTokens,
-          tests: bm.dimension5_quality.checksSummary,
-          autonomy: bm.dimension4_autonomy.resumeIncidents,
-          models: bm.dimension3_swarm.workers.join(", "),
-        } : undefined),
+          tests: bm.dimension5_quality.finalUnitTestScore || bm.dimension5_quality.checksSummary,
+          requests: bm.dimension2_effort.totalActions,
+          commitSha: bm.dimension5_quality.commitSha,
+        } : item.telemetry,
       };
     });
 
