@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { createClient, type SupabaseClient, type User } from "@supabase/supabase-js";
 import type { Build } from "../lib/builds";
+import { decodeBenchmarkComment } from "../lib/task-parser";
 
 type BuildDetailViewProps = {
   build: Build;
@@ -180,7 +181,24 @@ export function BuildDetailView({
   const targetId = build.slug || build.id;
   const shareUrl = `${shareOrigin.replace(/\/$/, "")}/community/${targetId}`;
   const tweetText = encodeURIComponent(`${build.title} — autonomous zero-cost showcase on The Cheapskate Club`);
-  const telemetry = build.telemetry;
+  // Decode embedded benchmark if not present directly in build.telemetry
+  const decoded = decodeBenchmarkComment(build.description);
+  const displayDescription = decoded.cleanText;
+  const benchmark = build.telemetry?.benchmark || decoded.benchmark;
+  const telemetry = build.telemetry || (benchmark ? {
+    benchmark,
+    tokens: benchmark.dimension1_cost_tokens.totalTokens,
+    cost: benchmark.dimension1_cost_tokens.billedCost,
+    requests: benchmark.dimension2_effort.totalActions,
+    tests: benchmark.dimension5_quality.finalUnitTestScore,
+    commitSha: benchmark.dimension5_quality.commitSha,
+  } : null);
+
+  const readmeUrl = readmeUrl || (
+    build.project_url && build.project_url.includes("github.com")
+      ? `${build.project_url.replace(/\/$/, "")}/blob/main/README.md`
+      : null
+  );
 
   return (
     <section className="build-detail" style={{ maxWidth: "100%", margin: "32px 0 60px" }}>
@@ -279,7 +297,7 @@ export function BuildDetailView({
 
             <div style={{ display: "flex", gap: "8px", alignItems: "center", flexWrap: "wrap" }}>
               <a
-                href={build.readme_url || `https://github.com/carlosa8c/cheapoS/blob/main/examples/${build.slug || ""}/README.md`}
+                href={readmeUrl || `https://github.com/carlosa8c/cheapoS/blob/main/examples/${build.slug || ""}/README.md`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="button primary"
@@ -577,7 +595,7 @@ export function BuildDetailView({
         className="build-description"
         style={{ fontSize: "17px", lineHeight: "1.7", whiteSpace: "pre-wrap", marginBottom: "32px" }}
       >
-        {build.description}
+        {displayDescription}
       </div>
 
       {build.narrative && build.narrative.quickstart && (
@@ -699,10 +717,10 @@ export function BuildDetailView({
           {cheered ? "✦ Cheered" : "✧ Give a cheer"} · {cheers}
         </button>
 
-        {build.readme_url && (
+        {readmeUrl && (
           <a
             className="button primary"
-            href={build.readme_url}
+            href={readmeUrl}
             target="_blank"
             rel="noopener noreferrer ugc"
             style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
