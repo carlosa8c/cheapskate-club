@@ -36,6 +36,7 @@ export function BuildForm({
   const [taskJsonStatus, setTaskJsonStatus] = useState<string | null>(null);
   const [taskJsonText, setTaskJsonText] = useState("");
   const [showPasteJson, setShowPasteJson] = useState(false);
+  const [submittedPending, setSubmittedPending] = useState<string | null>(null);
 
   useEffect(() => {
     if (!supabaseUrl || !supabaseKey) {
@@ -190,12 +191,47 @@ export function BuildForm({
           return;
         }
 
-        window.location.href = "/community/" + data.id;
+        setSubmittedPending(data.id);
+        setSubmitting(false);
+        return;
       }
     } catch (err: any) {
       setErrorMessage(err.message || "An unexpected error occurred.");
       setSubmitting(false);
     }
+  }
+
+  if (submittedPending) {
+    return (
+      <div
+        style={{
+          padding: "48px 24px",
+          textAlign: "center",
+          maxWidth: "600px",
+          margin: "40px auto",
+          borderRadius: "12px",
+          border: "1px solid var(--card-border)",
+          background: "var(--card-bg)",
+        }}
+      >
+        <span style={{ fontSize: "52px" }} role="img" aria-label="Hourglass">⏳</span>
+        <h2 style={{ font: "34px var(--serif)", margin: "16px 0 8px" }}>Build submitted!</h2>
+        <div style={{ display: "inline-block", margin: "4px 0 16px", padding: "4px 12px", borderRadius: "12px", background: "rgba(217, 119, 6, 0.15)", color: "var(--status-warning)", fontWeight: "bold", fontSize: "var(--text-meta)" }}>
+          AWAITING OPERATOR REVIEW
+        </div>
+        <p style={{ color: "var(--muted)", margin: "0 auto 28px", maxWidth: "480px", lineHeight: "1.6" }}>
+          Your build has been received and is waiting in the review queue. It will appear publicly on the workbench feed as soon as @carlosa8c verifies the GitHub repository.
+        </p>
+        <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
+          <a className="button primary" href={`/community/${submittedPending}`}>
+            Preview your submission →
+          </a>
+          <a className="button" href="/community">
+            Around the workbench →
+          </a>
+        </div>
+      </div>
+    );
   }
 
   if (loadingUser) {
