@@ -32,7 +32,31 @@ export default async function Layout({children}: {children: React.ReactNode}) {
       <Link href="/community">Community</Link>
       <Link href="/about">How it works</Link>
       <ThemeToggle />
-      <Link className="button primary" href={member?"/account":"/join"}>{member?"Your membership ↗":"Join the club ↗"}</Link>
+      {member ? (
+        <>
+          <Link
+            href={member.profileUrl}
+            className="nav-profile-pill"
+            title={`View @${member.handle} profile`}
+          >
+            <span className="nav-avatar" aria-hidden="true">
+              {member.name.slice(0, 1).toUpperCase()}
+            </span>
+            <span>Profile</span>
+          </Link>
+          <Link
+            className="button"
+            href="/account"
+            title="Account & Installation Settings"
+          >
+            Account ⚙️
+          </Link>
+        </>
+      ) : (
+        <Link className="button primary" href="/join">
+          Join the club ↗
+        </Link>
+      )}
      </nav>
     </header>
     <main className="page" id="main">{children}</main>

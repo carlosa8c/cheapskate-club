@@ -58,7 +58,14 @@ export default async function LeaderboardPage({
                   {member.name}, you’re in. Your profile, connected installations,
                   and sharing settings are all in one place.
                 </p>
-                <Link className="button" href="/account">Your membership ↗</Link>
+                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 14 }}>
+                  <Link className="button primary" href={member.profileUrl}>
+                    View your profile ↗
+                  </Link>
+                  <Link className="button" href="/account">
+                    Account settings ⚙️
+                  </Link>
+                </div>
                 <span className="join-fine">Good to have you here.</span>
               </>
             ) : (

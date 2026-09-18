@@ -2827,3 +2827,89 @@ select{background:var(--input-bg);color:var(--input-color);border:1px solid var(
     font-size: 32px;
   }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   CLUB CARD JUMP LINKS & GLOBAL NAV PROFILE ACCESS
+   ════════════════════════════════════════════════════════════════════ */
+html {
+  scroll-behavior: smooth;
+}
+
+#club-card {
+  scroll-margin-top: 90px;
+}
+
+.profile-top-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.top-jump-card-link {
+  font: 700 12px var(--mono);
+  color: var(--accent-mint);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: var(--paper);
+  border: 1px solid var(--card-border);
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+.top-jump-card-link:hover {
+  background: rgba(86, 207, 137, 0.14);
+  border-color: var(--accent-mint);
+  transform: translateY(-1px);
+}
+
+.jump-card-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font: 700 11px var(--mono);
+  padding: 3px 11px;
+  border-radius: 999px;
+  background: rgba(86, 207, 137, 0.12);
+  border: 1px solid rgba(86, 207, 137, 0.45);
+  color: var(--accent-mint);
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+.jump-card-pill:hover {
+  background: rgba(86, 207, 137, 0.22);
+  border-color: var(--accent-mint);
+  transform: translateY(-1px);
+}
+
+.nav-profile-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 3px 12px 3px 5px;
+  border-radius: 999px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  font: 600 13px var(--sans);
+  color: var(--ink);
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+.nav-profile-pill:hover {
+  border-color: var(--accent-mint);
+  color: var(--accent-mint);
+}
+.nav-avatar {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--monogram-bg);
+  color: var(--ink);
+  font: 700 11px var(--mono);
+}

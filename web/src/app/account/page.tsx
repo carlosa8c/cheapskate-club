@@ -56,11 +56,9 @@ export default async function Account({
               Signed in as <strong>{profile.display_name}</strong> (<code>@{profile.handle}</code>)
             </span>
             <div className="account-nav-buttons">
-              {profile.sharing_enabled && (
-                <Link className="button primary" href={`/@${profile.handle}`}>
-                  View Public Profile ↗
-                </Link>
-              )}
+              <Link className="button primary" href={`/@${profile.handle}`}>
+                View My Profile ↗
+              </Link>
               <Link className="button" href="/leaderboard">
                 Leaderboard ↗
               </Link>

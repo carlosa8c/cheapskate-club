@@ -36,7 +36,7 @@ export function ShareActions({ handle, url }: { handle: string; url: string }) {
   })}`;
 
   return (
-    <section className="share-pass-showcase" aria-label="Official Club Card & Share Pass">
+    <section id="club-card" className="share-pass-showcase" aria-label="Official Club Card & Share Pass">
       <div className="club-card-preview-frame">
         <img
           src={`${cardImageUrl}?download=1`}

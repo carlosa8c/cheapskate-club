@@ -125,9 +125,14 @@ export default async function MemberPage({
 
   return (
     <section className="member-page">
-      <Link href="/leaderboard" className="inline-link">
-        ← The leaderboard
-      </Link>
+      <div className="profile-top-nav">
+        <Link href="/leaderboard" className="inline-link">
+          ← The leaderboard
+        </Link>
+        <a href="#club-card" className="top-jump-card-link">
+          🪪 Your verified Club Card ↓
+        </a>
+      </div>
 
       {/* Upgraded Member Hero Header */}
       <div className="member-heading-card">
@@ -170,6 +175,9 @@ export default async function MemberPage({
                 Rank #{rankIndex + 1} on the Board
               </span>
             )}
+            <a href="#club-card" className="jump-card-pill" title="Jump to your verified Club Card">
+              🪪 Club Card ↓
+            </a>
           </div>
         </div>
       </div>
