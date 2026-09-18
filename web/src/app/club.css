@@ -2739,27 +2739,128 @@ select{background:var(--input-bg);color:var(--input-color);border:1px solid var(
   border-radius: 16px;
   padding: 32px;
   display: grid;
-  grid-template-columns: 340px 1fr;
+  grid-template-columns: 300px 1fr;
   gap: 36px;
   align-items: center;
+  scroll-margin-top: 90px;
 }
 
-.club-card-preview-frame {
-  position: relative;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
-  border: 1px solid var(--card-border);
-  transition: transform 0.2s ease;
-}
-.club-card-preview-frame:hover {
-  transform: scale(1.02);
-}
-
-.club-card-preview-img {
+.club-card-preview-container {
   width: 100%;
-  height: auto;
-  display: block;
+  max-width: 300px;
+  border-radius: 16px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.club-card-preview-container:hover {
+  transform: translateY(-2px);
+}
+
+.club-card-face {
+  background: var(--champ-bg);
+  border: 2px solid var(--champ-border);
+  border-radius: 16px;
+  padding: 22px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  color: var(--ink);
+  font-family: var(--sans);
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.card-arch-top {
+  width: 100%;
+  background: var(--trophy-star);
+  border: 1px solid var(--champ-border);
+  border-radius: 100px 100px 10px 10px;
+  padding: 16px 12px 12px;
+  margin-bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: var(--ink);
+}
+
+.card-arch-eyebrow {
+  font: 700 8.5px var(--mono);
+  letter-spacing: 1.5px;
+  color: var(--banner-eyebrow, #e7b695);
+  text-transform: uppercase;
+}
+
+.card-arch-title {
+  font: 22px/1.1 var(--serif);
+  color: var(--ink);
+  margin: 2px 0;
+}
+
+.card-arch-art {
+  display: grid;
+  place-items: center;
+  margin: 4px 0;
+  color: #c96644;
+}
+
+[data-theme="dark"] .card-arch-art {
+  color: var(--accent-mint);
+}
+
+.card-arch-motto {
+  font: 700 8.5px var(--mono);
+  letter-spacing: 1.2px;
+  color: var(--muted);
+}
+
+.card-member-info {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-top: 4px;
+}
+
+.card-member-display {
+  font: 700 17px/1.2 var(--sans);
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.card-member-h {
+  font: 600 11.5px var(--mono);
+  color: var(--muted);
+}
+
+.card-tokens-big {
+  font: 38px/1 var(--serif);
+  letter-spacing: -1.5px;
+  color: var(--ink);
+  margin-top: 12px;
+}
+
+[data-theme="dark"] .card-tokens-big {
+  color: var(--accent-mint);
+}
+
+.card-tokens-lbl {
+  font: 500 11px var(--sans);
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.card-badge-footer {
+  margin-top: 16px;
+  padding-top: 10px;
+  border-top: 1px solid var(--champ-border);
+  width: 100%;
+  font: 600 9.5px var(--mono);
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .share-pass-content h2 {
@@ -2779,37 +2880,53 @@ select{background:var(--input-bg);color:var(--input-color);border:1px solid var(
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  margin-bottom: 20px;
+}
+
+.embed-badge-section {
+  background: var(--paper);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.embed-badge-label {
+  font: 700 11px var(--mono);
+  color: var(--muted);
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
 .copy-badge-code-box {
-  margin-top: 18px;
-  background: var(--paper);
-  border: 1px solid var(--card-border);
-  border-radius: 8px;
-  padding: 10px 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  min-width: 0;
 }
 
 .copy-badge-code-box code {
   font: 11px var(--mono);
-  color: var(--muted);
+  color: var(--ink);
+  opacity: 0.85;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  flex: 1;
+  min-width: 0;
 }
 
 .copy-mini-btn {
   font: 700 11px var(--mono);
-  padding: 4px 10px;
-  border-radius: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   color: var(--ink);
   cursor: pointer;
   white-space: nowrap;
+  flex-shrink: 0;
   transition: all 0.15s ease;
 }
 .copy-mini-btn:hover {

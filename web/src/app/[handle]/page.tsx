@@ -189,6 +189,9 @@ export default async function MemberPage({
       {shareable && (
         <ShareActions
           handle={member.handle}
+          displayName={member.display_name}
+          tokens={member.tokens}
+          isChampion={rankIndex === 0}
           url={`${clubOrigin()}/@${member.handle}`}
         />
       )}
