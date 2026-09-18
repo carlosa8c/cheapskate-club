@@ -1,0 +1,57 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { builds } from "../lib/builds";
+import BuildCard from "../components/build-card.astro";
+
+const pageParam = Astro.url.searchParams.get("page") || "0";
+const page = Math.min(10000, Math.max(0, Number.parseInt(pageParam, 10) || 0));
+
+const feed = await builds({ page }).catch(() => ({ items: [], unavailable: true }));
+---
+
+<Layout
+  title="Community Workbench · The Cheapskate Club"
+  description="Weekend experiments, useful little tools, and wonderfully unnecessary inventions built by fellow cheapskates."
+>
+  <section class="intro community-intro">
+    <p class="eyebrow">SMALL BUDGETS. BIG IDEAS.</p>
+    <h1>
+      Look what<br />
+      <em>we made.</em>
+    </h1>
+    <p class="lede">
+      Weekend experiments, useful little tools, and wonderfully unnecessary inventions. Built by fellow cheapskates.
+    </p>
+    <a class="button" href="https://github.com/carlosa8c/cheapskate-club" target="_blank" rel="noopener noreferrer">
+      Submit a build on GitHub ↗
+    </a>
+  </section>
+
+  <div class="board-heading">
+    <h2>Around the workbench</h2>
+    <span class="eyebrow">LATEST BUILDS</span>
+  </div>
+
+  {feed.unavailable ? (
+    <p class="notice" role="status">
+      The workbench is getting ready. Please check back shortly.
+    </p>
+  ) : feed.items.length > 0 ? (
+    <div class="build-grid">
+      {feed.items.map((b) => (
+        <BuildCard build={b} />
+      ))}
+    </div>
+  ) : (
+    <div class="empty-state">
+      <span aria-hidden="true">✳</span>
+      <h3>{page ? "You’ve reached the end." : "Every club starts with a first build."}</h3>
+      <p>It doesn’t have to change the world. Show us what you made.</p>
+    </div>
+  )}
+
+  <nav class="build-pagination" aria-label="Build pages">
+    {page > 0 && <a href={`/community?page=${page - 1}`}>← Newer builds</a>}
+    {feed.items.length === 12 && <a href={`/community?page=${page + 1}`}>Older builds →</a>}
+  </nav>
+</Layout>

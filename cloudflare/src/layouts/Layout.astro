@@ -74,6 +74,16 @@ const currentPath = Astro.url.pathname;
             Engine
           </a>
           <a
+            href="/community"
+            class:list={[
+              "nav-link",
+              { active: currentPath.startsWith("/community") },
+            ]}
+            aria-current={currentPath.startsWith("/community") ? "page" : undefined}
+          >
+            Community
+          </a>
+          <a
             href="/sponsors"
             class:list={[
               "nav-link",
@@ -92,6 +102,14 @@ const currentPath = Astro.url.pathname;
           </a>
         </div>
         <div class="nav-actions">
+          <a
+            href="/@cheaposnumero1"
+            class="nav-profile-pill"
+            title="View @cheaposnumero1 profile"
+          >
+            <span class="nav-avatar" aria-hidden="true">C</span>
+            <span>My Card</span>
+          </a>
           <button
             type="button"
             class="theme-toggle"
