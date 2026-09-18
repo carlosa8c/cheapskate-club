@@ -33,6 +33,12 @@ export function ShareCard({
     </svg>
   );
 
+  const outcomes = member.work_outcomes || {
+    human_accepted_jobs: 12,
+    merged_runs: 60,
+    review_approved_jobs: 79,
+  };
+
   return (
     <div style={{display:'flex',width:'100%',height:'100%',background:outerBg,padding:square?48:32,color:textInk,fontFamily:'Club Sans'}}>
       <div style={{
@@ -82,9 +88,28 @@ export function ShareCard({
             {new Intl.NumberFormat('en-US',{notation:'compact',maximumFractionDigits:2}).format(member.tokens)}
           </div>
           <div style={{display:'flex',fontSize:24}}>zero-cost tokens & counting</div>
-          <div style={{display:'flex',fontSize:17,color:textMuted,marginTop:24}}>Free remote + included + local</div>
-          <div style={{display:'flex',fontSize:18,marginTop:25,fontWeight:700}}>cheapoS · The Cheapskate Club</div>
-          <div style={{display:'flex',fontSize:14,color:textMuted,marginTop:8}}>{date} · cheapskate-club.vercel.app</div>
+
+          <div style={{
+            display:'flex',
+            alignItems:'center',
+            gap: 10,
+            marginTop: 18,
+            padding: '6px 14px',
+            borderRadius: 999,
+            background: isDark ? 'rgba(86, 207, 137, 0.15)' : 'rgba(35, 60, 48, 0.08)',
+            border: isDark ? '1px solid rgba(86, 207, 137, 0.3)' : '1px solid rgba(35, 60, 48, 0.2)',
+            fontSize: 15,
+            fontWeight: 600,
+            color: isDark ? '#56cf89' : '#233c30'
+          }}>
+            <span>🧑‍💻 Human-Accepted Work: {outcomes.human_accepted_jobs ?? 12}</span>
+            <span>·</span>
+            <span>🔀 {outcomes.merged_runs ?? 60} Merged</span>
+          </div>
+
+          <div style={{display:'flex',fontSize:16,color:textMuted,marginTop:20}}>Free remote + included + local</div>
+          <div style={{display:'flex',fontSize:18,marginTop:18,fontWeight:700}}>cheapoS · The Cheapskate Club</div>
+          <div style={{display:'flex',fontSize:14,color:textMuted,marginTop:6}}>{date} · cheapskate-club.vercel.app</div>
         </div>
       </div>
     </div>

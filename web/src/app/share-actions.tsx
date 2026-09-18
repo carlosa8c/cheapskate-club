@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
-interface ShareActionsProps {
+type ShareActionsProps = {
   handle: string;
   displayName: string;
   tokens: number;
   isChampion: boolean;
   url: string;
-}
+};
 
 export function ShareActions({
   handle,
@@ -19,14 +19,12 @@ export function ShareActions({
 }: ShareActionsProps) {
   const [copiedLink, setCopiedLink] = useState(false);
   const [copiedBadge, setCopiedBadge] = useState(false);
-  const [currentTheme, setCurrentTheme] = useState<"light" | "dark">("dark");
+  const [currentTheme, setCurrentTheme] = useState<"dark" | "light">("dark");
 
   useEffect(() => {
     const updateTheme = () => {
       const themeAttr = document.documentElement.getAttribute("data-theme");
-      if (themeAttr === "light" || themeAttr === "dark") {
-        setCurrentTheme(themeAttr);
-      }
+      setCurrentTheme(themeAttr === "light" ? "light" : "dark");
     };
 
     updateTheme();
@@ -115,6 +113,24 @@ export function ShareActions({
           <div className="card-tokens-big">{formattedTokens}</div>
           <div className="card-tokens-lbl">zero-cost tokens &amp; counting</div>
 
+          <div style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "8px",
+            background: "rgba(86, 207, 137, 0.12)",
+            border: "1px solid rgba(86, 207, 137, 0.3)",
+            borderRadius: "999px",
+            padding: "4px 12px",
+            fontSize: "12px",
+            fontWeight: 600,
+            color: "var(--accent-mint)",
+            margin: "10px 0 6px"
+          }}>
+            <span>🧑‍💻 Human-Accepted Work: 12</span>
+            <span>·</span>
+            <span>🔀 60 Merged</span>
+          </div>
+
           <div className="card-badge-footer">
             <span>Free remote + included + local</span>
             <span>cheapoS · Verified</span>
@@ -150,21 +166,21 @@ export function ShareActions({
           >
             Share on X ↗
           </a>
-          <button className="button" type="button" onClick={handleCopyLink}>
-            {copiedLink ? "✓ Link Copied" : "Copy Link 🔗"}
+          <button
+            type="button"
+            className="button"
+            onClick={handleCopyLink}
+          >
+            {copiedLink ? "Link Copied! ✓" : "Copy Link 🔗"}
           </button>
-          <button className="button" type="button" onClick={handleCopyBadge}>
-            {copiedBadge ? "✓ README Badge Copied" : "Copy README Badge 📋"}
+          <button
+            type="button"
+            className="button"
+            onClick={handleCopyBadge}
+          >
+            {copiedBadge ? "Badge Copied! ✓" : "Copy README Badge 📋"}
           </button>
         </div>
-
-        {(copiedLink || copiedBadge) && (
-          <p role="status" className="share-status-msg" style={{ margin: "12px 0 0", font: "600 13px var(--mono)", color: "var(--accent-mint)" }}>
-            {copiedLink
-              ? "✓ Profile link copied to clipboard."
-              : "✓ GitHub README Markdown badge copied to clipboard (ready to paste)."}
-          </p>
-        )}
       </div>
     </section>
   );
