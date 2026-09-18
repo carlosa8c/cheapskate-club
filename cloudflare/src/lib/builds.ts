@@ -14,6 +14,8 @@ export type Build = {
   show_usage: boolean;
   cheers: number;
   slug?: string;
+  readme_url?: string;
+  readme_content?: string;
   hook?: string;
   telemetry?: any;
   narrative?: any;
