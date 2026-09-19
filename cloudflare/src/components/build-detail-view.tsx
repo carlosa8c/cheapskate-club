@@ -365,9 +365,52 @@ export function BuildDetailView({
       
 
       {statusMessage && (
-        <p role="alert" className="notice" style={{ marginTop: "16px" }}>
-          {statusMessage}
-        </p>
+        <div
+          role="alert"
+          style={{
+            margin: "24px 0",
+            padding: "14px 18px",
+            borderRadius: "10px",
+            background: statusMessage.includes("Failed") || statusMessage.includes("Could not")
+              ? "rgba(185, 28, 28, 0.12)"
+              : "var(--status-success-bg)",
+            border: `1px solid ${statusMessage.includes("Failed") || statusMessage.includes("Could not") ? "var(--status-danger)" : "var(--status-success)"}`,
+            color: statusMessage.includes("Failed") || statusMessage.includes("Could not")
+              ? "var(--status-danger)"
+              : "var(--status-success)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "12px",
+            fontSize: "15px",
+            fontWeight: 500,
+            lineHeight: 1.4,
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <span style={{ fontSize: "18px" }}>
+              {statusMessage.includes("Failed") || statusMessage.includes("Could not") ? "⚠️" : "✓"}
+            </span>
+            <span>{statusMessage}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setStatusMessage(null)}
+            style={{
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+              color: "inherit",
+              fontSize: "16px",
+              padding: "4px 8px",
+              lineHeight: 1,
+              opacity: 0.8,
+            }}
+            aria-label="Dismiss notification"
+          >
+            ✕
+          </button>
+        </div>
       )}
 
       {/* Action buttons */}
