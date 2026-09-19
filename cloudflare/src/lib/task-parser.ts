@@ -292,7 +292,7 @@ export function parseTaskJson(rawInput: string | Record<string, any>): ParsedTas
     ? `${unitTestCount}/${unitTestCount} passing unit tests`
     : autoApprovedChecks > 0
     ? `${checksPassed}/${autoApprovedChecks} passing check runs`
-    : "100% pass";
+    : "Passing";
   const commitsAuthored = checkpoints || 1;
   const commitSha = (data.snapshot?.commit || data.id || "").slice(0, 7);
 
