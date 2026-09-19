@@ -2,7 +2,7 @@
 
 import { useState, useEffect, type FormEvent } from "react";
 import { createClient, type SupabaseClient, type User } from "@supabase/supabase-js";
-import type { Build } from "../lib/builds";
+import { slugify, type Build } from "../lib/builds";
 import { parseTaskJson, encodeBenchmarkComment, sanitizeProjectTitle, sanitizeProjectHook } from "../lib/task-parser";
 import type { BenchmarkTelemetry } from "../lib/showcase-projects";
 
@@ -184,7 +184,7 @@ export function BuildForm({
           return;
         }
 
-        window.location.href = "/community/" + build.id;
+        window.location.href = "/community/" + (build.slug || slugify(title) || build.id);
       } else {
         // Insert new build
         const { data, error } = await client
@@ -231,7 +231,7 @@ export function BuildForm({
           Your build has been received and is waiting in the review queue. It will appear publicly on the workbench feed as soon as @carlosa8c verifies the GitHub repository.
         </p>
         <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
-          <a className="button primary" href={`/community/${submittedPending}`}>
+          <a className="button primary" href={`/community/${slugify(title) || submittedPending}`}>
             Preview your submission →
           </a>
           <a className="button" href="/community">

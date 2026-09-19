@@ -22,6 +22,11 @@ if (!feed || feed.unavailable || !feed.items || feed.items.length === 0) {
 
 const build = feed.items[0];
 
+// Canonical slug redirect: If accessed via raw UUID and build has a human-friendly slug, 301 redirect to clean slug
+if (build.slug && id !== build.slug && id.toLowerCase() === build.id.toLowerCase()) {
+  return Astro.redirect(`/community/${build.slug}`, 301);
+}
+
 const supabaseUrl =
   import.meta.env.SUPABASE_URL ||
   (typeof process !== "undefined" && process.env?.SUPABASE_URL) ||

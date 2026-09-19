@@ -5,7 +5,7 @@ import { BuildForm } from "../../../components/build-form";
 
 const { id } = Astro.params;
 
-if (!id || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) {
+if (!id || !/^[a-z0-9_-]{3,64}$/i.test(id)) {
   return Astro.redirect("/community");
 }
 
@@ -42,7 +42,7 @@ const siteUrl =
 >
   <section class="prose" style="max-width: 780px; margin: 40px auto;">
     <div style="margin-bottom: 20px;">
-      <a href={`/community/${build.id}`} style="text-decoration: underline; color: var(--muted);">
+      <a href={`/community/${build.slug || build.id}`} style="text-decoration: underline; color: var(--muted);">
         ← Back to project showcase
       </a>
     </div>

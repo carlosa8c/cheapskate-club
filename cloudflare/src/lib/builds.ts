@@ -24,6 +24,16 @@ export type Build = {
   benchmark?: BenchmarkTelemetry;
 };
 
+export function slugify(title: string): string {
+  if (!title) return "";
+  const base = title.split(/\s+[·\-–—:]\s+/)[0].trim();
+  return base
+    .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 export async function builds(
   options: {
     id?: string;
@@ -52,11 +62,12 @@ export async function builds(
   }
 
   try {
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(options.id || "");
     const response = await fetch(`${url.replace(/\/$/, "")}/rest/v1/rpc/club_build_feed`, {
       method: "POST",
       headers: { apikey: key, "Content-Type": "application/json" },
       body: JSON.stringify({
-        build_filter: options.id || null,
+        build_filter: isUuid ? options.id : null,
         author_handle: options.handle || null,
         page_number: options.page || 0,
       }),
@@ -79,6 +90,8 @@ export async function builds(
       const bm = decoded.benchmark;
       const rawTitle = item.title || "";
       const cleanTitle = sanitizeProjectTitle(rawTitle);
+      const computedSlug = item.slug || slugify(cleanTitle);
+
       if (bm?.dimension5_quality) {
         if (bm.dimension5_quality.checksSummary) {
           bm.dimension5_quality.checksSummary = sanitizeChecksSummary(bm.dimension5_quality.checksSummary);
@@ -101,6 +114,7 @@ export async function builds(
       return {
         ...item,
         title: cleanTitle,
+        slug: computedSlug,
         description: decoded.cleanText,
         hook: cleanHook,
         review_status: decoded.status || item.review_status,
@@ -116,11 +130,63 @@ export async function builds(
       };
     });
 
-    // If a specific ID was requested, return it (whether approved or pending review)
+    // If a specific ID/slug was requested, locate it
     if (options.id) {
-      const found = processed.find(
-        (b) => b.id.toLowerCase() === options.id!.toLowerCase() || b.slug?.toLowerCase() === options.id!.toLowerCase()
+      const target = options.id.toLowerCase();
+      let found = processed.find(
+        (b) => b.id.toLowerCase() === target || b.slug?.toLowerCase() === target
       );
+
+      // If requested by slug and not on page 0, look ahead through next pages
+      if (!found && !isUuid && (!options.page || options.page === 0)) {
+        for (let nextPage = 1; nextPage <= 4; nextPage++) {
+          try {
+            const nextResp = await fetch(`${url.replace(/\/$/, "")}/rest/v1/rpc/club_build_feed`, {
+              method: "POST",
+              headers: { apikey: key, "Content-Type": "application/json" },
+              body: JSON.stringify({
+                build_filter: null,
+                author_handle: options.handle || null,
+                page_number: nextPage,
+              }),
+              signal: AbortSignal.timeout(3000),
+            });
+            if (nextResp.ok) {
+              const nextData = await nextResp.json();
+              if (Array.isArray(nextData) && nextData.length > 0) {
+                for (const nextItem of nextData) {
+                  const cTitle = sanitizeProjectTitle(nextItem.title || "");
+                  const nextSlug = nextItem.slug || slugify(cTitle);
+                  if (nextItem.id.toLowerCase() === target || nextSlug.toLowerCase() === target) {
+                    const dec = decodeBenchmarkComment(nextItem.description || "");
+                    const bmark = dec.benchmark;
+                    found = {
+                      ...nextItem,
+                      title: cTitle,
+                      slug: nextSlug,
+                      description: dec.cleanText,
+                      hook: nextItem.hook || (dec.cleanText && dec.cleanText.length <= 250 ? dec.cleanText : undefined),
+                      review_status: dec.status || nextItem.review_status,
+                      benchmark: bmark || undefined,
+                      telemetry: bmark ? {
+                        benchmark: bmark,
+                        cost: bmark.dimension1_cost_tokens.billedCost,
+                        tokens: bmark.dimension1_cost_tokens.totalTokens,
+                        tests: bmark.dimension5_quality.finalUnitTestScore || bmark.dimension5_quality.checksSummary,
+                        requests: bmark.dimension2_effort.totalActions,
+                        commitSha: bmark.dimension5_quality.commitSha,
+                      } : nextItem.telemetry,
+                    };
+                    break;
+                  }
+                }
+              }
+            }
+            if (found) break;
+          } catch {}
+        }
+      }
+
       if (found) {
         return { items: [found], unavailable: false };
       }
