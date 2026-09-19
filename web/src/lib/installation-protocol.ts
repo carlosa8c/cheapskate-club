@@ -12,7 +12,8 @@ export function verifiedMessage(body: {payload?: unknown; signature?: unknown; p
  if(m.action==="consent" && typeof m.enabled!=="boolean") throw Error("Invalid consent");
  if(m.action==="consent" && m.share_models!==undefined && typeof m.share_models!=="boolean") throw Error("Invalid model sharing consent");
  if(m.action==="sync") {
-  if(!Array.isArray(m.events)||m.events.length<1||m.events.length>100) throw Error("Invalid events");
+  if(!Array.isArray(m.events)||m.events.length>100) throw Error("Invalid events");
+  if(m.events.length===0 && !m.work_outcomes) throw Error("Invalid events: empty batch requires work_outcomes");
   const seen=new Set();
   m.events.forEach((e: Record<string, unknown>,index: number)=>{
    if(!e || typeof e.event_id!=="string" || !uuid.test(e.event_id) || seen.has(e.event_id) || e.slot!==index || !["public_free","local","included","paid","unknown"].includes(String(e.category)) || typeof e.accounting_at!=="string" || !/^\d{4}-\d{2}-\d{2}T00:00:00Z$/.test(e.accounting_at) || !Number.isFinite(Date.parse(e.accounting_at)) || Date.parse(e.accounting_at)>Date.now()) throw Error("Invalid event");
