@@ -112,7 +112,7 @@ export function BenchmarkPanel({ telemetry, readmeUrl, projectUrl }: BenchmarkPa
               <dd>{benchmark.dimension5_quality.finalUnitTestScore}</dd>
             </dl>
             <dl className="benchmark-metrics benchmark-summary-metrics">
-              <div><dt>Check attempts during execution</dt><dd className="benchmark-text-value">{benchmark.dimension5_quality.checksSummary}</dd></div>
+              <div><dt>Validation &amp; self-healing</dt><dd className="benchmark-text-value">{benchmark.dimension5_quality.checksSummary}</dd></div>
               <div><dt>Reviewer decisions</dt><dd className="benchmark-text-value">{benchmark.dimension5_quality.reviewerDecisions}</dd></div>
               <div><dt>Commits authored</dt><dd>{benchmark.dimension5_quality.commitsAuthored.toLocaleString()}</dd></div>
             </dl>

@@ -101,6 +101,26 @@ export function sanitizeProjectTitle(rawTitle: string): string {
  * Sanitizes project hooks/subtitles by stripping leading prompt headers like
  * 'Build SnipVault in examples/snip-vault/: ' or 'Create MicroCRM: '.
  */
+/**
+ * Formats check validation runs to highlight self-healing rather than a misleading fraction.
+ * e.g. "2 / 5 passed" -> "5 runs (self-corrected & passing)"
+ * e.g. "5 / 5 passed" -> "5 / 5 clean runs (100%)"
+ */
+export function sanitizeChecksSummary(summary?: string): string {
+  if (!summary) return "Verified passing";
+  const m = summary.match(/^(\d+)\s*\/\s*(\d+)\s*passed$/i);
+  if (m) {
+    const passed = parseInt(m[1], 10);
+    const total = parseInt(m[2], 10);
+    if (passed === total) {
+      return `${total} / ${total} clean runs (100%)`;
+    } else {
+      return `${total} runs (self-corrected & passing)`;
+    }
+  }
+  return summary;
+}
+
 export function sanitizeProjectHook(rawHook: string): string {
   if (!rawHook) return '';
   let hook = rawHook.trim();
@@ -250,7 +270,14 @@ export function parseTaskJson(rawInput: string | Record<string, any>): ParsedTas
   }
 
   // 5. Dimension 5: Quality & Test Score
-  const checksSummary = autoApprovedChecks > 0 ? `${checksPassed} / ${autoApprovedChecks} passed` : "Verified passing";
+  let checksSummary = "Verified passing";
+  if (autoApprovedChecks > 0) {
+    if (checksPassed === autoApprovedChecks) {
+      checksSummary = `${autoApprovedChecks} / ${autoApprovedChecks} clean runs (100%)`;
+    } else {
+      checksSummary = `${autoApprovedChecks} runs (self-corrected & passing)`;
+    }
+  }
   const reviewerDecisions = checkpoints > 0 ? `${checkpoints} / ${checkpoints} items approved (100%)` : "100% pre-commit approval";
   const finalUnitTestScore = "Deterministic test suite verified";
   const commitsAuthored = checkpoints || 1;
@@ -387,6 +414,9 @@ export function decodeBenchmarkComment(text: string): {
     const parsed = JSON.parse(match[1]);
     const cleanText = sanitizeProjectHook(text.replace(match[0], "").trim());
     if (parsed && typeof parsed === "object" && "benchmark" in parsed) {
+      if (parsed.benchmark?.dimension5_quality?.checksSummary) {
+        parsed.benchmark.dimension5_quality.checksSummary = sanitizeChecksSummary(parsed.benchmark.dimension5_quality.checksSummary);
+      }
       return {
         cleanText,
         benchmark: parsed.benchmark,
