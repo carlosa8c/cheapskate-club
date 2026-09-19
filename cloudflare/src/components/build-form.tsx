@@ -276,6 +276,61 @@ export function BuildForm({
 
   return (
     <form onSubmit={handleSubmit} className="profile-form build-form">
+      {/* 📦 The Workbench Standard (10-Project Showcase Baseline) */}
+      <div
+        style={{
+          padding: "20px 24px",
+          borderRadius: "10px",
+          background: "var(--surface-inset)",
+          border: "1px solid var(--surface-border)",
+          marginBottom: "28px",
+        }}
+      >
+        <div className="eyebrow" style={{ margin: "0 0 6px" }}>
+          <span className="little-spark" aria-hidden="true">📦</span>
+          THE WORKBENCH STANDARD · 10-PROJECT BASELINE
+        </div>
+        <h3 style={{ font: "22px var(--serif)", margin: "0 0 8px", color: "var(--text-primary)" }}>
+          Showcase a Finished Product on GitHub
+        </h3>
+        <p style={{ margin: "0 0 16px", fontSize: "var(--text-meta)", color: "var(--text-secondary)", lineHeight: "1.5" }}>
+          Like the 10 official showcase builds (SnipVault, MicroCRM, FeedCurator, etc.), every Workbench entry represents a complete, runnable product built end-to-end in cheapoS:
+        </p>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "12px", marginBottom: "14px" }}>
+          <div style={{ padding: "12px 14px", borderRadius: "8px", background: "var(--surface-card)", border: "1px solid var(--surface-border)" }}>
+            <strong style={{ fontSize: "var(--text-meta)", display: "block", color: "var(--text-primary)", marginBottom: "4px" }}>
+              📂 Public GitHub Repo
+            </strong>
+            <span style={{ fontSize: "var(--text-meta)", color: "var(--text-secondary)", lineHeight: "1.4", display: "block" }}>
+              Working codebase with a clear README.md that anyone can clone, inspect, and run.
+            </span>
+          </div>
+
+          <div style={{ padding: "12px 14px", borderRadius: "8px", background: "var(--surface-card)", border: "1px solid var(--surface-border)" }}>
+            <strong style={{ fontSize: "var(--text-meta)", display: "block", color: "var(--text-primary)", marginBottom: "4px" }}>
+              🧪 Deterministic Tests
+            </strong>
+            <span style={{ fontSize: "var(--text-meta)", color: "var(--text-secondary)", lineHeight: "1.4", display: "block" }}>
+              An automated unit test suite (e.g. 28/28 tests passing) verified in telemetry.
+            </span>
+          </div>
+
+          <div style={{ padding: "12px 14px", borderRadius: "8px", background: "var(--surface-card)", border: "1px solid var(--surface-border)" }}>
+            <strong style={{ fontSize: "var(--text-meta)", display: "block", color: "var(--text-primary)", marginBottom: "4px" }}>
+              ⚡ Single End-to-End Run
+            </strong>
+            <span style={{ fontSize: "var(--text-meta)", color: "var(--text-secondary)", lineHeight: "1.4", display: "block" }}>
+              Authentic task JSON from prompt to completion, showing multi-model cooperation and build cost.
+            </span>
+          </div>
+        </div>
+
+        <p style={{ margin: 0, fontSize: "var(--text-meta)", color: "var(--text-secondary)", fontStyle: "italic" }}>
+          Note: Routine micro-tasks, bugfixes, and iterative prompts belong in your local development loop. Share the finished software you shipped!
+        </p>
+      </div>
+
       {/* ⚡ Task.json Telemetry Autodetect Card */}
       <div
         style={{
