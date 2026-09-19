@@ -82,7 +82,7 @@ export default function ModelExplorer({ models }: ModelExplorerProps) {
               <th>Provider</th>
               <th>Compute Share</th>
               <th style={{ textAlign: "right" }}>Total Tokens</th>
-              <th style={{ textAlign: "right" }}>Bills Eliminated</th>
+              <th style={{ textAlign: "right" }}>Access & Cost</th>
             </tr>
           </thead>
           <tbody>
@@ -127,8 +127,16 @@ export default function ModelExplorer({ models }: ModelExplorerProps) {
                   <td style={{ textAlign: "right" }} className="mono-tokens">
                     <strong>{formatTokens(m.tokens)}</strong>
                   </td>
-                  <td style={{ textAlign: "right" }} className="mono-savings">
-                    ~${m.estimatedSavings.toFixed(2)}
+                  <td style={{ textAlign: "right" }}>
+                    <span
+                      style={{
+                        fontSize: "var(--text-meta)",
+                        fontWeight: 600,
+                        color: m.verifiedFree ? "var(--status-success)" : "var(--ink-muted)",
+                      }}
+                    >
+                      {m.accessTier || "Public Free ($0.00)"}
+                    </span>
                   </td>
                 </tr>
               );

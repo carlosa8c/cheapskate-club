@@ -15,7 +15,33 @@ export interface ModelStat {
   providerBadgeColor: string;
   tokens: number;
   pct: number;
-  estimatedSavings: number;
+  accessTier: string;
+  verifiedFree: boolean;
+  successRate?: number;
+}
+
+export interface ModelHealthStat {
+  model: string;
+  cleanName: string;
+  provider: string;
+  requests: number;
+  tokens: number;
+  successes: number;
+  failures: number;
+  successRate: number;
+  failureBreakdown: Record<string, number>;
+}
+
+export interface ModelPairStat {
+  pairId: string;
+  workerModel: string;
+  reviewerModel: string;
+  isIndependent: boolean;
+  totalJobs: number;
+  completionRate: number;
+  reviewApprovedJobs: number;
+  mergedRuns: number;
+  totalTokens: number;
 }
 
 export const ROLE_META: Record<string, { icon: string; color: string; desc: string }> = {
@@ -65,15 +91,15 @@ export function cleanModelName(name: string): string {
   return name.replace(/^openrouter\//, "").replace(/:free$/, "");
 }
 
-export function estimateModelSavings(name: string, tokens: number): number {
-  const lower = name.toLowerCase();
-  let ratePerMillion = 3.0;
-  if (lower.includes("flash-lite") || lower.includes("mini")) {
-    ratePerMillion = 0.30;
-  } else if (lower.includes("flash") || lower.includes("27b")) {
-    ratePerMillion = 1.00;
-  } else if (lower.includes("120b") || lower.includes("pro")) {
-    ratePerMillion = 5.00;
+export function classifyAccessTier(name: string, category?: string): { tier: string; verifiedFree: boolean } {
+  if (category === "local" || name.toLowerCase().includes("local") || name.toLowerCase().includes("ollama")) {
+    return { tier: "Local (zsh.00)", verifiedFree: true };
   }
-  return Number(((tokens / 1_000_000) * ratePerMillion).toFixed(2));
+  if (category === "included" || name.toLowerCase().startsWith("antigravity/")) {
+    return { tier: "Included (zsh.00)", verifiedFree: true };
+  }
+  if (category === "paid") {
+    return { tier: "Paid API", verifiedFree: false };
+  }
+  return { tier: "Public Free (zsh.00)", verifiedFree: true };
 }

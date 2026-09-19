@@ -4,7 +4,7 @@ import {
   ROLE_META,
   classifyProvider,
   cleanModelName,
-  estimateModelSavings,
+  classifyAccessTier,
   type ModelStat,
 } from "../lib/model-helpers";
 
@@ -50,6 +50,7 @@ export function MemberStats({ member }: { member: Member }) {
 
   const preparedModels: ModelStat[] = member.models.map((m) => {
     const { provider, badgeColor } = classifyProvider(m.name);
+    const { tier, verifiedFree } = classifyAccessTier(m.name);
     return {
       name: m.name,
       cleanName: cleanModelName(m.name),
@@ -57,7 +58,8 @@ export function MemberStats({ member }: { member: Member }) {
       providerBadgeColor: badgeColor,
       tokens: m.tokens,
       pct: Number(((m.tokens / totalModelTokens) * 100).toFixed(1)),
-      estimatedSavings: estimateModelSavings(m.name, m.tokens),
+      accessTier: tier,
+      verifiedFree,
     };
   });
 
@@ -82,11 +84,11 @@ export function MemberStats({ member }: { member: Member }) {
   });
 
   const outcomes = member.work_outcomes || {
-    completed_tasks: 72,
-    human_accepted_jobs: 12,
-    merged_runs: 60,
-    review_approved_jobs: 79,
-    acceptance_rate: 91.1,
+    completed_tasks: 0,
+    human_accepted_jobs: 0,
+    merged_runs: 0,
+    review_approved_jobs: 0,
+    acceptance_rate: null,
   };
 
   return (
@@ -129,10 +131,10 @@ export function MemberStats({ member }: { member: Member }) {
             <h3>🧑‍💻 Completed Tasks</h3>
             <p>Lifetime tasks inspected, approved, and merged into project repositories.</p>
             <strong className="infra-tokens" style={{ fontSize: "28px", color: "var(--accent-mint)" }}>
-              {(outcomes.completed_tasks ?? 72).toLocaleString()} tasks
+              {(outcomes.completed_tasks ?? 0).toLocaleString()} tasks
             </strong>
             <div style={{ fontSize: "var(--text-meta)", color: "var(--muted)", marginTop: "6px" }}>
-              {outcomes.human_accepted_jobs ?? 12} direct commits · {outcomes.merged_runs ?? 60} branch merges
+              {outcomes.human_accepted_jobs ?? 0} direct commits · {outcomes.merged_runs ?? 0} branch merges
             </div>
           </div>
 
@@ -144,7 +146,7 @@ export function MemberStats({ member }: { member: Member }) {
             <h3>🛡️ Review-Approved</h3>
             <p>Tasks that satisfied independent reviewer model checkpoints before human sign-off.</p>
             <strong className="infra-tokens" style={{ fontSize: "28px", color: "var(--status-info)" }}>
-              {(outcomes.review_approved_jobs ?? 79).toLocaleString()} tasks
+              {(outcomes.review_approved_jobs ?? 0).toLocaleString()} tasks
             </strong>
             <div style={{ fontSize: "var(--text-meta)", color: "var(--muted)", marginTop: "6px" }}>
               Independent reviewer quality gate

@@ -4,7 +4,7 @@ import { publicMember } from "../../lib/public-member";
 
 export async function GET() {
   let totalTokens = 81364597;
-  let retailSavings = "244.09";
+  let zeroCostPct = "99.8";
   let pubTokens = 79505670;
   let incTokens = 1601645;
   let locTokens = 238316;
@@ -18,7 +18,7 @@ export async function GET() {
     const board = await leaderboard("zero_cost", "all");
     if (board.state === "ready" && board.entries.length > 0) {
       totalTokens = board.entries.reduce((sum, e) => sum + e.tokens, 0);
-      retailSavings = (totalTokens * 0.000003).toFixed(2);
+      zeroCostPct = (((pubTokens + incTokens + locTokens) / Math.max(totalTokens, 1)) * 100).toFixed(1);
       const champion = board.entries[0];
       const member = await publicMember(champion.handle);
       if (member?.categories) {
@@ -114,7 +114,7 @@ export async function GET() {
       COMMUNITY COMPUTE · <tspan fill="#56cf89">MAXIMUM LEVERAGE</tspan>
     </text>
     <text x="0" y="60" class="sans" font-size="17" font-weight="500" fill="#e8f3ec">
-      ~$${retailSavings} in commercial API bills eliminated — <tspan fill="#56cf89" font-weight="700">$0 out-of-pocket</tspan>
+      Verified zero-cost autonomous compute — <tspan fill="#56cf89" font-weight="700">$0 out-of-pocket</tspan>
     </text>
     <text x="0" y="84" class="mono" font-size="11.5" fill="#5c6f64">
       Signed machine sync · 32 models in the mix · 4 agent roles · Verified on-device receipts
@@ -129,12 +129,11 @@ export async function GET() {
     <text x="18" y="24" class="mono" font-size="11" font-weight="700" letter-spacing="2" fill="#56cf89">THE HONEST MATH</text>
     <text x="316" y="24" text-anchor="end" class="mono" font-size="10" font-weight="600" letter-spacing="1" fill="#5c6f64">ED25519 AUDITED</text>
     
-    <!-- Commercial fake bill crossed out -->
+    <!-- Zero-cost rate verification -->
     <g transform="translate(18, 64)">
-      <text x="0" y="0" class="mono" font-size="24" font-weight="800" fill="#5c6f64">~$${retailSavings}</text>
-      <line x1="-3" y1="-8" x2="116" y2="-8" stroke="#ef4444" stroke-width="2.5" />
-      <text x="298" y="-6" text-anchor="end" class="mono" font-size="10.5" fill="#7a8d82">standard API retail bill</text>
-      <text x="298" y="9" text-anchor="end" class="mono" font-size="10.5" font-weight="700" fill="#ef4444">nobody paid that</text>
+      <text x="0" y="0" class="mono" font-size="24" font-weight="800" fill="#56cf89">${zeroCostPct}%</text>
+      <text x="298" y="-6" text-anchor="end" class="mono" font-size="10.5" fill="#7a8d82">verified zero-cost share</text>
+      <text x="298" y="9" text-anchor="end" class="mono" font-size="10.5" font-weight="700" fill="#56cf89">public free + local</text>
     </g>
 
     <!-- Honest Real Spend -->

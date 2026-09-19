@@ -1,10 +1,10 @@
 import { leaderboard } from "./leaderboard";
 import { publicMember } from "./public-member";
 
-export type { RoleStat, ModelStat } from "./model-helpers";
-export { ROLE_META, classifyProvider, cleanModelName, estimateModelSavings } from "./model-helpers";
+export type { RoleStat, ModelStat, ModelHealthStat, ModelPairStat } from "./model-helpers";
+export { ROLE_META, classifyProvider, cleanModelName, classifyAccessTier } from "./model-helpers";
 import type { RoleStat, ModelStat } from "./model-helpers";
-import { ROLE_META, classifyProvider, cleanModelName, estimateModelSavings } from "./model-helpers";
+import { ROLE_META, classifyProvider, cleanModelName, classifyAccessTier } from "./model-helpers";
 
 export interface ProviderStat {
   name: string;
@@ -17,7 +17,8 @@ export interface EngineStats {
   totalTokens: number;
   totalMembers: number;
   uniqueModelCount: number;
-  estimatedCommercialRetailTotal: number;
+  verifiedZeroCostRate: number;
+  verifiedZeroCostTokens: number;
   categories: {
     public_free: number;
     included: number;
@@ -35,7 +36,6 @@ export interface EngineStats {
     reviewerToWorkerRatio: string;
   };
 }
-
 
 export async function getEngineStats(): Promise<EngineStats> {
   const board = await leaderboard("zero_cost", "all");
@@ -127,6 +127,7 @@ export async function getEngineStats(): Promise<EngineStats> {
     .sort(([, a], [, b]) => b - a)
     .map(([name, tokens]) => {
       const { provider, badgeColor } = classifyProvider(name);
+      const { tier, verifiedFree } = classifyAccessTier(name);
       return {
         name,
         cleanName: cleanModelName(name),
@@ -134,7 +135,8 @@ export async function getEngineStats(): Promise<EngineStats> {
         providerBadgeColor: badgeColor,
         tokens,
         pct: Number(((tokens / totalModelTokens) * 100).toFixed(1)),
-        estimatedSavings: estimateModelSavings(name, tokens),
+        accessTier: tier,
+        verifiedFree,
       };
     });
 
@@ -155,7 +157,11 @@ export async function getEngineStats(): Promise<EngineStats> {
       color: data.color,
     }));
 
-  const estimatedCommercialRetailTotal = models.reduce((sum, m) => sum + m.estimatedSavings, 0);
+  const verifiedZeroCostTokens =
+    rawCategories.public_free + rawCategories.included + rawCategories.local;
+  const verifiedZeroCostRate = Number(
+    ((verifiedZeroCostTokens / Math.max(totalTokens, 1)) * 100).toFixed(1)
+  );
 
   const workerTokens = rawRoles.worker || 1;
   const reviewerTokens = rawRoles.reviewer || 0;
@@ -165,7 +171,8 @@ export async function getEngineStats(): Promise<EngineStats> {
     totalTokens,
     totalMembers,
     uniqueModelCount: models.length,
-    estimatedCommercialRetailTotal,
+    verifiedZeroCostRate: Math.min(verifiedZeroCostRate, 100),
+    verifiedZeroCostTokens,
     categories: rawCategories,
     roles,
     models,

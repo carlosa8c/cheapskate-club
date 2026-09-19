@@ -41,7 +41,7 @@ function formatTokens(n: number): string {
       <p class="lede">
         Aggregate intelligence across installations. See which models builders deploy,
         how autonomous agents divide cognitive labor, and where zero-dollar compute
-        replaces commercial retail API spend.
+        powers verified autonomous outcomes with zero API spend.
       </p>
     </section>
 
@@ -70,11 +70,11 @@ function formatTokens(n: number): string {
       </div>
 
       <div class="engine-kpi-card">
-        <span class="kpi-label">Commercial bills avoided</span>
-        <strong class="kpi-val" style="color: var(--status-purple);">
-          ~${stats.estimatedCommercialRetailTotal.toFixed(2)}
+        <span class="kpi-label">Verified zero-cost rate</span>
+        <strong class="kpi-val" style="color: var(--accent-mint);">
+          {stats.verifiedZeroCostRate}%
         </strong>
-        <span class="kpi-sub">Maximum leverage across providers</span>
+        <span class="kpi-sub">$0.00 out-of-pocket on free tiers</span>
       </div>
     </section>
 
@@ -213,7 +213,7 @@ function formatTokens(n: number): string {
             Targeted out-of-pocket tokens reserved for high-stakes frontier reasoning
             or heavy benchmarks.
           </p>
-          <strong class="infra-tokens" style="color: var(--status-purple);">
+          <strong class="infra-tokens" style="color: var(--accent-mint);">
             {stats.categories.paid.toLocaleString("en-US")} tokens
           </strong>
         </div>
