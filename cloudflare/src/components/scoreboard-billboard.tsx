@@ -48,44 +48,66 @@ export default function ScoreboardBillboard({
   const [lastDelta, setLastDelta] = useState<number | null>(null);
   const [showDelta, setShowDelta] = useState(false);
 
+  // Community token velocity: tokens generated per second across workers
+  // Baseline rate: ~24.8 tokens/sec (revisitable as installs grow)
+  const TOKENS_PER_SECOND = 24.8;
+
   const displayCountRef = useRef(displayCount);
   displayCountRef.current = displayCount;
 
   const liveTotalRef = useRef(liveTotal);
   liveTotalRef.current = liveTotal;
 
-  // Smooth easing ticker
-  const animateTicker = (fromVal: number, toVal: number, duration: number = 1200) => {
+  const anchorValueRef = useRef<number>(initialTarget);
+  const anchorTimeRef = useRef<number>(Date.now());
+  const isEntranceDoneRef = useRef<boolean>(false);
+
+  // Initial mount entrance animation (eased roll up to starting target)
+  useEffect(() => {
+    setIsClient(true);
+    anchorValueRef.current = initialTarget;
+    anchorTimeRef.current = Date.now();
+
     let start: number | null = null;
     let animId: number;
+    const duration = 1400;
 
-    function step(timestamp: number) {
+    function entranceStep(timestamp: number) {
       if (!start) start = timestamp;
       const elapsed = timestamp - start;
       const progress = Math.min(elapsed / duration, 1);
       const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-      const current = Math.floor(fromVal + (toVal - fromVal) * ease);
+      const current = Math.floor(initialTarget * ease);
       setDisplayCount(current);
 
       if (progress < 1) {
-        animId = requestAnimationFrame(step);
+        animId = requestAnimationFrame(entranceStep);
       } else {
-        setDisplayCount(toVal);
+        setDisplayCount(initialTarget);
+        isEntranceDoneRef.current = true;
+        anchorTimeRef.current = Date.now();
       }
     }
 
-    animId = requestAnimationFrame(step);
+    animId = requestAnimationFrame(entranceStep);
     return () => cancelAnimationFrame(animId);
-  };
-
-  // Initial mount entrance animation
-  useEffect(() => {
-    setIsClient(true);
-    const cancel = animateTicker(0, initialTarget, 1500);
-    return () => cancel();
   }, [initialTarget]);
 
-  // Live polling every 10 seconds
+  // Continuous live rolling ticker (like the US debt clock)
+  useEffect(() => {
+    const tickTimer = setInterval(() => {
+      if (typeof document !== "undefined" && document.hidden) return;
+      if (!isEntranceDoneRef.current) return;
+
+      const elapsedSec = Math.max(0, (Date.now() - anchorTimeRef.current) / 1000);
+      const liveTokens = anchorValueRef.current + Math.floor(elapsedSec * TOKENS_PER_SECOND);
+      setDisplayCount(liveTokens);
+    }, 150);
+
+    return () => clearInterval(tickTimer);
+  }, []);
+
+  // Live polling every 10 seconds to reconcile with true server telemetry
   useEffect(() => {
     let active = true;
 
@@ -97,22 +119,22 @@ export default function ScoreboardBillboard({
         const data = await res.json();
         if (!active) return;
 
-        if (data.totalTokens && data.totalTokens !== liveTotalRef.current) {
+        if (data.totalTokens && data.totalTokens > liveTotalRef.current) {
           const delta = data.totalTokens - liveTotalRef.current;
-          if (delta > 0) {
-            setLastDelta(delta);
-            setShowDelta(true);
-            setIsLivePulsing(true);
-            setTimeout(() => {
-              if (active) {
-                setIsLivePulsing(false);
-                setShowDelta(false);
-              }
-            }, 3500);
-          }
+          setLastDelta(delta);
+          setShowDelta(true);
+          setIsLivePulsing(true);
+          setTimeout(() => {
+            if (active) {
+              setIsLivePulsing(false);
+              setShowDelta(false);
+            }
+          }, 3500);
 
-          animateTicker(displayCountRef.current, data.totalTokens, 1200);
           setLiveTotal(data.totalTokens);
+          // Re-anchor live extrapolation to latest server total
+          anchorValueRef.current = Math.max(data.totalTokens, displayCountRef.current);
+          anchorTimeRef.current = Date.now();
 
           if (data.championMember) {
             setLiveMember(data.championMember);
@@ -130,8 +152,9 @@ export default function ScoreboardBillboard({
     };
   }, []);
 
-  const target = liveTotal;
-  const countToShow = isClient ? displayCount : target;
+  const currentCount = isClient && displayCount > 0 ? displayCount : liveTotal;
+  const target = currentCount;
+  const countToShow = currentCount;
 
   const categories = liveMember?.categories || {
     public_free: Math.round(target * 0.977),
