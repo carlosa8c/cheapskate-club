@@ -155,7 +155,7 @@ export function BuildDetailView({
   const isOperator = Boolean(
     user &&
     (
-      user.user_metadata?.user_name?.toLowerCase() === "carlosa8c" ||
+      user.user_metadata?.user_name?.toLowerCase() === "cheapos_lol" || user.user_metadata?.user_name?.toLowerCase() === "carlosa8c" ||
       user.user_metadata?.preferred_username?.toLowerCase() === "carlosa8c" ||
       user.user_metadata?.user_name?.toLowerCase() === "cheaposnumero1" ||
       user.user_metadata?.preferred_username?.toLowerCase() === "cheaposnumero1" ||
@@ -285,8 +285,8 @@ export function BuildDetailView({
               {isOperator
                 ? "This community project was submitted to the workbench and requires operator approval before appearing on the public feed."
                 : isOwn
-                ? "Your build has been received and is waiting for review by @carlosa8c before going live to the public workbench."
-                : "This community project has been submitted and is currently awaiting operator review by @carlosa8c."}
+                ? "Your build has been received and is waiting for review by @cheapos_lol before going live to the public workbench."
+                : "This community project has been submitted and is currently awaiting operator review by @cheapos_lol."}
             </p>
           </div>
 

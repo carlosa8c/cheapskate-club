@@ -170,7 +170,7 @@ export const MICRO_PATRON_TIERS: MicroPatronTier[] = [
       "Mention in the Cheapskate Hall of Benefactors",
       "Immense spiritual satisfaction of peak frugality"
     ],
-    ctaUrl: "https://github.com/sponsors/carlosa8c"
+    ctaUrl: "https://github.com/sponsors/cheapoS"
   },
   {
     id: "free-refill",
@@ -184,7 +184,7 @@ export const MICRO_PATRON_TIERS: MicroPatronTier[] = [
       "Early preview access to new model-pair benchmarks",
       "Bragging rights on the community Discord/X"
     ],
-    ctaUrl: "https://github.com/sponsors/carlosa8c"
+    ctaUrl: "https://github.com/sponsors/cheapoS"
   },
   {
     id: "anti-waste",
@@ -198,6 +198,6 @@ export const MICRO_PATRON_TIERS: MicroPatronTier[] = [
       "Vote on monthly model-pair benchmark priorities",
       "Direct recognition in the cheapoS repository README"
     ],
-    ctaUrl: "https://github.com/sponsors/carlosa8c"
+    ctaUrl: "https://github.com/sponsors/cheapoS"
   }
 ];

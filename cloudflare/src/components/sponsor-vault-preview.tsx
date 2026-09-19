@@ -239,7 +239,7 @@ export default function SponsorVaultPreview({
         </div>
         <div className="cta-actions">
           <a
-            href="https://github.com/sponsors/carlosa8c"
+            href="https://github.com/sponsors/cheapoS"
             target="_blank"
             rel="noopener noreferrer"
             className="vault-action-btn primary"

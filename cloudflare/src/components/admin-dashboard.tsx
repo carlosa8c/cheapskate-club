@@ -43,7 +43,7 @@ export function AdminDashboard({
   const [memberSearch, setMemberSearch] = useState("");
   const [membersList, setMembersList] = useState<MemberAudit[]>([
     { handle: "cheaposnumero1", display_name: "cheapos numero 1", tokens: 80191727, badge: "👑 Reigning Supreme Cheapo", isVerified: true },
-    { handle: "carlosa8c", display_name: "carlosa8c", tokens: 25410900, badge: "🏷️ Coupon Clipper Prime", isVerified: true },
+    { handle: "cheapos_lol", display_name: "cheapoS", tokens: 25410900, badge: "🏷️ Coupon Clipper Prime", isVerified: true },
     { handle: "pennypinner", display_name: "The Penny Pinner", tokens: 18450120, badge: "🪙 Dime Dropper Deluxe", isVerified: true },
     { handle: "freeloader_alpha", display_name: "Frontier Freeloader", tokens: 12100400, badge: "🍞 Frontier Freeloader", isVerified: false },
   ]);
@@ -74,8 +74,8 @@ export function AdminDashboard({
   const isOperator = Boolean(
     user &&
     (
-      user.user_metadata?.user_name?.toLowerCase() === "carlosa8c" ||
-      user.user_metadata?.preferred_username?.toLowerCase() === "carlosa8c" ||
+      user.user_metadata?.user_name?.toLowerCase() === "cheapos_lol" || user.user_metadata?.user_name?.toLowerCase() === "carlosa8c" ||
+      user.user_metadata?.preferred_username?.toLowerCase() === "cheapos_lol" || user.user_metadata?.preferred_username?.toLowerCase() === "carlosa8c" ||
       user.user_metadata?.user_name?.toLowerCase() === "cheaposnumero1" ||
       user.user_metadata?.preferred_username?.toLowerCase() === "cheaposnumero1" ||
       user.email?.toLowerCase().includes("carlosa8c")
@@ -144,7 +144,7 @@ export function AdminDashboard({
             Operator Access Restricted
           </h1>
           <p className="admin-gatekeeper-desc">
-            The Admin Command Center is reserved for verified club operators (@carlosa8c / @cheaposnumero1) to manage sponsors, review builds, and moderate users.
+            The Admin Command Center is reserved for verified club operators (@cheapos_lol) to manage sponsors, review builds, and moderate users.
           </p>
 
           {!user ? (
@@ -184,7 +184,7 @@ export function AdminDashboard({
 
         <div style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
           <span className="admin-operator-badge">
-            <span>🛡️</span> Operator: @{user.user_metadata?.user_name || "carlosa8c"}
+            <span>🛡️</span> Operator: @{user.user_metadata?.user_name || "cheapos_lol"}
           </span>
           <button type="button" className="button" onClick={handleSignOut} style={{ fontSize: "var(--text-meta)" }}>
             Sign Out

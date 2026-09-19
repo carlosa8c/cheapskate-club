@@ -231,7 +231,7 @@ export function BuildForm({
           AWAITING OPERATOR REVIEW
         </div>
         <p style={{ color: "var(--muted)", margin: "0 auto 28px", maxWidth: "480px", lineHeight: "1.6" }}>
-          Your build has been received and is waiting in the review queue. It will appear publicly on the workbench feed as soon as @carlosa8c verifies the GitHub repository.
+          Your build has been received and is waiting in the review queue. It will appear publicly on the workbench feed as soon as @cheapos_lol verifies the GitHub repository.
         </p>
         <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
           <a className="button primary" href={`/community/${slugify(title) || submittedPending}`}>
