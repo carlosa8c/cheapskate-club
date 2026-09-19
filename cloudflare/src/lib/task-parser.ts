@@ -17,6 +17,40 @@ export interface ParsedTaskResult {
 export interface TaskJsonValidationResult {
   valid: boolean;
   error?: string;
+  details?: {
+    hasId: boolean;
+    matchedSignatures: number;
+    hasPrompt: boolean;
+    totalTokens?: number;
+  };
+}
+
+/**
+ * Strips HTML tags to prevent HTML/XSS injection in titles, hooks, or notes.
+ */
+export function stripHtmlTags(str: string): string {
+  if (!str || typeof str !== "string") return "";
+  return str
+    .replace(/<script[\s\S]*?<\/script>/gi, "")
+    .replace(/<style[\s\S]*?<\/style>/gi, "")
+    .replace(/<[^>]*>/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/**
+ * Validates that a URL is a secure HTTPS link and does not use dangerous protocols like javascript:, data:, or file:.
+ */
+export function isSafeHttpsUrl(urlStr: string): boolean {
+  if (!urlStr || typeof urlStr !== "string") return false;
+  const trimmed = urlStr.trim();
+  if (!trimmed.startsWith("https://")) return false;
+  try {
+    const parsed = new URL(trimmed);
+    return parsed.protocol === "https:";
+  } catch {
+    return false;
+  }
 }
 
 export function validateCheapoSTaskJson(data: any): TaskJsonValidationResult {
@@ -24,11 +58,20 @@ export function validateCheapoSTaskJson(data: any): TaskJsonValidationResult {
     return { valid: false, error: "Input must be a valid JSON object." };
   }
 
-  // Required: must have an identifier
-  if (!data.id && !data.task_id && !data.snapshot?.commit) {
+  // Required: must have an authentic cheapoS task identifier
+  const rawId = data.id || data.task_id || data.snapshot?.commit;
+  if (!rawId || typeof rawId !== "string" || !rawId.trim()) {
     return {
       valid: false,
       error: "Missing required cheapoS task identifier (id). Make sure this is an authentic task export from cheapoS.",
+    };
+  }
+
+  const idStr = String(rawId).trim();
+  if (/<[^>]*>/.test(idStr) || idStr.includes("..") || idStr.length > 256) {
+    return {
+      valid: false,
+      error: "Task identifier contains invalid characters or excessive length.",
     };
   }
 
@@ -66,7 +109,44 @@ export function validateCheapoSTaskJson(data: any): TaskJsonValidationResult {
     };
   }
 
-  return { valid: true };
+  // Token sanity bounds validation if usage is present
+  let totalTokens: number | undefined = undefined;
+  if (data.usage && typeof data.usage === "object") {
+    const workerTokens = Number(data.usage.worker?.tokens) || 0;
+    const reviewerTokens = Number(data.usage.reviewer?.tokens) || 0;
+    const plannerTokens = Number(data.usage.planner?.tokens) || 0;
+    const coordinatorTokens = Number(data.usage.coordinator?.tokens) || 0;
+    let sumTokens = workerTokens + reviewerTokens + plannerTokens + coordinatorTokens;
+    if (sumTokens === 0) {
+      if (typeof data.usage.total_tokens === "number") sumTokens = data.usage.total_tokens;
+      else if (typeof data.usage.tokens === "number") sumTokens = data.usage.tokens;
+      else if (typeof data.total_tokens === "number") sumTokens = data.total_tokens;
+    }
+
+    if (sumTokens < 0 || isNaN(sumTokens)) {
+      return {
+        valid: false,
+        error: "Task token usage cannot be negative or invalid.",
+      };
+    }
+    if (sumTokens > 500_000_000) {
+      return {
+        valid: false,
+        error: "Task token usage exceeds realistic single-task threshold (> 500M tokens).",
+      };
+    }
+    totalTokens = sumTokens;
+  }
+
+  return {
+    valid: true,
+    details: {
+      hasId: true,
+      matchedSignatures,
+      hasPrompt: true,
+      totalTokens,
+    },
+  };
 }
 
 /**
@@ -75,6 +155,7 @@ export function validateCheapoSTaskJson(data: any): TaskJsonValidationResult {
  * Example: 'Build SnipVault in examples/snip-vault/: A fast...' -> 'SnipVault'
  */
 export function sanitizeProjectTitle(rawTitle: string): string {
+  rawTitle = stripHtmlTags(rawTitle);
   if (!rawTitle) return '';
   let title = rawTitle.trim();
 
@@ -125,6 +206,7 @@ export function sanitizeChecksSummary(summary?: string): string {
 }
 
 export function sanitizeProjectHook(rawHook: string): string {
+  rawHook = stripHtmlTags(rawHook);
   if (!rawHook) return '';
   let hook = rawHook.trim();
   hook = hook.replace(/^(?:Build|Create)\s+[A-Za-z0-9_.-]+(?:\s+[A-Za-z0-9_.-]+)*?(?:\s+in\s+[^\s:]+\/?)?:\s*/i, '');
@@ -154,11 +236,23 @@ export function parseTaskJson(rawInput: string | Record<string, any>): ParsedTas
 
   // 1. Dimension 1: Cost & Tokens
   const usage = (data && typeof data.usage === "object") ? data.usage : {};
-  const workerTokens = usage.worker?.tokens || 0;
-  const reviewerTokens = usage.reviewer?.tokens || 0;
-  const plannerTokens = usage.planner?.tokens || 0;
-  const coordinatorTokens = usage.coordinator?.tokens || 0;
-  const totalTokens = workerTokens + reviewerTokens + plannerTokens + coordinatorTokens;
+  const workerTokens = Number(usage.worker?.tokens) || 0;
+  const reviewerTokens = Number(usage.reviewer?.tokens) || 0;
+  const plannerTokens = Number(usage.planner?.tokens) || 0;
+  const coordinatorTokens = Number(usage.coordinator?.tokens) || 0;
+  let totalTokens = workerTokens + reviewerTokens + plannerTokens + coordinatorTokens;
+  if (totalTokens === 0) {
+    if (typeof usage.total_tokens === "number") totalTokens = usage.total_tokens;
+    else if (typeof usage.tokens === "number") totalTokens = usage.tokens;
+    else if (typeof data.total_tokens === "number") totalTokens = data.total_tokens;
+  }
+
+  if (totalTokens <= 0) {
+    throw new Error("Task telemetry must contain positive token usage (totalTokens > 0).");
+  }
+  if (totalTokens > 500_000_000) {
+    throw new Error("Task token usage exceeds realistic single-task threshold (> 500M tokens).");
+  }
   const costNumber = typeof usage.cost === "number" ? usage.cost : 0;
   const billedCost = costNumber > 0 ? `$${costNumber.toFixed(2)}` : "$0.00";
 
@@ -328,14 +422,17 @@ export function parseTaskJson(rawInput: string | Record<string, any>): ParsedTas
       const diff = cp?.diff || "";
       const matches = diff.matchAll(/diff --git a\/.*? b\/(.*)/g);
       for (const m of matches) {
-        const filePath = m[1]?.trim();
-        if (filePath && !filePath.startsWith(".") && !filePath.startsWith("test_fts") && !seenPaths.has(filePath)) {
-          seenPaths.add(filePath);
-          const name = filePath.split("/").pop() || filePath;
-          const isTest = name.startsWith("test_");
-          const isDoc = name.endsWith(".md");
-          const description = isTest ? "Unit test suite" : isDoc ? "Project documentation" : "Source implementation";
-          files.push({ name, path: filePath, description });
+        let filePath = m[1]?.trim();
+        if (filePath) {
+          filePath = stripHtmlTags(filePath).replace(/^\/+/, "");
+          if (!filePath.startsWith(".") && !filePath.includes("..") && !filePath.startsWith("test_fts") && !seenPaths.has(filePath)) {
+            seenPaths.add(filePath);
+            const name = filePath.split("/").pop() || filePath;
+            const isTest = name.startsWith("test_");
+            const isDoc = name.endsWith(".md");
+            const description = isTest ? "Unit test suite" : isDoc ? "Project documentation" : "Source implementation";
+            files.push({ name, path: filePath, description });
+          }
         }
       }
     }

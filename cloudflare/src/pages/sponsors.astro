@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import { SPONSOR_TIERS, FRUGAL_TOOLS } from "../lib/sponsor-data";
 import SponsorVaultPreview from "../components/sponsor-vault-preview";
+import ProviderSpotlight from "../components/provider-spotlight";
 import { getEngineStats } from "../lib/engine-stats";
 
 const stats = await getEngineStats();
@@ -72,6 +73,9 @@ const inquiryHref = "mailto:sponsors@cheapos.lol?subject=Cheapskate%20Club%20Spo
         selfHealingIndex={stats.selfHealingIndex}
       />
     </section>
+
+    <!-- Live Pillar 1: Cheap Provider of the Month -->
+    <ProviderSpotlight client:load />
 
     <section class="sponsors-tiers-section" aria-labelledby="packages-title">
       <div class="section-header">

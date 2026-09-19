@@ -3,7 +3,7 @@
 import { useState, useEffect, type FormEvent } from "react";
 import { createClient, type SupabaseClient, type User } from "@supabase/supabase-js";
 import { slugify, type Build } from "../lib/builds";
-import { parseTaskJson, encodeBenchmarkComment, sanitizeProjectTitle, sanitizeProjectHook } from "../lib/task-parser";
+import { parseTaskJson, encodeBenchmarkComment, sanitizeProjectTitle, sanitizeProjectHook, validateCheapoSTaskJson, isSafeHttpsUrl, stripHtmlTags } from "../lib/task-parser";
 import type { BenchmarkTelemetry } from "../lib/showcase-projects";
 
 type BuildFormProps = {
@@ -35,6 +35,12 @@ export function BuildForm({
   const [benchmark, setBenchmark] = useState<BenchmarkTelemetry | null>(null);
   const [taskFiles, setTaskFiles] = useState<any[]>([]);
   const [taskJsonStatus, setTaskJsonStatus] = useState<string | null>(null);
+  const [taskVerification, setTaskVerification] = useState<{
+    totalTokens: number;
+    billedCost: string;
+    tests: string;
+    actions: number;
+  } | null>(null);
   const [taskJsonText, setTaskJsonText] = useState("");
   const [showPasteJson, setShowPasteJson] = useState(false);
   const [submittedPending, setSubmittedPending] = useState<string | null>(null);
@@ -69,11 +75,18 @@ export function BuildForm({
       setTaskFiles(res.files || []);
       if (res.title) setTitle(res.title);
       if (res.hook) setDescription(res.hook);
+      setTaskVerification({
+        totalTokens: res.benchmark.dimension1_cost_tokens.totalTokens,
+        billedCost: res.benchmark.dimension1_cost_tokens.billedCost,
+        tests: res.benchmark.dimension5_quality.finalUnitTestScore,
+        actions: res.benchmark.dimension2_effort.totalActions,
+      });
       setTaskJsonStatus(
         `Verified cheapoS run: ${(res.benchmark.dimension1_cost_tokens.totalTokens).toLocaleString()} tokens · ${res.benchmark.dimension1_cost_tokens.billedCost} billed · ${res.benchmark.dimension2_effort.totalActions} actions · ${res.benchmark.dimension4_autonomy.resumeIncidents}`
       );
     } catch (err: any) {
       setBenchmark(null);
+      setTaskVerification(null);
       setTaskJsonStatus("Error: " + (err?.message || "Invalid cheapoS task.json export"));
     }
   }
@@ -105,8 +118,8 @@ export function BuildForm({
 
     setErrorMessage(null);
 
-    const cleanTitle = title.trim();
-    const cleanDesc = description.trim();
+    const cleanTitle = stripHtmlTags(title.trim());
+    const cleanDesc = stripHtmlTags(description.trim());
     const cleanScreenshot = screenshotUrl.trim();
     const cleanProject = projectUrl.trim();
     const cleanDiscussion = discussionUrl.trim();
@@ -125,17 +138,7 @@ export function BuildForm({
       return;
     }
 
-    const validateHttps = (u: string) => {
-      if (!u) return true;
-      try {
-        const parsed = new URL(u);
-        return parsed.protocol === "https:";
-      } catch {
-        return false;
-      }
-    };
-
-    if (cleanScreenshot && !validateHttps(cleanScreenshot)) {
+    if (cleanScreenshot && !isSafeHttpsUrl(cleanScreenshot)) {
       setErrorMessage("Screenshot URL must be a valid HTTPS link.");
       return;
     }
@@ -143,12 +146,12 @@ export function BuildForm({
       setErrorMessage("GitHub Repository or README link is mandatory to verify project authenticity.");
       return;
     }
-    if (!validateHttps(cleanProject) || !/^https:\/\/github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+/.test(cleanProject)) {
+    if (!isSafeHttpsUrl(cleanProject) || !/^https:\/\/github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+/.test(cleanProject)) {
       setErrorMessage("Project URL must be a valid public GitHub repository or README link (e.g. https://github.com/username/repository).");
       return;
     }
     if (cleanDiscussion) {
-      if (!validateHttps(cleanDiscussion) || !/^https:\/\/(www\.)?(x\.com|twitter\.com)\/[A-Za-z0-9_]+\/status\/[0-9]+\/?$/.test(cleanDiscussion)) {
+      if (!isSafeHttpsUrl(cleanDiscussion) || !/^https:\/\/(www\.)?(x\.com|twitter\.com)\/[A-Za-z0-9_]+\/status\/[0-9]+\/?$/.test(cleanDiscussion)) {
         setErrorMessage("Discussion URL must be a valid X/Twitter post link (e.g. https://x.com/username/status/123...).");
         return;
       }
@@ -370,6 +373,20 @@ export function BuildForm({
           >
             {taskJsonStatus.startsWith("Error") ? "⚠️ " : "✅ "}
             {taskJsonStatus}
+          </div>
+        )}
+
+        {taskVerification && (
+          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginTop: "10px" }}>
+            <span className="pill" style={{ background: "rgba(36, 63, 50, 0.12)", color: "var(--status-success)", fontWeight: "bold", fontSize: "var(--text-meta)" }}>
+              🛡️ Authentic cheapoS run
+            </span>
+            <span className="pill" style={{ background: "rgba(36, 63, 50, 0.12)", color: "var(--status-success)", fontWeight: "bold", fontSize: "var(--text-meta)" }}>
+              ⚡ {taskVerification.totalTokens.toLocaleString()} tokens ({taskVerification.billedCost})
+            </span>
+            <span className="pill" style={{ background: "rgba(36, 63, 50, 0.12)", color: "var(--status-success)", fontWeight: "bold", fontSize: "var(--text-meta)" }}>
+              🧪 {taskVerification.tests}
+            </span>
           </div>
         )}
       </div>

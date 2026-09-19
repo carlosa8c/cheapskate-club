@@ -1,0 +1,198 @@
+.spotlight-card {
+  margin: 36px 0;
+  border-radius: 12px;
+  border: 1px solid var(--surface-border);
+  background: var(--surface-card);
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.spotlight-top-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background: var(--surface-inset);
+  border-bottom: 1px solid var(--surface-border);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.spotlight-pill-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.spotlight-badge {
+  font-family: var(--mono);
+  font-size: var(--text-meta);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--status-brand);
+}
+
+.spotlight-sub-pill {
+  padding: 2px 10px;
+  border-radius: 12px;
+  background: var(--status-success-bg);
+  color: var(--status-success);
+  font-size: var(--text-meta);
+  font-weight: 600;
+}
+
+.spotlight-external-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.spotlight-ext-link {
+  font-size: var(--text-meta);
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+.spotlight-ext-link:hover {
+  color: var(--text-primary);
+  text-decoration: underline;
+}
+
+.spotlight-body {
+  padding: 24px;
+}
+
+.spotlight-title-row {
+  margin-bottom: 16px;
+}
+
+.spotlight-heading {
+  font: 26px var(--serif);
+  margin: 0 0 6px;
+  color: var(--text-primary);
+}
+
+.spotlight-tagline {
+  font-size: var(--text-body);
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.spotlight-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.spotlight-metric-box {
+  padding: 14px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--surface-border);
+  background: var(--surface-inset);
+}
+
+.spotlight-metric-label {
+  font-size: var(--text-meta);
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.spotlight-metric-val {
+  font-size: var(--text-metric);
+  font-weight: 700;
+  color: var(--text-primary);
+  font-family: var(--mono);
+  display: block;
+}
+
+.spotlight-metric-note {
+  font-size: var(--text-meta);
+  color: var(--text-secondary);
+  margin-top: 2px;
+  display: block;
+}
+
+.spotlight-cli-container {
+  margin-top: 20px;
+  border-radius: 8px;
+  border: 1px solid var(--surface-border);
+  background: var(--surface-inset);
+  padding: 16px;
+}
+
+.spotlight-cli-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.spotlight-cli-title {
+  font-size: var(--text-label);
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.spotlight-cli-codebox {
+  position: relative;
+  border-radius: 6px;
+  border: 1px solid var(--surface-border);
+  background: var(--surface-card);
+  padding: 12px 14px;
+  font-family: var(--mono);
+  font-size: var(--text-meta);
+  color: var(--text-primary);
+  overflow-x: auto;
+  white-space: pre;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.spotlight-copy-btn {
+  background: var(--surface-inset);
+  color: var(--text-primary);
+  border: 1px solid var(--surface-border);
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: var(--text-meta);
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.spotlight-copy-btn:hover {
+  border-color: var(--status-brand);
+  color: var(--status-brand);
+}
+
+.spotlight-copy-btn.copied {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+  border-color: var(--status-success);
+}
+
+.spotlight-perks-row {
+  display: flex;
+  gap: 16px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.spotlight-perk {
+  font-size: var(--text-meta);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}

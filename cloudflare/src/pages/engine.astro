@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import { getEngineStats } from "../lib/engine-stats";
 import ModelExplorer from "../components/model-explorer";
 import SponsorVaultPreview from "../components/sponsor-vault-preview";
+import ProviderSpotlight from "../components/provider-spotlight";
 
 const stats = await getEngineStats();
 
@@ -127,6 +128,9 @@ function formatTokens(n: number): string {
         </div>
       </div>
     </section>
+
+    <!-- Featured Frugal Provider of the Month -->
+    <ProviderSpotlight client:load />
 
     <!-- Section 2: Model Power Rankings -->
     <section class="engine-section" aria-labelledby="models-heading">

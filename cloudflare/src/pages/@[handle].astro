@@ -3,7 +3,8 @@ import Layout from "../layouts/Layout.astro";
 import { publicMember, clubOrigin } from "../lib/public-member";
 import { leaderboard } from "../lib/leaderboard";
 import { getCheapoTitle } from "../lib/cheapo-titles";
-import { MemberStats } from "../components/member-stats";
+import { builds } from "../lib/builds";
+import { MemberProfileView } from "../components/member-profile-view";
 import { ShareActions } from "../components/share-actions";
 
 const rawHandle = Astro.params.handle || "";
@@ -40,6 +41,10 @@ const rankHeadline =
     : rankIndex >= 0
     ? `OFFICIAL STANDINGS · RANK #${rankIndex + 1} ALL-TIME`
     : "FELLOW CHEAPSKATE · BUILDER PROFILE";
+
+const authorBuildsResult = await builds({ handle: member.handle }).catch(() => ({ items: [], unavailable: false }));
+const memberBuilds = authorBuildsResult.items || [];
+const tabParam = Astro.url.searchParams.get("tab") === "builds" ? "builds" : "telemetry";
 ---
 
 <Layout
@@ -102,8 +107,8 @@ const rankHeadline =
       </div>
     </div>
 
-    <!-- Unified Stats: Banner + 4-Tier Compute Matrix + Roles Grid + Model Explorer -->
-    <MemberStats member={member} client:load />
+    <!-- Modular Dual-Tab View: 📊 Compute Telemetry vs 🛠️ Community Builds -->
+    <MemberProfileView member={member} builds={memberBuilds} initialTab={tabParam} client:load />
 
     <!-- Graphical Membership Pass / Card Showcase -->
     <ShareActions
