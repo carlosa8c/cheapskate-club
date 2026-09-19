@@ -37,6 +37,7 @@ function cleanModelName(name: string): string {
 
 export default function ScoreboardBillboard({
   totalTokens,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   entryCount,
   championMember,
 }: ScoreboardBillboardProps) {
@@ -48,12 +49,14 @@ export default function ScoreboardBillboard({
   const [isLivePulsing, setIsLivePulsing] = useState(false);
   const [lastDelta, setLastDelta] = useState<number | null>(null);
   const [showDelta, setShowDelta] = useState(false);
-
   const displayCountRef = useRef(displayCount);
-  displayCountRef.current = displayCount;
-
   const liveTotalRef = useRef(liveTotal);
-  liveTotalRef.current = liveTotal;
+
+  // Keep refs in sync with state values
+  useEffect(() => {
+    displayCountRef.current = displayCount;
+    liveTotalRef.current = liveTotal;
+  }, [displayCount, liveTotal]);
 
   // Smooth easing ticker
   const animateTicker = (fromVal: number, toVal: number, duration: number = 1200) => {
@@ -79,11 +82,12 @@ export default function ScoreboardBillboard({
     return () => cancelAnimationFrame(animId);
   };
 
-  // Initial mount entrance animation
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsClient(true);
     const cancel = animateTicker(0, initialTarget, 1500);
     return () => cancel();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialTarget]);
 
   // Live polling every 10 seconds

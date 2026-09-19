@@ -68,12 +68,19 @@ export function cleanModelName(name: string): string {
 export function estimateModelSavings(name: string, tokens: number): number {
   const lower = name.toLowerCase();
   let ratePerMillion = 3.0;
-  if (lower.includes("flash-lite") || lower.includes("mini")) {
-    ratePerMillion = 0.30;
+  // Match the most specific signal first so that broad substrings do not
+  // mis-classify models: "pro"/size tokens make a model premium, "flash-lite"
+  // is cheaper than plain "flash", and "mini" must not swallow "gemini".
+  if (lower.includes("70b") || lower.includes("120b") || lower.includes("pro")) {
+    ratePerMillion = 5.0;
+  } else if (
+    lower.includes("flash-lite") ||
+    lower.includes("8b") ||
+    (lower.includes("mini") && !lower.includes("gemini"))
+  ) {
+    ratePerMillion = 0.3;
   } else if (lower.includes("flash") || lower.includes("27b")) {
-    ratePerMillion = 1.00;
-  } else if (lower.includes("120b") || lower.includes("pro")) {
-    ratePerMillion = 5.00;
+    ratePerMillion = 1.0;
   }
   return Number(((tokens / 1_000_000) * ratePerMillion).toFixed(2));
 }

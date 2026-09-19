@@ -19,3 +19,19 @@ test('roles are validated and preserved',()=>{
  assert.deepEqual(memberData(sample).roles,[]);
  for(const bad of [{...sample,roles:'not-array'},{...sample,roles:[{name:123,tokens:10}]},{...sample,roles:[{name:'worker',tokens:-1}]}]) assert.equal(memberData(bad),null);
 });
+import {estimateModelSavings} from '../src/lib/model-helpers.ts';
+test('estimated savings use refined tiers for small and large models',()=>{
+  // Small cheap models (e.g. Llama 3.1 8B) use the mini rate.
+  assert.equal(estimateModelSavings('llama-3.1-8b',1_000_000),0.30);
+  assert.equal(estimateModelSavings('gpt-4o-mini',2_000_000),0.60);
+  // Mid-size models (e.g. 27B, flash) use the mid rate.
+  assert.equal(estimateModelSavings('qwen3-27b',1_000_000),1.00);
+  assert.equal(estimateModelSavings('gemini-flash',1_000_000),1.00);
+  // Large models (e.g. Llama 3.3 70B, 120b, pro) use the high rate.
+  assert.equal(estimateModelSavings('llama-3.3-70b',1_000_000),5.00);
+  assert.equal(estimateModelSavings('mistral-large-120b',100_000),0.50);
+  assert.equal(estimateModelSavings('gemini-1.5-pro',1_000_000),5.00);
+  // Unknown models fall back to the default rate.
+  assert.equal(estimateModelSavings('mystery-model',1_000_000),3.00);
+  assert.equal(estimateModelSavings('llama-3.1-8b',0),0);
+});
