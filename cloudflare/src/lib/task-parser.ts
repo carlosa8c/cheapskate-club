@@ -69,6 +69,48 @@ export function validateCheapoSTaskJson(data: any): TaskJsonValidationResult {
   return { valid: true };
 }
 
+/**
+ * Sanitizes project titles extracted from prompt strings or raw titles.
+ * Strips imperative verbs ('Build', 'Create') and repository paths ('in examples/snip-vault/:').
+ * Example: 'Build SnipVault in examples/snip-vault/: A fast...' -> 'SnipVault'
+ */
+export function sanitizeProjectTitle(rawTitle: string): string {
+  if (!rawTitle) return '';
+  let title = rawTitle.trim();
+
+  // Pattern: 'Build <Name> in <path>/: <rest>' or 'Build <Name>: <rest>'
+  const m1 = title.match(/^(?:Build|Create)\s+([A-Za-z0-9_.-]+(?:\s+[A-Za-z0-9_.-]+)*?)(?:\s+in\s+[^\s:]+\/?)?:\s*(.*)$/i);
+  if (m1) return m1[1].trim();
+
+  // Pattern: '<Name> in <path>/: <rest>'
+  const m2 = title.match(/^([A-Za-z0-9_.-]+(?:\s+[A-Za-z0-9_.-]+)*?)\s+in\s+[^\s:]+\/?:\s*(.*)$/i);
+  if (m2) return m2[1].trim();
+
+  // Pattern: 'Build <Name> in <path>/'
+  const m3 = title.match(/^(?:Build|Create)\s+([A-Za-z0-9_.-]+(?:\s+[A-Za-z0-9_.-]+)*?)(?:\s+in\s+[^\s:]+\/?)?$/i);
+  if (m3) return m3[1].trim();
+
+  return title
+    .replace(/\s*in\s+(?:examples\/)?[^\s:]+\/?:\s*/gi, ': ')
+    .replace(/\s*in\s+(?:examples\/)?[^\s:]+\/?/gi, '')
+    .replace(/^(?:Build|Create)\s+/i, '')
+    .trim();
+}
+
+/**
+ * Sanitizes project hooks/subtitles by stripping leading prompt headers like
+ * 'Build SnipVault in examples/snip-vault/: ' or 'Create MicroCRM: '.
+ */
+export function sanitizeProjectHook(rawHook: string): string {
+  if (!rawHook) return '';
+  let hook = rawHook.trim();
+  hook = hook.replace(/^(?:Build|Create)\s+[A-Za-z0-9_.-]+(?:\s+[A-Za-z0-9_.-]+)*?(?:\s+in\s+[^\s:]+\/?)?:\s*/i, '');
+  hook = hook.replace(/^[A-Za-z0-9_.-]+(?:\s+[A-Za-z0-9_.-]+)*?\s+in\s+[^\s:]+\/?:\s*/i, '');
+  hook = hook.replace(/^(?:Build|Create)\s+[A-Za-z0-9_.-]+(?:\s+[A-Za-z0-9_.-]+)*?:\s*/i, '');
+  hook = hook.replace(/\s*in\s+examples\/[^\s:]+\/?:\s*/gi, ' ');
+  return hook.trim();
+}
+
 export function parseTaskJson(rawInput: string | Record<string, any>): ParsedTaskResult {
   let data: Record<string, any>;
   if (typeof rawInput === "string") {
@@ -214,27 +256,29 @@ export function parseTaskJson(rawInput: string | Record<string, any>): ParsedTas
   const commitsAuthored = checkpoints || 1;
   const commitSha = (data.snapshot?.commit || data.id || "").slice(0, 7);
 
-  // Title extraction
-  let extractedTitle = "";
+  // Title extraction (sanitized to remove "Build ... in examples/.../:")
+  let rawTitle = "";
   if (typeof data.title === "string" && data.title.trim()) {
-    extractedTitle = data.title.trim();
+    rawTitle = data.title.trim();
   } else if (typeof data.prompt === "string" && data.prompt.trim()) {
-    extractedTitle = data.prompt.slice(0, 70).replace(/[\r\n]+/g, " ").trim();
+    rawTitle = data.prompt.slice(0, 70).replace(/[\r\n]+/g, " ").trim();
   }
+  const extractedTitle = sanitizeProjectTitle(rawTitle);
 
-  // Hook extraction (bulletproof type handling)
-  let extractedHook = "";
+  // Hook extraction (bulletproof type handling and prompt prefix stripping)
+  let rawHook = "";
   if (typeof data.hook === "string" && data.hook.trim()) {
-    extractedHook = data.hook.slice(0, 180).trim();
+    rawHook = data.hook.slice(0, 180).trim();
   } else if (typeof data.subtitle === "string" && data.subtitle.trim()) {
-    extractedHook = data.subtitle.slice(0, 180).trim();
+    rawHook = data.subtitle.slice(0, 180).trim();
   } else if (typeof data.project_brief === "string" && data.project_brief.trim()) {
-    extractedHook = data.project_brief.slice(0, 180).trim();
+    rawHook = data.project_brief.slice(0, 180).trim();
   } else if (data.branch_run?.plan?.goal && typeof data.branch_run.plan.goal === "string") {
-    extractedHook = data.branch_run.plan.goal.slice(0, 180).replace(/[\r\n]+/g, " ").trim();
+    rawHook = data.branch_run.plan.goal.slice(0, 180).replace(/[\r\n]+/g, " ").trim();
   } else if (typeof data.prompt === "string" && data.prompt.trim()) {
-    extractedHook = data.prompt.slice(0, 180).replace(/[\r\n]+/g, " ").trim();
+    rawHook = data.prompt.slice(0, 180).replace(/[\r\n]+/g, " ").trim();
   }
+  const extractedHook = sanitizeProjectHook(rawHook);
 
   // Extract files from checkpoint diffs
   const files: TaskFileItem[] = [];
@@ -341,7 +385,7 @@ export function decodeBenchmarkComment(text: string): {
 
   try {
     const parsed = JSON.parse(match[1]);
-    const cleanText = text.replace(match[0], "").trim();
+    const cleanText = sanitizeProjectHook(text.replace(match[0], "").trim());
     if (parsed && typeof parsed === "object" && "benchmark" in parsed) {
       return {
         cleanText,

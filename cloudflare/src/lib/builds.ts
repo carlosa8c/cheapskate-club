@@ -1,5 +1,5 @@
 import { SHOWCASE_PROJECTS, getShowcaseProject, type ShowcaseProject, type BenchmarkTelemetry } from "./showcase-projects";
-import { decodeBenchmarkComment } from "./task-parser";
+import { decodeBenchmarkComment, sanitizeProjectTitle, sanitizeProjectHook } from "./task-parser";
 
 export type Build = {
   id: string;
@@ -77,10 +77,15 @@ export async function builds(
     const processed: Build[] = (data as any[]).map((item) => {
       const decoded = decodeBenchmarkComment(item.description || "");
       const bm = decoded.benchmark;
+      const rawTitle = item.title || "";
+      const cleanTitle = sanitizeProjectTitle(rawTitle);
+      const rawHook = item.hook || (decoded.cleanText && decoded.cleanText.length <= 250 ? decoded.cleanText : undefined);
+      const cleanHook = rawHook ? sanitizeProjectHook(rawHook) : undefined;
       return {
         ...item,
+        title: cleanTitle,
         description: decoded.cleanText,
-        hook: item.hook || (decoded.cleanText && decoded.cleanText.length <= 250 ? decoded.cleanText : undefined),
+        hook: cleanHook,
         review_status: decoded.status || item.review_status,
         benchmark: bm || undefined,
         telemetry: bm ? {

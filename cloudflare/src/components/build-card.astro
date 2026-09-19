@@ -1,5 +1,6 @@
 ---
 import type { Build } from "../lib/builds";
+import { sanitizeProjectTitle, sanitizeProjectHook } from "../lib/task-parser";
 
 interface Props {
   build: Build;
@@ -7,6 +8,8 @@ interface Props {
 
 const { build } = Astro.props;
 const targetHref = build.slug ? `/community/${build.slug}` : `/community/${build.id}`;
+const title = sanitizeProjectTitle(build.title);
+const excerpt = sanitizeProjectHook(build.hook || build.description);
 const benchmark = build.benchmark || build.telemetry?.benchmark;
 const cost = benchmark?.dimension1_cost_tokens?.billedCost || build.telemetry?.cost;
 const tokens = benchmark?.dimension1_cost_tokens?.totalTokens ?? build.telemetry?.tokens;
@@ -27,11 +30,11 @@ const testScore = typeof verification === "string"
     {build.screenshot_url && (
       <img class="compact-build-thumbnail" src={build.screenshot_url} alt="" width="48" height="48" loading="lazy" referrerpolicy="no-referrer" />
     )}
-    <h2><a href={targetHref}>{build.title}</a></h2>
+    <h2><a href={targetHref}>{title}</a></h2>
   </div>
 
-  {(build.hook || build.description) && (
-    <p class="build-excerpt">{build.hook || build.description}</p>
+  {excerpt && (
+    <p class="build-excerpt">{excerpt}</p>
   )}
 
   {(cost || hasTokens || testScore) && (
@@ -64,7 +67,7 @@ const testScore = typeof verification === "string"
     ) : (
       <span class="compact-build-author">@{build.handle}</span>
     )}
-    <a href={targetHref} class="compact-build-link" aria-label={`View build: ${build.title}`}>View build →</a>
+    <a href={targetHref} class="compact-build-link" aria-label={`View build: ${title}`}>View build →</a>
   </div>
 </article>
 

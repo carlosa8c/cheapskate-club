@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { createClient, type SupabaseClient, type User } from "@supabase/supabase-js";
 import type { Build } from "../lib/builds";
-import { decodeBenchmarkComment, encodeBenchmarkComment } from "../lib/task-parser";
+import { decodeBenchmarkComment, encodeBenchmarkComment, sanitizeProjectTitle, sanitizeProjectHook } from "../lib/task-parser";
 import { BenchmarkPanel } from "./benchmark-panel";
 
 type BuildDetailViewProps = {
@@ -208,7 +208,8 @@ export function BuildDetailView({
   const shareOrigin = siteUrl || (typeof window !== "undefined" ? window.location.origin : "https://cheapos.lol");
   const targetId = build.slug || build.id;
   const shareUrl = `${shareOrigin.replace(/\/$/, "")}/community/${targetId}`;
-  const tweetText = encodeURIComponent(`${build.title} — autonomous zero-cost showcase on The Cheapskate Club`);
+  const cleanTitle = sanitizeProjectTitle(build.title);
+  const tweetText = encodeURIComponent(`${cleanTitle} — autonomous zero-cost showcase on The Cheapskate Club`);
   // Decode embedded benchmark if not present directly in build.telemetry
   const displayDescription = decoded.cleanText;
   const benchmark = build.benchmark || build.telemetry?.benchmark || decoded.benchmark;
@@ -221,7 +222,8 @@ export function BuildDetailView({
     commitSha: benchmark.dimension5_quality.commitSha,
   } : build.telemetry;
 
-  const hookText = build.hook || (displayDescription && displayDescription.trim().length <= 250 ? displayDescription.trim() : null);
+  const rawHook = build.hook || (displayDescription && displayDescription.trim().length <= 250 ? displayDescription.trim() : null);
+  const hookText = rawHook ? sanitizeProjectHook(rawHook) : null;
 
   const readmeUrl = build.readme_url || (
     build.project_url && build.project_url.includes("github.com")
@@ -311,7 +313,7 @@ export function BuildDetailView({
       </div>
 
       <h1 style={{ fontSize: "clamp(34px, 5vw, 54px)", lineHeight: 1.15, margin: "16px 0 12px" }}>
-        {build.title}
+        {cleanTitle}
       </h1>
 
       <p className="lede" style={{ marginBottom: hookText ? "12px" : "28px" }}>
@@ -345,7 +347,7 @@ export function BuildDetailView({
         <img
           className="build-screenshot"
           src={build.screenshot_url}
-          alt={`Screenshot of ${build.title}`}
+          alt={`Screenshot of ${cleanTitle}`}
           referrerPolicy="no-referrer"
           style={{ marginBottom: "28px" }}
         />

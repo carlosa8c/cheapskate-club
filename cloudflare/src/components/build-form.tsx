@@ -3,7 +3,7 @@
 import { useState, useEffect, type FormEvent } from "react";
 import { createClient, type SupabaseClient, type User } from "@supabase/supabase-js";
 import type { Build } from "../lib/builds";
-import { parseTaskJson, encodeBenchmarkComment } from "../lib/task-parser";
+import { parseTaskJson, encodeBenchmarkComment, sanitizeProjectTitle, sanitizeProjectHook } from "../lib/task-parser";
 import type { BenchmarkTelemetry } from "../lib/showcase-projects";
 
 type BuildFormProps = {
@@ -26,8 +26,8 @@ export function BuildForm({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Form fields
-  const [title, setTitle] = useState(build?.title || "");
-  const [description, setDescription] = useState(build?.description || "");
+  const [title, setTitle] = useState(sanitizeProjectTitle(build?.title || ""));
+  const [description, setDescription] = useState(sanitizeProjectHook(build?.description || ""));
   const [screenshotUrl, setScreenshotUrl] = useState(build?.screenshot_url || "");
   const [projectUrl, setProjectUrl] = useState(build?.project_url || "");
   const [discussionUrl, setDiscussionUrl] = useState(build?.discussion_url || "");
@@ -67,8 +67,8 @@ export function BuildForm({
       const res = parseTaskJson(content);
       setBenchmark(res.benchmark);
       setTaskFiles(res.files || []);
-      if (!title && res.title) setTitle(res.title);
-      if (!description && res.hook) setDescription(res.hook);
+      if (res.title) setTitle(res.title);
+      if (res.hook) setDescription(res.hook);
       setTaskJsonStatus(
         `Verified cheapoS run: ${(res.benchmark.dimension1_cost_tokens.totalTokens).toLocaleString()} tokens · ${res.benchmark.dimension1_cost_tokens.billedCost} billed · ${res.benchmark.dimension2_effort.totalActions} actions · ${res.benchmark.dimension4_autonomy.resumeIncidents}`
       );
