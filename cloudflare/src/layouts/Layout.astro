@@ -6,10 +6,11 @@ interface Props {
 
 const {
   title = "The Cheapskate Club · cheapoS",
-  description = "Build more. Spend less. A community for resourceful AI builders.",
+  description = "Autonomous coding with zero subscription tax. Real software built end-to-end for $0.00.",
 } = Astro.props;
 
 const currentPath = Astro.url.pathname;
+const canonicalUrl = Astro.url.href;
 ---
 
 <!doctype html>
@@ -19,7 +20,25 @@ const currentPath = Astro.url.pathname;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
     <link rel="icon" type="image/svg+xml" href="/brand-icon.svg" />
+
+    <!-- Open Graph / Facebook / LinkedIn / Discord -->
+    <meta property="og:site_name" content="The Cheapskate Club · cheapoS" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content="https://cheapos.lol/brand-icon.svg" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@cheapos_lol" />
+    <meta name="twitter:creator" content="@cheapos_lol" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="https://cheapos.lol/brand-icon.svg" />
+
     <script is:inline>
       (function () {
         try {
@@ -39,6 +58,7 @@ const currentPath = Astro.url.pathname;
       @import "../styles/globals.css";
       @import "../styles/club.css";
       @import "../styles/sponsor-vault.css";
+      @import "../styles/quickstart.css";
     </style>
   </head>
   <body data-design="club">
@@ -142,14 +162,21 @@ const currentPath = Astro.url.pathname;
     </main>
 
     <footer class="site-footer">
-      <a class="brand" href="/">
-        <img src="/brand-icon.svg" width="25" height="25" alt="" />
-        cheapoS
-      </a>
-      <span>Make expensive compute the exception. Proudly operated on a $1.80/yr domain.</span>
-      <div class="footer-links">
-
-        <a class="text-button" href="/account">Your data, your call</a>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <a class="brand" href="/">
+          <img src="/brand-icon.svg" width="25" height="25" alt="" />
+          cheapoS
+        </a>
+        <span>Make expensive compute the exception. Proudly operated on a $1.80/yr domain.</span>
+      </div>
+      <div class="footer-links" style="display: flex; gap: 14px; flex-wrap: wrap; align-items: center;">
+        <a class="text-button" href="/#quickstart">Get cheapoS</a>
+        <a class="text-button" href="/about">How It Works & FAQ</a>
+        <a class="text-button" href="/privacy">Privacy</a>
+        <a class="text-button" href="/terms">Terms</a>
+        <a class="text-button" href="https://github.com/cheapos-app/cheapos" target="_blank" rel="noreferrer">GitHub ↗</a>
+        <a class="text-button" href="https://x.com/cheapos_lol" target="_blank" rel="noreferrer">X / Twitter ↗</a>
+        <a class="text-button" href="/account">Account ⚙️</a>
       </div>
     </footer>
 
