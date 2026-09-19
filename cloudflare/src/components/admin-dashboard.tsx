@@ -529,7 +529,7 @@ export function AdminDashboard({
             <a href="https://supabase.com/dashboard" target="_blank" rel="noopener noreferrer" className="button">
               Supabase Database Console ↗
             </a>
-            <a href="https://github.com/carlosa8c/cheapoS-leaderboard" target="_blank" rel="noopener noreferrer" className="button">
+            <a href="https://github.com/cheapos/cheapskate-club" target="_blank" rel="noopener noreferrer" className="button">
               GitHub Repository ↗
             </a>
           </div>

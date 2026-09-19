@@ -1,6 +1,6 @@
 # The Cheapskate Club · Cloudflare Edition
 
-Cloudflare-native deployment of [The Cheapskate Club](https://cheapos.lol) (`cheapos.lol`), the official community leaderboard and compute observatory for [cheapoS](https://github.com/carlosa8c/cheapoS).
+Cloudflare-native deployment of [The Cheapskate Club](https://cheapos.lol) (`cheapos.lol`), the official community leaderboard and compute observatory for [cheapoS](https://github.com/cheapos/CheapoS).
 
 ## Architecture & Frugal Philosophy
 

@@ -352,7 +352,7 @@ export function BuildDetailView({
       {telemetry && (
         <BenchmarkPanel
           telemetry={telemetry}
-          readmeUrl={readmeUrl || `https://github.com/carlosa8c/cheapoS/blob/main/examples/${build.slug || ""}/README.md`}
+          readmeUrl={readmeUrl || `https://github.com/cheapos/CheapoS/blob/main/examples/${build.slug || ""}/README.md`}
           projectUrl={build.project_url}
         />
       )}

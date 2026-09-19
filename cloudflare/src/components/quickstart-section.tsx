@@ -4,7 +4,7 @@ export function QuickstartSection() {
   const [activeTrack, setActiveTrack] = useState<"desktop" | "cli">("desktop");
   const [copied, setCopied] = useState(false);
 
-  const cliCommand = "git clone https://github.com/cheapos-app/cheapos.git && cd cheapoS && python3 -B cheapos/app.py";
+  const cliCommand = "git clone https://github.com/cheapos/CheapoS.git && cd CheapoS && python3 run.py";
 
   const handleCopy = () => {
     navigator.clipboard.writeText(cliCommand).then(() => {
@@ -64,7 +64,7 @@ export function QuickstartSection() {
               </div>
               <a
                 className="button primary"
-                href="https://github.com/cheapos-app/cheapos/releases/latest"
+                href="https://github.com/cheapos/CheapoS/releases/latest"
                 target="_blank"
                 rel="noreferrer"
                 style={{ whiteSpace: "nowrap" }}
