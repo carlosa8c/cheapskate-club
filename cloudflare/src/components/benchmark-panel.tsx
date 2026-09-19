@@ -38,7 +38,7 @@ export function BenchmarkPanel({ telemetry, readmeUrl, projectUrl }: BenchmarkPa
         <div className="benchmark-sections">
           <section className="benchmark-card" aria-labelledby="benchmark-cost">
             <div className="benchmark-card-heading">
-              <h3 id="benchmark-cost"><span className="benchmark-index">01</span>Cost &amp; token usage</h3>
+              <h3 id="benchmark-cost"><span className="benchmark-index">01</span> Cost &amp; token usage</h3>
             </div>
             <dl className="benchmark-totals">
               <div><dt>Total billed</dt><dd>{benchmark.dimension1_cost_tokens.billedCost}</dd></div>
@@ -59,7 +59,7 @@ export function BenchmarkPanel({ telemetry, readmeUrl, projectUrl }: BenchmarkPa
 
           <section className="benchmark-card" aria-labelledby="benchmark-actions">
             <div className="benchmark-card-heading">
-              <h3 id="benchmark-actions"><span className="benchmark-index">02</span>Actions &amp; calls</h3>
+              <h3 id="benchmark-actions"><span className="benchmark-index">02</span> Actions &amp; calls</h3>
               <p className="benchmark-inline-total"><strong>{benchmark.dimension2_effort.totalActions.toLocaleString()}</strong> total actions</p>
             </div>
             <dl className="benchmark-metrics benchmark-actions">
@@ -74,7 +74,7 @@ export function BenchmarkPanel({ telemetry, readmeUrl, projectUrl }: BenchmarkPa
 
           <section className="benchmark-card" aria-labelledby="benchmark-models">
             <div className="benchmark-card-heading">
-              <h3 id="benchmark-models"><span className="benchmark-index">03</span>Models used</h3>
+              <h3 id="benchmark-models"><span className="benchmark-index">03</span> Models used</h3>
               <p className="benchmark-note">{benchmark.dimension3_swarm.providerHandoffs.toLocaleString()} provider handoffs</p>
             </div>
             <dl className="benchmark-roster">
@@ -93,7 +93,7 @@ export function BenchmarkPanel({ telemetry, readmeUrl, projectUrl }: BenchmarkPa
 
           <section className="benchmark-card" aria-labelledby="benchmark-autonomy">
             <div className="benchmark-card-heading">
-              <h3 id="benchmark-autonomy"><span className="benchmark-index">04</span>Autonomy</h3>
+              <h3 id="benchmark-autonomy"><span className="benchmark-index">04</span> Autonomy</h3>
               {unattended && <span className="benchmark-status">Unattended</span>}
             </div>
             <dl className="benchmark-metrics benchmark-summary-metrics">
@@ -105,14 +105,14 @@ export function BenchmarkPanel({ telemetry, readmeUrl, projectUrl }: BenchmarkPa
 
           <section className="benchmark-card" aria-labelledby="benchmark-quality">
             <div className="benchmark-card-heading">
-              <h3 id="benchmark-quality"><span className="benchmark-index">05</span>Code quality &amp; verification</h3>
+              <h3 id="benchmark-quality"><span className="benchmark-index">05</span> Code quality &amp; verification</h3>
             </div>
             <dl className="benchmark-verification">
-              <dt>Final verification</dt>
+              <dt>Unit test suite (final verification)</dt>
               <dd>{benchmark.dimension5_quality.finalUnitTestScore}</dd>
             </dl>
             <dl className="benchmark-metrics benchmark-summary-metrics">
-              <div><dt>Validation &amp; self-healing</dt><dd className="benchmark-text-value">{benchmark.dimension5_quality.checksSummary}</dd></div>
+              <div><dt>Autonomous check runs</dt><dd className="benchmark-text-value">{benchmark.dimension5_quality.checksSummary}</dd><span className="benchmark-note">Iterative test loops during build</span></div>
               <div><dt>Reviewer decisions</dt><dd className="benchmark-text-value">{benchmark.dimension5_quality.reviewerDecisions}</dd></div>
               <div><dt>Commits authored</dt><dd>{benchmark.dimension5_quality.commitsAuthored.toLocaleString()}</dd></div>
             </dl>
