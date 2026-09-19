@@ -4,7 +4,8 @@ import { leaderboard } from "../lib/leaderboard";
 import { publicMember } from "../lib/public-member";
 import { Avatar, Trophy } from "../components/club-art";
 import ScoreboardBillboard from "../components/scoreboard-billboard";
-import SponsorHero from "../components/sponsor-hero";
+import { QuickstartSection } from "../components/quickstart-section";
+import { FrugalFaq } from "../components/frugal-faq";
 
 const all = await leaderboard("zero_cost", "all");
 const champion = all.entries[0];
@@ -14,7 +15,7 @@ const championMember = champion
   : null;
 ---
 
-<Layout title="The Cheapskate Club · cheapoS" description="Less bill. More brag. A community for resourceful AI builders.">
+<Layout title="The Cheapskate Club · cheapoS" description="Autonomous coding with zero subscription tax. Real software built end-to-end for $0.00.">
   <section class="hero club-hero">
     <div class="hero-copy">
       <div class="eyebrow">
@@ -26,15 +27,18 @@ const championMember = champion
         <em>More brag.</em>
       </h1>
       <p>
-        You bring the ideas. cheapoS stretches every token.<br />
-        We bring a wildly unnecessary leaderboard.
+        Autonomous software development powered by multi-model cooperation and generous free tiers.
+        Zero subscription tax. 100% local deterministic unit test verification.
       </p>
       <div class="hero-actions">
-        <a class="button primary" href="/leaderboard">
+        <a class="button primary" href="#quickstart">
+          Get cheapoS Free <span aria-hidden="true">↓</span>
+        </a>
+        <a class="button" href="/leaderboard">
           View Leaderboard <span aria-hidden="true">→</span>
         </a>
-        <a class="button" href="/engine">
-          Engine Observatory <span aria-hidden="true">↗</span>
+        <a class="button" href="/community">
+          Workbench Builds <span aria-hidden="true">↗</span>
         </a>
       </div>
     </div>
@@ -107,7 +111,8 @@ const championMember = champion
     championMember={championMember}
   />
 
-
+  <!-- ⚡ The Front Door: 30-Second Quickstart & Install Tracks -->
+  <QuickstartSection client:load />
 
   <!-- Gateway Teasers: Dedicated Leaderboard & Engine Pages -->
   <section class="home-gateways" aria-label="Explore the Club">
@@ -131,6 +136,24 @@ const championMember = champion
       </div>
     </a>
 
+    <a class="home-gateway-card" href="/community">
+      <div>
+        <div class="gateway-eyebrow">
+          <span class="gateway-icon" aria-hidden="true">📦</span>
+          COMMUNITY WORKBENCH
+        </div>
+        <h2>Showcase & Finished Builds</h2>
+        <p>
+          Complete, working software built end-to-end with cheapoS in a single run.
+          Backed by deterministic unit tests and public GitHub repositories.
+        </p>
+      </div>
+      <div class="gateway-footer">
+        <span class="gateway-pill">10 launch builds</span>
+        <span class="gateway-arrow" aria-hidden="true">Browse the workbench ↗</span>
+      </div>
+    </a>
+
     <a class="home-gateway-card" href="/engine">
       <div>
         <div class="gateway-eyebrow">
@@ -149,6 +172,9 @@ const championMember = champion
       </div>
     </a>
   </section>
+
+  <!-- ✳ The Frugal Manifesto & FAQ -->
+  <FrugalFaq client:load />
 
   <section class="bottom-banner">
     <span class="banner-star" aria-hidden="true">✳</span>

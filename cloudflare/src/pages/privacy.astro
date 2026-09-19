@@ -1,0 +1,53 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="Privacy Policy · The Cheapskate Club"
+  description="Local-first by design. Zero source code or prompt tracking."
+>
+  <section class="prose" style="max-width: 760px; margin: 40px auto; padding: 0 20px;">
+    <p class="eyebrow">LOCAL-FIRST PRIVACY GUARANTEE</p>
+    <h1>
+      Privacy Policy.<br />
+      <em>Your code stays yours.</em>
+    </h1>
+
+    <h2>1. Local-First Architecture</h2>
+    <p>
+      cheapoS is built from the ground up as local-first software. When you run cheapoS on your computer, your source files, repository trees, git diffs, environment keys, and unit test logs remain entirely on your local machine.
+    </p>
+    <p>
+      We do not host or operate a centralized code ingestion backend. Your private prompts and code are never used to train models, sold to advertisers, or stored on our servers.
+    </p>
+
+    <h2>2. The Leaderboard & Signed Token Telemetry</h2>
+    <p>
+      Participation in The Cheapskate Club (<code>cheapos.lol</code>) is strictly opt-in. If you choose to connect cheapoS to your club profile, cheapoS uploads only signed, anonymous lifetime token quantities and installation signatures.
+    </p>
+    <p>
+      These telemetry packets contain numerical counters (e.g. total input tokens, output tokens, cost estimates) used exclusively to calculate public leaderboard standing. They contain zero file contents, directory paths, or provider API credentials.
+    </p>
+
+    <h2>3. Community Workbench Submissions</h2>
+    <p>
+      When you publish a finished product to the Community Workbench (<code>/community</code>), you voluntarily share the project metadata you provide: the project title, description, public GitHub repository URL, and task benchmark summary. All submissions are public by definition.
+    </p>
+
+    <h2>4. Third-Party Model Providers</h2>
+    <p>
+      When you configure API keys (such as Google AI Studio, GroqCloud, Cerebras, or Together AI), your requests flow directly from your machine to the respective provider's public API endpoint. Your usage is governed by each provider's individual terms and privacy policies.
+    </p>
+
+    <h2>5. Data Deletion & Account Control</h2>
+    <p>
+      You can disconnect your cheapoS installation or delete your club profile at any time from your <a href="/account">Account Settings</a>. Deleting your profile permanently purges your standing and associated installation signatures from our database.
+    </p>
+
+    <div style="margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--surface-border);">
+      <span style="font-size: var(--text-meta); color: var(--text-secondary);">
+        Last updated: September 2026 · The Cheapskate Club
+      </span>
+    </div>
+  </section>
+</Layout>
