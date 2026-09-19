@@ -309,3 +309,38 @@ export async function getEngineStats(): Promise<EngineStats> {
 }
 
 export const engineStats = getEngineStats;
+
+
+export interface FeaturedProviderSpotlight {
+  month: string;
+  providerName: string;
+  badgeText: string;
+  tagline: string;
+  topWorkerModel: string;
+  topReviewerModel: string;
+  estimatedDailyCost: string;
+  rateLimits: string;
+  avgLatency: string;
+  sponsorUrl: string;
+  cliPresetCommand: string;
+  perks: string[];
+}
+
+export const FEATURED_PROVIDER: FeaturedProviderSpotlight = {
+  month: "Featured Engine Partner",
+  providerName: "Groq Cloud & Google AI Studio",
+  badgeText: "⚡ CHEAP MODEL PAIR OF THE MONTH",
+  tagline: "Ultra-fast autonomous worker with independent multi-model verification for zsh.00",
+  topWorkerModel: "groq/llama-3.3-70b-versatile",
+  topReviewerModel: "gemini-2.5-flash-lite",
+  estimatedDailyCost: "zsh.00 / day",
+  rateLimits: "30 RPM · 14,400 RPD (Zero credit card required)",
+  avgLatency: "172ms worker · 280ms review",
+  sponsorUrl: "https://groq.com",
+  cliPresetCommand: "cheapos run --worker groq/llama-3.3-70b-versatile --reviewer gemini-2.5-flash-lite",
+  perks: [
+    "100% Unattended Autonomous Recovery Loops",
+    "Independent verification gate prevents intra-model bias",
+    "Zero out-of-pocket inference bills on community tier"
+  ]
+};

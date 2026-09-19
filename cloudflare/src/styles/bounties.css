@@ -1,0 +1,129 @@
+.bounties-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 20px 80px;
+}
+
+.bounties-intro {
+  margin-bottom: 40px;
+}
+
+.bounties-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.bounty-card {
+  padding: 28px;
+  border-radius: 12px;
+  border: 1px solid var(--surface-border);
+  background: var(--surface-card);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.bounty-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--status-brand);
+}
+
+.bounty-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.bounty-sponsor-pill {
+  padding: 4px 12px;
+  border-radius: 12px;
+  background: var(--status-success-bg);
+  color: var(--status-success);
+  font-size: var(--text-meta);
+  font-weight: 700;
+}
+
+.bounty-prize {
+  font-family: var(--mono);
+  font-size: var(--text-metric);
+  font-weight: 700;
+  color: var(--status-brand);
+}
+
+.bounty-title {
+  font: 26px var(--serif);
+  margin: 0 0 8px;
+  color: var(--text-primary);
+}
+
+.bounty-desc {
+  font-size: var(--text-body);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0 0 20px;
+}
+
+.bounty-constraints-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  padding: 16px;
+  border-radius: 8px;
+  background: var(--surface-inset);
+  margin-bottom: 24px;
+}
+
+.bounty-constraint-item dt {
+  font-size: var(--text-meta);
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.bounty-constraint-item dd {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: var(--text-label);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.bounty-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--surface-border);
+}
+
+.bounty-deadline {
+  font-size: var(--text-meta);
+  color: var(--text-secondary);
+}
+
+.bounties-host-cta {
+  padding: 32px;
+  border-radius: 12px;
+  border: 1px dashed var(--surface-border);
+  background: var(--surface-inset);
+  text-align: center;
+}
+
+.bounties-host-title {
+  font: 24px var(--serif);
+  margin: 0 0 8px;
+  color: var(--text-primary);
+}
+
+.bounties-host-desc {
+  font-size: var(--text-body);
+  color: var(--text-secondary);
+  max-width: 540px;
+  margin: 0 auto 20px;
+  line-height: 1.5;
+}

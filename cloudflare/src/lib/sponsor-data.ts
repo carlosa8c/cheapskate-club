@@ -144,3 +144,60 @@ export const FRUGAL_TOOLS: FrugalTool[] = [
     url: "https://developers.cloudflare.com/workers-ai/",
   },
 ];
+
+
+export interface MicroPatronTier {
+  id: string;
+  name: string;
+  price: string;
+  badge: string;
+  tagline: string;
+  description: string;
+  perks: string[];
+  ctaUrl: string;
+}
+
+export const MICRO_PATRON_TIERS: MicroPatronTier[] = [
+  {
+    id: "dime-dropper",
+    name: "The Dime Dropper",
+    price: " / mo",
+    badge: "🪙 Penny Patron",
+    tagline: "Coffee is too expensive. Buy us a single penny of compute.",
+    description: "Supports open-source cheapoS development and community leaderboard hosting.",
+    perks: [
+      "Exclusive '🪙 Penny Patron' profile badge",
+      "Mention in the Cheapskate Hall of Benefactors",
+      "Immense spiritual satisfaction of peak frugality"
+    ],
+    ctaUrl: "https://github.com/sponsors/carlosa8c"
+  },
+  {
+    id: "free-refill",
+    name: "Free Refill Connoisseur",
+    price: " / mo",
+    badge: "☕ Free Refill Benefactor",
+    tagline: "Asking for hot water and bringing your own tea bag.",
+    description: "Directly funds community test suites and automated benchmark runner infrastructure.",
+    perks: [
+      "All  perks + '☕ Free Refill Benefactor' profile badge",
+      "Early preview access to new model-pair benchmarks",
+      "Bragging rights on the community Discord/X"
+    ],
+    ctaUrl: "https://github.com/sponsors/carlosa8c"
+  },
+  {
+    id: "anti-waste",
+    name: "Anti-Waste Purist",
+    price: " / mo",
+    badge: "🌱 Anti-Waste Architect",
+    tagline: "Friends don't let friends burn unquantized GPU clusters for hello-world.",
+    description: "Sponsors community bounty pools for students and open-source contributors.",
+    perks: [
+      "All  perks + '🌱 Anti-Waste Architect' badge",
+      "Vote on monthly model-pair benchmark priorities",
+      "Direct recognition in the cheapoS repository README"
+    ],
+    ctaUrl: "https://github.com/sponsors/carlosa8c"
+  }
+];

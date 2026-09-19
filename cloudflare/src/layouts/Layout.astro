@@ -86,6 +86,17 @@ const currentPath = Astro.url.pathname;
           </a>
 
           <a
+            href="/bounties"
+            class:list={[
+              "nav-link",
+              { active: currentPath.startsWith("/bounties") },
+            ]}
+            aria-current={currentPath.startsWith("/bounties") ? "page" : undefined}
+          >
+            Bounties
+          </a>
+
+          <a
             href="/about"
             class:list={["nav-link", { active: currentPath.startsWith("/about") }]}
             aria-current={currentPath.startsWith("/about") ? "page" : undefined}

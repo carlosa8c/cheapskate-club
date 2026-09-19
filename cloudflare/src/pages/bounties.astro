@@ -1,0 +1,108 @@
+---
+import Layout from "../layouts/Layout.astro";
+import "../styles/bounties.css";
+
+const BOUNTIES = [
+  {
+    id: "sub-5k-micro-app",
+    title: "The Sub-5,000 Token Micro-App Challenge",
+    sponsor: "Groq Cloud · LPU Inference",
+    prize: "$250 API Credits",
+    description: "Build and deploy a complete, fully functional micro-utility (e.g. RSS parser, markdown formatter, CLI generator) using cheapoS in under 5,000 total tokens.",
+    ceiling: "< 5,000 Tokens",
+    quality: "100% Deterministic Test Pass",
+    costLimit: "$0.00 Out-of-Pocket",
+    deadline: "Rolling Monthly Challenge",
+  },
+  {
+    id: "zero-dollar-tool",
+    title: "The Zero-Dollar Autonomous Agent Tool",
+    sponsor: "Polar & GitHub Sponsors Pool",
+    prize: "$500 Community Bounty",
+    description: "Create an open-source developer productivity tool powered exclusively by public free tiers (Google AI Studio, Groq Free, Ollama Local). Must run with 100% unattended completion.",
+    ceiling: "Free Tiers Only",
+    quality: "Public GitHub Repo + 10+ Tests",
+    costLimit: "Strictly $0.00 Invoiced",
+    deadline: "Autumn 2026 Hackathon",
+  },
+  {
+    id: "self-healing-matrix",
+    title: "The Multi-Model Self-Healing Benchmark",
+    sponsor: "The Cheapskate Club Swarm Vault",
+    prize: "$150 Compute Credits",
+    description: "Demonstrate an autonomous self-healing recovery loop where an independent reviewer model detects and repairs an execution error with under 25% token overhead.",
+    ceiling: "< 25% Repair Overhead",
+    quality: "Independent Multi-Model Gate",
+    costLimit: "Zero Operator Resumes",
+    deadline: "Ongoing Empirical Benchmark",
+  },
+];
+---
+
+<Layout
+  title="Frugal Bounties & Challenges · The Cheapskate Club"
+  description="Participate in community coding hackathons and efficiency challenges under strict token ceilings."
+>
+  <div class="bounties-page">
+    <section class="intro bounties-intro">
+      <div class="eyebrow">
+        <span class="little-spark" aria-hidden="true">🏆</span>
+        PILLAR 2: SPONSORED EFFICIENCY BENCHMARKS
+      </div>
+      <h1>
+        Frugal Bounties.<br />
+        <em>Big ideas. Small bills.</em>
+      </h1>
+      <p class="lede">
+        Compete with fellow cheapskates to build useful software, fix complex bugs, and push autonomous code swarms to peak token efficiency. Sponsored by budget inference providers.
+      </p>
+    </section>
+
+    <div class="bounties-grid">
+      {BOUNTIES.map((b) => (
+        <article class="bounty-card">
+          <div class="bounty-card-top">
+            <span class="bounty-sponsor-pill">Sponsored by {b.sponsor}</span>
+            <div class="bounty-prize">{b.prize}</div>
+          </div>
+
+          <h2 class="bounty-title">{b.title}</h2>
+          <p class="bounty-desc">{b.description}</p>
+
+          <dl class="bounty-constraints-grid">
+            <div class="bounty-constraint-item">
+              <dt>Token Ceiling</dt>
+              <dd>{b.ceiling}</dd>
+            </div>
+            <div class="bounty-constraint-item">
+              <dt>Quality Gate</dt>
+              <dd>{b.quality}</dd>
+            </div>
+            <div class="bounty-constraint-item">
+              <dt>Cost Boundary</dt>
+              <dd>{b.costLimit}</dd>
+            </div>
+          </dl>
+
+          <div class="bounty-footer">
+            <span class="bounty-deadline">⏳ {b.deadline}</span>
+            <a class="button primary" href="/community/new">
+              Submit Task Run ↗
+            </a>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <section class="bounties-host-cta">
+      <div class="eyebrow">FOR PROVIDERS & PLATFORMS</div>
+      <h2 class="bounties-host-title">Host a Sponsored Challenge</h2>
+      <p class="bounties-host-desc">
+        Are you an inference provider or developer tool company wanting to challenge the most frugal, efficiency-minded builders in AI? Sponsor a bounty pool with trial API credits or developer cash.
+      </p>
+      <a class="button" href="mailto:sponsors@cheapos.lol?subject=Sponsoring%20a%20Frugal%20Bounty">
+        Inquire About Hosting a Bounty →
+      </a>
+    </section>
+  </div>
+</Layout>

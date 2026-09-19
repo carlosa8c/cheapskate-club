@@ -1,0 +1,29 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { AdminDashboard } from "../components/admin-dashboard";
+
+const supabaseUrl =
+  import.meta.env.SUPABASE_URL ||
+  (typeof process !== "undefined" && process.env?.SUPABASE_URL) ||
+  "";
+const supabaseKey =
+  import.meta.env.SUPABASE_PUBLISHABLE_KEY ||
+  (typeof process !== "undefined" && process.env?.SUPABASE_PUBLISHABLE_KEY) ||
+  "";
+const siteUrl =
+  import.meta.env.SITE_URL ||
+  (typeof process !== "undefined" && process.env?.SITE_URL) ||
+  "https://cheapos.lol";
+---
+
+<Layout
+  title="Operator Command Center · The Cheapskate Club"
+  description="Manage community builds, sponsor spotlight placements, and member verification."
+>
+  <AdminDashboard
+    supabaseUrl={supabaseUrl}
+    supabaseKey={supabaseKey}
+    siteUrl={siteUrl}
+    client:load
+  />
+</Layout>

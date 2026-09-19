@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import { SPONSOR_TIERS, FRUGAL_TOOLS } from "../lib/sponsor-data";
 import SponsorVaultPreview from "../components/sponsor-vault-preview";
 import ProviderSpotlight from "../components/provider-spotlight";
+import MicroPatronSection from "../components/micro-patron-section";
 import { getEngineStats } from "../lib/engine-stats";
 
 const stats = await getEngineStats();
@@ -127,6 +128,9 @@ const inquiryHref = "mailto:sponsors@cheapos.lol?subject=Cheapskate%20Club%20Spo
         <a href="/about#sponsorship-and-rankings">How it works →</a>
       </p>
     </section>
+
+    <!-- Pillar 3: Community Micro-Patronage -->
+    <MicroPatronSection client:load />
 
     <section class="frugal-stack-section" aria-labelledby="tools-title">
       <div class="section-header">

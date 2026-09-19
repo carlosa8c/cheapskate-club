@@ -26,6 +26,7 @@ export function BuildDetailView({
   const [isOwn, setIsOwn] = useState(false);
   const [cheering, setCheering] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [copiedBenchmark, setCopiedBenchmark] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
   // Decode embedded metadata & benchmark
@@ -71,6 +72,19 @@ export function BuildDetailView({
 
     checkState();
   }, [supabaseUrl, supabaseKey, build.id]);
+
+  function handleCopyBenchmark() {
+    const bm = telemetry || decoded.benchmark;
+    const tok = bm?.dimension1_cost_tokens?.totalTokens?.toLocaleString() || '0';
+    const cst = bm?.dimension1_cost_tokens?.billedCost || '$0.00';
+    const tst = bm?.dimension5_quality?.finalUnitTestScore || bm?.dimension5_quality?.checksSummary || 'Verified passing';
+    const shareText = `🛠️ ${cleanTitle} by @${build.handle}\n⚡ ${tok} tokens · ${cst} billed · 100% Unattended\n🧪 ${tst}\n\nInspect on cheapoS: ${shareUrl}`;
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(shareText);
+      setCopiedBenchmark(true);
+      setTimeout(() => setCopiedBenchmark(false), 2500);
+    }
+  }
 
   async function handleToggleCheer() {
     if (!client || !user) {
@@ -456,6 +470,76 @@ export function BuildDetailView({
           Share on X ↗
         </a>
       </div>
+
+      {/* Community Discussion & Benchmark Share Card */}
+      <section
+        style={{
+          margin: "32px 0",
+          padding: "24px",
+          borderRadius: "10px",
+          border: "1px solid var(--surface-border)",
+          background: "var(--surface-inset)",
+        }}
+        aria-labelledby="discussion-heading"
+      >
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "12px", marginBottom: "12px" }}>
+          <div>
+            <div className="eyebrow" style={{ margin: "0 0 4px" }}>
+              <span className="little-spark" aria-hidden="true">💬</span>
+              PEER FEEDBACK & COMMUNITY BENCHMARKS
+            </div>
+            <h3 id="discussion-heading" style={{ font: "22px var(--serif)", margin: "0 0 6px", color: "var(--text-primary)" }}>
+              Discuss this Build
+            </h3>
+          </div>
+          <button
+            type="button"
+            className="button"
+            onClick={handleCopyBenchmark}
+            style={{ fontSize: "var(--text-meta)" }}
+          >
+            {copiedBenchmark ? "✓ Copied Summary!" : "📋 Copy Benchmark Summary"}
+          </button>
+        </div>
+
+        <p style={{ margin: "0 0 16px", fontSize: "var(--text-body)", color: "var(--text-secondary)", lineHeight: "1.5" }}>
+          {build.discussion_url
+            ? `Join the active discussion thread on X with @${build.handle} and fellow cheapskate engineers.`
+            : `Have thoughts on architecture, efficiency, or model pairings for this build? Share feedback with @${build.handle} on X.`}
+        </p>
+
+        <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+          {build.discussion_url ? (
+            <a
+              className="button primary"
+              href={build.discussion_url}
+              target="_blank"
+              rel="noopener noreferrer ugc"
+            >
+              Open Discussion Thread on X ↗
+            </a>
+          ) : (
+            <a
+              className="button primary"
+              target="_blank"
+              rel="noopener noreferrer"
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent("I just inspected @" + build.handle + "'s #cheapoS project '" + cleanTitle + "' — built for $0.00! What models would you use?")}&url=${encodeURIComponent(shareUrl)}`}
+            >
+              Start discussion on X ↗
+            </a>
+          )}
+          {primaryProjectUrl && (
+            <a
+              className="button"
+              href={primaryProjectUrl}
+              target="_blank"
+              rel="noopener noreferrer ugc"
+            >
+              Inspect Source on GitHub ↗
+            </a>
+          )}
+        </div>
+      </section>
 
       {/* Builder's verified Club Card */}
       {build.show_usage && (
