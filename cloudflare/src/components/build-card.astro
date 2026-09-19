@@ -37,24 +37,20 @@ const testScore = typeof verification === "string"
     <p class="build-excerpt">{excerpt}</p>
   )}
 
-  {(cost || hasTokens || testScore) && (
+  {(cost || hasTokens || testScore || verification) && (
     <dl class="compact-build-metrics">
       {cost && <div><dt>Cost</dt><dd>{cost}</dd></div>}
       {hasTokens && (
         <div>
           <dt>Tokens</dt>
-          <dd title={`${tokens.toLocaleString("en-US")} tokens`}>
-            <span aria-hidden="true">{tokenLabel}</span>
-            <span class="sr-only">{tokens.toLocaleString("en-US")}</span>
-          </dd>
+          <dd title={`${tokens.toLocaleString("en-US")} tokens`}>{tokenLabel}</dd>
         </div>
       )}
       {(verification || testScore) && (
         <div>
           <dt>Tests</dt>
           <dd title={verification || "Verified passing"}>
-            <span aria-hidden="true">{testScore ? `${testScore[1]}/${testScore[2]}` : "100% pass"}</span>
-            <span class="sr-only">{verification || "100% pass"}</span>
+            {testScore ? `${testScore[1]}/${testScore[2]}` : "100% pass"}
           </dd>
         </div>
       )}

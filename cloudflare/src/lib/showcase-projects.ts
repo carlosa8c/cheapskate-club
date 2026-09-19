@@ -415,7 +415,7 @@ export const SHOWCASE_PROJECTS: ShowcaseProject[] = [
       requests: 181,
       cost: "$0.0000 (100% Free Tier)",
       models: ["claude-sonnet-4-6", "gemma-4-31b-it", "dots-3-note-preview:free", "gpt-oss-120b"],
-      tests: "Regex signature clustering verified",
+      tests: "4/4 passing unit tests (0.002s)",
       commitSha: "14abe65",
       files: [
         { name: "whisperer.py", path: "examples/log-whisperer/whisperer.py", description: "Log parsing, regex signature extraction, and frequency clustering engine" },
@@ -458,7 +458,7 @@ export const SHOWCASE_PROJECTS: ShowcaseProject[] = [
         dimension5_quality: {
           checksSummary: "7 / 10 passed (iterative repair loop)",
           reviewerDecisions: "2 / 2 items approved (100%)",
-          finalUnitTestScore: "Regex signature clustering & anomaly detection verified",
+          finalUnitTestScore: "4/4 passing in 0.002s",
           commitsAuthored: 2,
           commitSha: "14abe65",
         },

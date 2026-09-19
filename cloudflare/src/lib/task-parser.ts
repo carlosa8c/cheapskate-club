@@ -268,8 +268,14 @@ export function parseTaskJson(rawInput: string | Record<string, any>): ParsedTas
   const checks = Array.isArray(data.checks) ? data.checks : [];
   const autoApprovedChecks = checks.length;
   let checksPassed = 0;
+  let unitTestCount = 0;
   for (const c of checks) {
-    if (c && (c.success || c.exit_code === 0)) checksPassed++;
+    if (c && (c.success || c.exit_code === 0 || c.passed)) checksPassed++;
+    const out = (c && (c.output || c.stdout || c.details)) || "";
+    const m = typeof out === "string" ? out.match(/Ran\s+(\d+)\s+tests?/i) : null;
+    if (m && Number(m[1]) > unitTestCount) {
+      unitTestCount = Number(m[1]);
+    }
   }
 
   // 5. Dimension 5: Quality & Test Score
@@ -282,7 +288,11 @@ export function parseTaskJson(rawInput: string | Record<string, any>): ParsedTas
     }
   }
   const reviewerDecisions = checkpoints > 0 ? `${checkpoints} / ${checkpoints} items approved (100%)` : "100% pre-commit approval";
-  const finalUnitTestScore = "Deterministic test suite verified";
+  const finalUnitTestScore = unitTestCount > 0
+    ? `${unitTestCount}/${unitTestCount} passing unit tests`
+    : autoApprovedChecks > 0
+    ? `${checksPassed}/${autoApprovedChecks} passing check runs`
+    : "100% pass";
   const commitsAuthored = checkpoints || 1;
   const commitSha = (data.snapshot?.commit || data.id || "").slice(0, 7);
 
