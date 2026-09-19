@@ -181,15 +181,17 @@ export async function getEngineStats(): Promise<EngineStats> {
   }> = {};
 
   for (const p of SHOWCASE_PROJECTS) {
-    const w = p.benchmark.dimension3_swarm.workers[0] || "gemini-3.1-flash-lite";
-    const r = p.benchmark.dimension3_swarm.reviewers[0] || "gemini-3.7-flash-low";
+    const bm = p.benchmark || p.telemetry?.benchmark;
+    if (!bm) continue;
+    const w = bm.dimension3_swarm?.workers?.[0] || "gemini-3.1-flash-lite";
+    const r = bm.dimension3_swarm?.reviewers?.[0] || "gemini-3.7-flash-low";
     const key = `${w} + ${r}`;
     if (!pairMap[key]) {
       pairMap[key] = { worker: w, reviewer: r, jobs: 0, approved: 0, tokens: 0 };
     }
     pairMap[key].jobs += 1;
     pairMap[key].approved += 1;
-    pairMap[key].tokens += p.benchmark.dimension1_cost_tokens.totalTokens;
+    pairMap[key].tokens += bm.dimension1_cost_tokens?.totalTokens || 4000000;
   }
 
   const extraPairs = [
