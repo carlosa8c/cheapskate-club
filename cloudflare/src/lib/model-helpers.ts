@@ -42,6 +42,23 @@ export interface ModelPairStat {
   reviewApprovedJobs: number;
   mergedRuns: number;
   totalTokens: number;
+  avgTokensPerJob: number;
+}
+
+export interface ProviderHealthStat {
+  provider: string;
+  badgeColor: string;
+  totalRequests: number;
+  successRate: number;
+  avgLatencyMs: number;
+  rateLimitPct: number;
+  status: "Optimal" | "Degraded" | "Throttled";
+}
+
+export interface SelfHealingIndex {
+  initialWorkTokens: number;
+  recoveryTokens: number;
+  repairOverheadPct: number;
 }
 
 export const ROLE_META: Record<string, { icon: string; color: string; desc: string }> = {
