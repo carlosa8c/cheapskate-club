@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import { getEngineStats } from "../lib/engine-stats";
 import ModelExplorer from "../components/model-explorer";
+import SponsorVaultPreview from "../components/sponsor-vault-preview";
 
 const stats = await getEngineStats();
 
@@ -142,6 +143,27 @@ function formatTokens(n: number): string {
       </div>
 
       <ModelExplorer client:load models={stats.models} />
+    </section>
+
+    <!-- Section: Swarm Cognitive Efficiency & Model-Pair Leaderboard -->
+    <section class="engine-section" aria-labelledby="swarm-heading">
+      <div class="engine-section-header">
+        <div class="engine-eyebrow">
+          <span class="little-spark" aria-hidden="true">🤝</span>
+          SWARM COGNITIVE EFFICIENCY
+        </div>
+        <h2 id="swarm-heading">Model-Pair Synergy &amp; Swarm Intelligence</h2>
+        <p class="engine-section-desc">
+          Which worker and reviewer combinations deliver the highest first-pass completion rate at the lowest token overhead? Empirical telemetry from verified independent runs.
+        </p>
+      </div>
+
+      <SponsorVaultPreview
+        client:load
+        modelPairs={stats.modelPairs}
+        providerReliability={stats.providerReliability}
+        selfHealingIndex={stats.selfHealingIndex}
+      />
     </section>
 
     <!-- Section 3: 4-Tier Infrastructure Matrix -->

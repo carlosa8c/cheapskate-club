@@ -1,6 +1,10 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { SPONSOR_TIERS, FRUGAL_TOOLS } from "../lib/sponsor-data";
+import SponsorVaultPreview from "../components/sponsor-vault-preview";
+import { getEngineStats } from "../lib/engine-stats";
+
+const stats = await getEngineStats();
 
 const inquiryHref = "mailto:sponsors@cheapos.lol?subject=Cheapskate%20Club%20Sponsorship%20Inquiry";
 ---
@@ -47,6 +51,26 @@ const inquiryHref = "mailto:sponsors@cheapos.lol?subject=Cheapskate%20Club%20Spo
         <h2>Help shape the launch</h2>
         <p>Work with us on useful setup guides, member offers, and ideas for the first community projects.</p>
       </article>
+    </section>
+
+    <section class="sponsor-vault-section" aria-labelledby="vault-heading">
+      <div class="section-header">
+        <div class="eyebrow">
+          <span class="little-spark" aria-hidden="true">💎</span>
+          Sponsor Intelligence Tier
+        </div>
+        <h2 id="vault-heading">The Swarm Intelligence Vault</h2>
+        <p>
+          Corporate and infrastructure sponsors gain direct access to live, empirical model-pair efficiency benchmarks, provider throttling heatmaps, and autonomous recovery economics.
+        </p>
+      </div>
+
+      <SponsorVaultPreview
+        client:load
+        modelPairs={stats.modelPairs}
+        providerReliability={stats.providerReliability}
+        selfHealingIndex={stats.selfHealingIndex}
+      />
     </section>
 
     <section class="sponsors-tiers-section" aria-labelledby="packages-title">
