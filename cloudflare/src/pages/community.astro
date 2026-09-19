@@ -1,7 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { builds } from "../lib/builds";
-import { WorkbenchFilterGrid } from "../components/workbench-filter-grid";
+import BuildCard from "../components/build-card.astro";
 
 const pageParam = Astro.url.searchParams.get("page") || "0";
 const page = Math.min(10000, Math.max(0, Number.parseInt(pageParam, 10) || 0));
@@ -15,7 +15,7 @@ const feed = await builds({
 
 <Layout
   title={isQueue ? "Operator Review Queue · The Cheapskate Club" : "Community Workbench · The Cheapskate Club"}
-  description="Complete, working software built end-to-end with cheapoS in a single run. Backed by deterministic unit tests and public GitHub repositories."
+  description="Complete, working software built end-to-end with cheapoS in a single run. Backed by deterministic unit tests, $0.00 compute bills, and public GitHub repositories."
 >
   <section class="intro community-intro">
     <p class="eyebrow">{isQueue ? "OPERATOR REVIEW QUEUE" : "SMALL BUDGETS. BIG IDEAS."}</p>
@@ -65,15 +65,32 @@ const feed = await builds({
     <p class="notice" role="status">
       The workbench is getting ready. Please check back shortly.
     </p>
+  ) : feed.items.length > 0 ? (
+    <div class="build-grid">
+      {feed.items.map((b) => (
+        <BuildCard build={b} />
+      ))}
+    </div>
   ) : (
-    <WorkbenchFilterGrid
-      client:load
-      initialBuilds={feed.items}
-      isQueue={isQueue}
-    />
+    <div class="empty-state">
+      <span aria-hidden="true">{isQueue ? "✓" : "✳"}</span>
+      <h3>{isQueue ? "All caught up!" : (page ? "You’ve reached the end." : "Every club starts with a first build.")}</h3>
+      <p>{isQueue ? "There are no pending submissions awaiting operator review." : "It doesn’t have to change the world. Show us what you made."}</p>
+      <div style="margin-top: 20px;">
+        {isQueue ? (
+          <a class="button primary" href="/community">
+            Return to live workbench →
+          </a>
+        ) : (
+          <a class="button primary" href="/community/new">
+            Submit the first build ↗
+          </a>
+        )}
+      </div>
+    </div>
   )}
 
-  <nav class="build-pagination" aria-label="Build pages" style="margin-top: 32px;">
+  <nav class="build-pagination" aria-label="Build pages">
     {page > 0 && <a href={`/community?${isQueue ? "queue=pending&" : ""}page=${page - 1}`}>← Newer builds</a>}
     {feed.items.length === 12 && <a href={`/community?${isQueue ? "queue=pending&" : ""}page=${page + 1}`}>Older builds →</a>}
   </nav>
