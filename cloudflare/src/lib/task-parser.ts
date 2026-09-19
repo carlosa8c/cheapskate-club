@@ -108,15 +108,18 @@ export function sanitizeProjectTitle(rawTitle: string): string {
  */
 export function sanitizeChecksSummary(summary?: string): string {
   if (!summary) return "Verified passing";
-  const m = summary.match(/^(\d+)\s*\/\s*(\d+)\s*passed$/i);
+  const m = summary.match(/^(\d+)\s*\/\s*(\d+)\s*(?:clean\s+)?(?:test\s+)?(?:runs|passed)/i);
   if (m) {
     const passed = parseInt(m[1], 10);
     const total = parseInt(m[2], 10);
     if (passed === total) {
-      return `${total} / ${total} clean runs (100%)`;
+      return `${total} / ${total} clean test runs (100%)`;
     } else {
-      return `${total} runs (self-corrected & passing)`;
+      return `${total} test runs (self-corrected & passing)`;
     }
+  }
+  if (summary.includes("runs") && !summary.includes("test runs")) {
+    return summary.replace("runs", "test runs");
   }
   return summary;
 }
@@ -273,9 +276,9 @@ export function parseTaskJson(rawInput: string | Record<string, any>): ParsedTas
   let checksSummary = "Verified passing";
   if (autoApprovedChecks > 0) {
     if (checksPassed === autoApprovedChecks) {
-      checksSummary = `${autoApprovedChecks} / ${autoApprovedChecks} clean runs (100%)`;
+      checksSummary = `${autoApprovedChecks} / ${autoApprovedChecks} clean test runs (100%)`;
     } else {
-      checksSummary = `${autoApprovedChecks} runs (self-corrected & passing)`;
+      checksSummary = `${autoApprovedChecks} test runs (self-corrected & passing)`;
     }
   }
   const reviewerDecisions = checkpoints > 0 ? `${checkpoints} / ${checkpoints} items approved (100%)` : "100% pre-commit approval";
