@@ -1,12 +1,16 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { leaderboard } from "../lib/leaderboard";
+import { getEngineStats } from "../lib/engine-stats";
 import Rankings from "../components/rankings";
 import Podium from "../components/podium";
 
 const periodParam = Astro.url.searchParams.get("period");
 const period = periodParam === "month" ? "month" : "all";
+const tabParam = Astro.url.searchParams.get("tab") === "pairs" ? "pairs" : "builders";
+
 const board = await leaderboard("zero_cost", period);
+const stats = await getEngineStats();
 ---
 
 <Layout
@@ -32,7 +36,7 @@ const board = await leaderboard("zero_cost", period);
   <Podium client:load entries={board.entries} period={period} />
 
   <div class="board-layout">
-    <Rankings client:load board={board} period={period} />
+    <Rankings client:load board={board} period={period} modelPairs={stats.modelPairs} initialTab={tabParam} />
     <aside>
 
 

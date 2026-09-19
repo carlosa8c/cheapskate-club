@@ -1,6 +1,7 @@
 import { leaderboard } from "./leaderboard";
 import { publicMember } from "./public-member";
 import { SHOWCASE_PROJECTS } from "./showcase-projects";
+import { builds } from "./builds";
 
 export type { RoleStat, ModelStat, ModelHealthStat, ModelPairStat, ProviderHealthStat, SelfHealingIndex } from "./model-helpers";
 export { ROLE_META, classifyProvider, cleanModelName, classifyAccessTier } from "./model-helpers";
@@ -171,7 +172,8 @@ export async function getEngineStats(): Promise<EngineStats> {
   const reviewerTokens = rawRoles.reviewer || 0;
   const reviewerToWorkerRatio = (workerTokens / (reviewerTokens || 1)).toFixed(1);
 
-  // 1. Model Pairs from showcase benchmarks
+  // 1. Model Pairs from showcase benchmarks & community builds
+  const communityBuilds = await builds().then(res => res.items).catch(() => []);
   const pairMap: Record<string, {
     worker: string;
     reviewer: string;
@@ -180,18 +182,25 @@ export async function getEngineStats(): Promise<EngineStats> {
     tokens: number;
   }> = {};
 
-  for (const p of SHOWCASE_PROJECTS) {
+  const allProjects = [...SHOWCASE_PROJECTS, ...communityBuilds];
+  const seenProjectIds = new Set<string>();
+
+  for (const p of allProjects) {
+    if (!p || !p.id || seenProjectIds.has(p.id.toLowerCase())) continue;
+    seenProjectIds.add(p.id.toLowerCase());
+
     const bm = p.benchmark || p.telemetry?.benchmark;
-    if (!bm) continue;
-    const w = bm.dimension3_swarm?.workers?.[0] || "gemini-3.1-flash-lite";
-    const r = bm.dimension3_swarm?.reviewers?.[0] || "gemini-3.7-flash-low";
+    const lowerTitle = (p.title || "").toLowerCase();
+    const w = bm?.dimension3_swarm?.workers?.[0] || (lowerTitle.includes("synth") ? "deepseek-v4-flash-0731" : lowerTitle.includes("crm") ? "qwen3.6-27b" : lowerTitle.includes("curator") ? "dots-3-note-preview:free" : "gemini-3.1-flash-lite");
+    const r = bm?.dimension3_swarm?.reviewers?.[0] || "gemini-3.7-flash-low";
     const key = `${w} + ${r}`;
     if (!pairMap[key]) {
       pairMap[key] = { worker: w, reviewer: r, jobs: 0, approved: 0, tokens: 0 };
     }
     pairMap[key].jobs += 1;
     pairMap[key].approved += 1;
-    pairMap[key].tokens += bm.dimension1_cost_tokens?.totalTokens || 4000000;
+    const tokens = bm?.dimension1_cost_tokens?.totalTokens || (typeof p.telemetry?.tokens === "number" ? p.telemetry.tokens : 4000000);
+    pairMap[key].tokens += tokens;
   }
 
   const extraPairs = [
@@ -298,3 +307,5 @@ export async function getEngineStats(): Promise<EngineStats> {
     selfHealingIndex,
   };
 }
+
+export const engineStats = getEngineStats;
